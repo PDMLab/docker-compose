@@ -1,0 +1,6 @@
+{
+  "extends": "es/2015/server",
+  "rules": {
+    "no-console" :"off"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "name": "docker-compose",
+  "version": "0.2.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/tape/bin/tape test",
+    "lint": "./node_modules/eslint/bin/eslint.js ."
+  },
+  "repository": {
+    "url": "git@github.com:PDMLab/docker-compose.git"
+  },
+  "keywords": [],
+  "author": "Alexander Zeitler <alexander.zeitler@pdmlab.com>",
+  "license": "MIT",
+  "description": "Manage docker-compose from Node.js",
+  "dependencies": {
+    "winston": "^2.3.1"
+  },
+  "devDependencies": {
+    "composefile": "^0.3.0",
+    "dockerode": "^2.4.3",
+    "eslint": "^3.19.0",
+    "eslint-config-es": "^0.8.11",
+    "eslint-plugin-extended": "^0.2.0",
+    "tape": "^4.6.3",
+    "tape-promise": "^2.0.1"
+  }
+}

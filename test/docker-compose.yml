@@ -1,0 +1,6 @@
+version: '2'
+
+services: 
+  db:
+    image: mongo:3.4
+    container_name: compose_test_mongodb
