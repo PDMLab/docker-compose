@@ -131,7 +131,7 @@ const rm = function (options) {
   return new Promise((resolve, reject) => {
     const cwd = options.cwd;
 
-    exec('docker-compose rm', { cwd }).then(
+    exec('docker-compose rm -f', { cwd }).then(
       standards => {
         if (options.log) {
           logStandards(standards);
