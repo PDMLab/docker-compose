@@ -135,9 +135,9 @@ const rm = function (options) {
       standards => {
         if (options.log) {
           logStandards(standards);
-
-          return resolve();
         }
+
+        return resolve();
       },
       err => {
         logger.error(err.message);
