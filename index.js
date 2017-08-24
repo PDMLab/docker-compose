@@ -21,7 +21,7 @@ const logStandards = function (standards) {
 /**
  * @param {object} options
  * @param {boolean} options.log
- * @param {cwd} options.cwd
+ * @param {string} options.cwd
  */
 const up = function (options) {
   return new Promise((resolve, reject) => {
@@ -47,7 +47,7 @@ const up = function (options) {
 /**
  * @param {object} options
  * @param {boolean} options.log
- * @param {cwd} options.cwd
+ * @param {string} options.cwd
  */
 const down = function (options) {
   return new Promise((resolve, reject) => {
@@ -99,7 +99,7 @@ const stop = function (options) {
 /**
  * @param {object} options
  * @param {boolean} options.log
- * @param {cwd} options.cwd
+ * @param {string} options.cwd
  */
 const kill = function (options) {
   return new Promise((resolve, reject) => {
