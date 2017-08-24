@@ -125,7 +125,7 @@ const kill = function (options) {
 /**
  * @param {object} options
  * @param {boolean} options.log
- * @param {cwd} options.cwd
+ * @param {string} options.cwd
  */
 const rm = function (options) {
   return new Promise((resolve, reject) => {
