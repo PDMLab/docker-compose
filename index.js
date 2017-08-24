@@ -20,7 +20,7 @@ const logStandards = function (standards) {
 
 /**
  * @param {object} options
- * @param {boolean} options.log
+ * @param {boolean} [options.log]
  * @param {string} options.cwd
  */
 const up = function (options) {
@@ -46,7 +46,7 @@ const up = function (options) {
 
 /**
  * @param {object} options
- * @param {boolean} options.log
+ * @param {boolean} [options.log]
  * @param {string} options.cwd
  */
 const down = function (options) {
@@ -72,7 +72,7 @@ const down = function (options) {
 
 /**
  * @param {object} options
- * @param {boolean} options.log
+ * @param {boolean} [options.log]
  * @param {cwd} options.cwd
  */
 const stop = function (options) {
@@ -98,7 +98,7 @@ const stop = function (options) {
 
 /**
  * @param {object} options
- * @param {boolean} options.log
+ * @param {boolean} [options.log]
  * @param {string} options.cwd
  */
 const kill = function (options) {
@@ -124,7 +124,7 @@ const kill = function (options) {
 
 /**
  * @param {object} options
- * @param {boolean} options.log
+ * @param {boolean} [options.log]
  * @param {string} options.cwd
  */
 const rm = function (options) {
