@@ -1,16 +1,20 @@
 'use strict';
 
-const { promisify } = require('util');
-const exec = promisify(require('child_process').exec);
+const promisify = require('es6-promisify');
+const exec = promisify(require('child_process').exec, { multiArgs: true });
 const logger = require('./lib/log');
 
 const logStandards = function (standards) {
-  if (standards.stdout.length > 0) {
-    logger.info(standards.stdout);
+  const stdout = standards.stdout || standards[0];
+
+  if (stdout && stdout.length > 0) {
+    logger.info(stdout);
   }
 
-  if (standards.stderr) {
-    logger.warn(standards.stderr);
+  const stderr = standards.stderr || standards[1];
+
+  if (stderr) {
+    logger.warn(stderr);
   }
 };
 
