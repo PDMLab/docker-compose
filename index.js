@@ -128,18 +128,24 @@ const kill = function (options) {
  * @param {cwd} options.cwd
  */
 const rm = function (options) {
-  const cwd = options.cwd;
+  return new Promise((resolve, reject) => {
+    const cwd = options.cwd;
 
-  exec('docker-compose rm', { cwd }).then(
-    standards => {
-      if (options.log) {
-        logStandards(standards);
+    exec('docker-compose rm', { cwd }).then(
+      standards => {
+        if (options.log) {
+          logStandards(standards);
+
+          return resolve();
+        }
+      },
+      err => {
+        logger.error(err.message);
+
+        return reject(err);
       }
-    },
-    err => {
-      logger.error(err.message);
-    }
-  );
+    );
+  });
 };
 
 module.exports = { up, kill, down, stop, rm };
