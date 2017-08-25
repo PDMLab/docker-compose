@@ -1,10 +1,10 @@
 {
   "name": "docker-compose",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/tape/bin/tape test",
-    "lint": "./node_modules/eslint/bin/eslint.js ."
+    "eslint": "./node_modules/eslint/bin/eslint.js ."
   },
   "repository": {
     "url": "git@github.com:PDMLab/docker-compose.git"
