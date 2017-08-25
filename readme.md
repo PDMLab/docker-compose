@@ -1,6 +1,6 @@
 # Manage Docker-Compose via Node.js
 
-`docker-compose` is a small library that allows you to run [docker-compose](https://docs.docker.com/compose/)(which is still required) via Node.js. This is useful to bootstrap test environments. You might also generate your `docker-compose.yml` files using [composefile](https://www.npmjs.com/package/composefile)
+`docker-compose` is a small library that allows you to run [docker-compose](https://docs.docker.com/compose/)(which is still required) via Node.js. This is useful to bootstrap test environments. You might also generate your `docker-compose.yml` files using [composefile](https://www.npmjs.com/package/composefile).
 
 ## Installation
 
@@ -41,7 +41,7 @@ compose.up({ cwd: path.join(__dirname), log: true })
 
 ## Running the tests
 
-While `docker-compose` runs on Node.js 6+, running the tests requires you to use Node.js as they make use of `async/await`.
+While `docker-compose` runs on Node.js 6+, running the tests requires you to use Node.js 8 as they make use of `async/await`.
 
 ```
 npm test
