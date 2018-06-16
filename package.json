@@ -3,8 +3,8 @@
   "version": "0.4.3",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/tape/bin/tape test",
-    "eslint": "./node_modules/eslint/bin/eslint.js ."
+    "test": "./node_modules/.bin/tape test",
+    "eslint": "./node_modules/.bin/eslint ."
   },
   "repository": {
     "url": "git@github.com:PDMLab/docker-compose.git"
