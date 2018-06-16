@@ -1,20 +1,16 @@
 'use strict';
 
 const promisify = require('es6-promisify');
-const exec = promisify(require('child_process').exec, { multiArgs: true });
+const execute = promisify(require('child_process').exec, { multiArgs: true });
 const logger = require('./lib/log');
 
-const logStandards = function (standards) {
-  const stdout = standards.stdout || standards[0];
-
-  if (stdout && stdout.length > 0) {
-    logger.info(stdout);
+const logStandards = function (std) {
+  if (std.out && std.out.length > 0) {
+    logger.info(std.out);
   }
 
-  const stderr = standards.stderr || standards[1];
-
-  if (stderr) {
-    logger.warn(stderr);
+  if (std.err && std.err.length > 0) {
+    logger.warn(std.err);
   }
 };
 
@@ -46,13 +42,18 @@ const execCompose = (command, options) => new Promise((resolve, reject) => {
   const cmd = `docker-compose ${configToArgs(options.config)} ${command}`;
   const cwd = options.cwd;
 
-  exec(cmd, { cwd }).then(
+  execute(cmd, { cwd }).then(
       standards => {
+        const std = {
+          out: standards[0],
+          err: standards[1]
+        };
+
         if (options.log) {
-          logStandards(standards);
+          logStandards(std);
         }
 
-        resolve();
+        resolve(std);
       },
       error => {
         logger.error(error.message);
@@ -112,4 +113,34 @@ const rm = function (options) {
   return execCompose('rm -f', options);
 };
 
-module.exports = { up, kill, down, stop, rm };
+/**
+ * Execute command in a running container
+ * @param {string} contaier container name
+ * @param {string} command command to execute
+ * @param {object} options
+ * @param {string} options.cwd
+ * @param {boolean} [options.log]
+ * @param {?(string|string[])} [options.config]
+ *
+ * @return {object} std.out / std.err
+ */
+const exec = function (container, command, options) {
+  return execCompose(`exec -T ${container} ${command}`, options);
+};
+
+/**
+ * Run command
+ * @param {string} contaier container name
+ * @param {string} command command to execute
+ * @param {object} options
+ * @param {string} options.cwd
+ * @param {boolean} [options.log]
+ * @param {?(string|string[])} [options.config]
+ *
+ * @return {object} std.out / std.err
+ */
+const run = function (container, command, options) {
+  return execCompose(`run -T ${container} ${command}`, options);
+};
+
+module.exports = { up, kill, down, stop, rm, exec, run };
