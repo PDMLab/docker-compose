@@ -43,7 +43,7 @@ const configToArgs = config => {
  * @param {?(string|string[])} [options.config]
  */
 const execCompose = (command, options) => new Promise((resolve, reject) => {
-  const cmd = 'docker-compose ' + configToArgs(options.config) + ' ' + command;
+  const cmd = `docker-compose ${configToArgs(options.config)} ${command}`;
   const cwd = options.cwd;
 
   exec(cmd, { cwd }).then(
