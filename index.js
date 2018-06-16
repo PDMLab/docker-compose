@@ -38,12 +38,12 @@ const configToArgs = config => {
  * Executes docker-compose command with common options
  * @param {string} command
  * @param {object} options
- * @param {boolean} [options.log]
  * @param {string} options.cwd
- * @param {?(string|string[])} options.config
+ * @param {boolean} [options.log]
+ * @param {?(string|string[])} [options.config]
  */
 const execCompose = (command, options) => new Promise((resolve, reject) => {
-  const cmd = `docker-compose ${configToArgs(options.config)} ${command}`;
+  const cmd = 'docker-compose ' + configToArgs(options.config) + ' ' + command;
   const cwd = options.cwd;
 
   exec(cmd, { cwd }).then(
@@ -64,9 +64,9 @@ const execCompose = (command, options) => new Promise((resolve, reject) => {
 
 /**
  * @param {object} options
- * @param {boolean} [options.log]
  * @param {string} options.cwd
- * @param {?(string|string[])} options.config
+ * @param {boolean} [options.log]
+ * @param {?(string|string[])} [options.config]
  */
 const up = function (options) {
   return execCompose('up -d', options);
@@ -74,9 +74,9 @@ const up = function (options) {
 
 /**
  * @param {object} options
- * @param {boolean} [options.log]
  * @param {string} options.cwd
- * @param {?(string|string[])} options.config
+ * @param {boolean} [options.log]
+ * @param {?(string|string[])} [options.config]
  */
 const down = function (options) {
   return execCompose('down', options);
@@ -84,9 +84,9 @@ const down = function (options) {
 
 /**
  * @param {object} options
- * @param {boolean} [options.log]
  * @param {string} options.cwd
- * @param {?(string|string[])} options.config
+ * @param {boolean} [options.log]
+ * @param {?(string|string[])} [options.config]
  */
 const stop = function (options) {
   return execCompose('stop', options);
@@ -94,9 +94,9 @@ const stop = function (options) {
 
 /**
  * @param {object} options
- * @param {boolean} [options.log]
  * @param {string} options.cwd
- * @param {?(string|string[])} options.config
+ * @param {boolean} [options.log]
+ * @param {?(string|string[])} [options.config]
  */
 const kill = function (options) {
   return execCompose('kill', options);
@@ -104,9 +104,9 @@ const kill = function (options) {
 
 /**
  * @param {object} options
- * @param {boolean} [options.log]
  * @param {string} options.cwd
- * @param {?(string|string[])} options.config
+ * @param {boolean} [options.log]
+ * @param {?(string|string[])} [options.config]
  */
 const rm = function (options) {
   return execCompose('rm -f', options);
