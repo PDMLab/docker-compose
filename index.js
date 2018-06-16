@@ -19,133 +19,97 @@ const logStandards = function (standards) {
 };
 
 /**
+ * Converts supplied yml files to cli arguments
+ * https://docs.docker.com/compose/reference/overview/#use--f-to-specify-name-and-path-of-one-or-more-compose-files
+ * @param {?(string|string[])} config
+ */
+const configToArgs = config => {
+  if (typeof config === 'undefined') {
+    return '';
+  } else if (typeof config === 'string') {
+    return `-f ${config}`;
+  } else if (config instanceof Array) {
+    return config.map(configToArgs).join(' ');
+  }
+  throw new Error(`Invalid argument supplied: ${config}`);
+};
+
+/**
+ * Executes docker-compose command with common options
+ * @param {string} command
  * @param {object} options
- * @param {boolean} [options.log]
  * @param {string} options.cwd
+ * @param {boolean} [options.log]
+ * @param {?(string|string[])} [options.config]
+ */
+const execCompose = (command, options) => new Promise((resolve, reject) => {
+  const cmd = `docker-compose ${configToArgs(options.config)} ${command}`;
+  const cwd = options.cwd;
+
+  exec(cmd, { cwd }).then(
+      standards => {
+        if (options.log) {
+          logStandards(standards);
+        }
+
+        resolve();
+      },
+      error => {
+        logger.error(error.message);
+
+        return reject(error);
+      }
+    );
+});
+
+/**
+ * @param {object} options
+ * @param {string} options.cwd
+ * @param {boolean} [options.log]
+ * @param {?(string|string[])} [options.config]
  */
 const up = function (options) {
-  return new Promise((resolve, reject) => {
-    const cwd = options.cwd;
-
-    exec('docker-compose up -d', { cwd }).then(
-      standards => {
-        if (options.log) {
-          logStandards(standards);
-        }
-
-        return resolve();
-      },
-      err => {
-        logger.error(err.message);
-
-        return reject(err);
-      }
-    );
-  });
+  return execCompose('up -d', options);
 };
 
 /**
  * @param {object} options
- * @param {boolean} [options.log]
  * @param {string} options.cwd
+ * @param {boolean} [options.log]
+ * @param {?(string|string[])} [options.config]
  */
 const down = function (options) {
-  return new Promise((resolve, reject) => {
-    const cwd = options.cwd;
-
-    exec('docker-compose down', { cwd }).then(
-      standards => {
-        if (options.log) {
-          logStandards(standards);
-        }
-
-        return resolve();
-      },
-      err => {
-        logger.error(err.message);
-
-        return reject(err);
-      }
-    );
-  });
+  return execCompose('down', options);
 };
 
 /**
  * @param {object} options
+ * @param {string} options.cwd
  * @param {boolean} [options.log]
- * @param {cwd} options.cwd
+ * @param {?(string|string[])} [options.config]
  */
 const stop = function (options) {
-  return new Promise((resolve, reject) => {
-    const cwd = options.cwd;
-
-    exec('docker-compose stop', { cwd }).then(
-      standards => {
-        if (options.log) {
-          logStandards(standards);
-        }
-
-        return resolve();
-      },
-      err => {
-        logger.error(err.message);
-
-        return reject(err);
-      }
-    );
-  });
+  return execCompose('stop', options);
 };
 
 /**
  * @param {object} options
- * @param {boolean} [options.log]
  * @param {string} options.cwd
+ * @param {boolean} [options.log]
+ * @param {?(string|string[])} [options.config]
  */
 const kill = function (options) {
-  return new Promise((resolve, reject) => {
-    const cwd = options.cwd;
-
-    exec('docker-compose kill', { cwd }).then(
-      standards => {
-        if (options.log) {
-          logStandards(standards);
-        }
-
-        return resolve();
-      },
-      err => {
-        logger.error(err.message);
-
-        return reject(err);
-      }
-    );
-  });
+  return execCompose('kill', options);
 };
 
 /**
  * @param {object} options
- * @param {boolean} [options.log]
  * @param {string} options.cwd
+ * @param {boolean} [options.log]
+ * @param {?(string|string[])} [options.config]
  */
 const rm = function (options) {
-  return new Promise((resolve, reject) => {
-    const cwd = options.cwd;
-
-    exec('docker-compose rm -f', { cwd }).then(
-      standards => {
-        if (options.log) {
-          logStandards(standards);
-        }
-
-        return resolve();
-      },
-      err => {
-        logger.error(err.message);
-
-        return reject(err);
-      }
-    );
-  });
+  return execCompose('rm -f', options);
 };
 
 module.exports = { up, kill, down, stop, rm };

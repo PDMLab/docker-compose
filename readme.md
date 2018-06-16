@@ -36,7 +36,8 @@ compose.up({ cwd: path.join(__dirname), log: true })
 
 `docker-compose` accepts these params:
 
-* `cwd {string}`: mandatory folder path to the `docker-compose.yml` (you don't need to specify the name of the `docker-compose.yml` - and custom file names are not supported yet ([PR ahead](https://github.com/PDMLab/docker-compose/issues/1)? 😉))
+* `cwd {string}`: mandatory folder path to the `docker-compose.yml`
+* `config {(string|string[])}`: custom and/or multiple yml files can be specified (relative to `cwd`)
 * `[log] {boolean}`:  optional setting to enable console logging (output of `docker-compose` `stdout`/`stderr` output)
 
 ## Running the tests
