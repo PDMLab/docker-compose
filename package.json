@@ -11,6 +11,11 @@
   },
   "keywords": [],
   "author": "Alexander Zeitler <alexander.zeitler@pdmlab.com>",
+  "contributors": [
+    {
+      "name": "Ignatiev Mikhail"
+    }
+  ],
   "license": "MIT",
   "description": "Manage docker-compose from Node.js",
   "dependencies": {
