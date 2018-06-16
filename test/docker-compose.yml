@@ -4,3 +4,6 @@ services:
   db:
     image: mongo:3.4
     container_name: compose_test_mongodb
+  alpine:
+    image: alpine:3.7
+    container_name: compose_test_apline
