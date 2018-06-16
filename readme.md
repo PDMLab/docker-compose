@@ -12,13 +12,21 @@ npm install --save-dev docker-compose
 
 `docker-compose` current supports these commands:
 
-* up - create and start containers - always uses the `-d` flag due to non interactive mode
-* down - Stop and remove containers, networks, images, and volumes
-* kill - Kill containers
-* stop - Stop services
-* rm - Remove stopped containers - always uses the `-f` flag due to non interactive mode
+* `up(options)` - create and start containers - always uses the `-d` flag due to non interactive mode
+* `down(options)` - Stop and remove containers, networks, images, and volumes
+* `kill(options)` - Kill containers
+* `stop(options)` - Stop services
+* `rm(options)` - Remove stopped containers - always uses the `-f` flag due to non interactive mode
+* `exec(container, command, options)` - Exec `command` inside `container`, uses `-T` to properly handle stdin & stdout
+* `run(container, command, options)` - Run `command` inside `container`, uses `-T` to properly handle stdin & stdout
 
-All commands return a Promise.
+All commands return a `Promise({object})` with an stdout and stderr strings
+```javascript
+{
+  out: 'stdout contents' 
+  err: 'stderr contents'
+}
+```
 
 ### Example
 
@@ -30,6 +38,11 @@ compose.up({ cwd: path.join(__dirname), log: true })
     () => { console.log('done')}, 
     err => { console.log('something went wrong:', err.message)}
   );
+```
+
+To execute command inside a running container
+```javascript
+compose.exec('node', 'npm install', { cwd: path.join(__dirname) })
 ```
 
 ### Options
