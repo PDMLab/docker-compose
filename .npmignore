@@ -1,0 +1,6 @@
+# ignore all files in the test/ directory
+test/
+
+# ignore ESLint and EditorConfig
+.editorconfig
+.eslintrc.json
