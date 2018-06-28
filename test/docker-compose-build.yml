@@ -1,0 +1,23 @@
+version: '2'
+
+services: 
+  build_test_1:
+    image: compose-test-build-image-1:test
+    build:
+      context: ./
+      dockerfile: build-test.Dockerfile
+  build_test_2:
+    image: compose-test-build-image-2:test
+    build:
+      context: ./
+      dockerfile: build-test.Dockerfile
+  build_test_3:
+    image: compose-test-build-image-3:test
+    build:
+      context: ./
+      dockerfile: build-test.Dockerfile
+  build_test_4:
+    image: compose-test-build-image-4:test
+    build:
+      context: ./
+      dockerfile: build-test.Dockerfile

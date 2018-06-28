@@ -143,4 +143,30 @@ const run = function (container, command, options) {
   return execCompose(`run -T ${container} ${command}`, options);
 };
 
-module.exports = { up, kill, down, stop, rm, exec, run };
+/**
+ * Build command
+ * @param {string|string[]|object} service service name
+ * @param {object} options
+ * @param {string} options.cwd
+ * @param {boolean} [options.log]
+ * @param {?(string|string[])} [options.config]
+ *
+ * @return {object} std.out / std.err
+ */
+const build = function (service, options) {
+  let services = [];
+
+  if (Array.isArray(service)) {
+    services = service;
+  } else if (typeof service === 'object') {
+    options = service;
+  } else {
+    services = [ service || '' ];
+  }
+
+  services = services.join(' ').trim();
+
+  return execCompose(`build ${services}`, options);
+};
+
+module.exports = { up, kill, down, stop, rm, exec, run, build };
