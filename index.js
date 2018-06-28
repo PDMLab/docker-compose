@@ -37,12 +37,14 @@ const configToArgs = config => {
  * @param {string} options.cwd
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
+ * @param {?object} [options.env]
  */
 const execCompose = (command, options) => new Promise((resolve, reject) => {
   const cmd = `docker-compose ${configToArgs(options.config)} ${command}`;
   const cwd = options.cwd;
+  const env = options.env || null;
 
-  execute(cmd, { cwd }).then(
+  execute(cmd, { cwd, env }).then(
       standards => {
         const std = {
           out: standards[0],
@@ -68,6 +70,7 @@ const execCompose = (command, options) => new Promise((resolve, reject) => {
  * @param {string} options.cwd
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
+ * @param {?object} [options.env]
  */
 const up = function (options) {
   return execCompose('up -d', options);
@@ -78,6 +81,7 @@ const up = function (options) {
  * @param {string} options.cwd
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
+ * @param {?object} [options.env]
  */
 const down = function (options) {
   return execCompose('down', options);
@@ -88,6 +92,7 @@ const down = function (options) {
  * @param {string} options.cwd
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
+ * @param {?object} [options.env]
  */
 const stop = function (options) {
   return execCompose('stop', options);
@@ -98,6 +103,7 @@ const stop = function (options) {
  * @param {string} options.cwd
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
+ * @param {?object} [options.env]
  */
 const kill = function (options) {
   return execCompose('kill', options);
@@ -108,6 +114,7 @@ const kill = function (options) {
  * @param {string} options.cwd
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
+ * @param {?object} [options.env]
  */
 const rm = function (options) {
   return execCompose('rm -f', options);
@@ -121,6 +128,7 @@ const rm = function (options) {
  * @param {string} options.cwd
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
+ * @param {?object} [options.env]
  *
  * @return {object} std.out / std.err
  */
@@ -136,6 +144,7 @@ const exec = function (container, command, options) {
  * @param {string} options.cwd
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
+ * @param {?object} [options.env]
  *
  * @return {object} std.out / std.err
  */
