@@ -1,18 +1,6 @@
 'use strict';
 
-const promisify = require('es6-promisify');
-const execute = promisify(require('child_process').exec, { multiArgs: true });
-const logger = require('./lib/log');
-
-const logStandards = function (std) {
-  if (std.out && std.out.length > 0) {
-    logger.info(std.out);
-  }
-
-  if (std.err && std.err.length > 0) {
-    logger.warn(std.err);
-  }
-};
+const childProcess = require('child_process');
 
 /**
  * Converts supplied yml files to cli arguments
@@ -21,11 +9,11 @@ const logStandards = function (std) {
  */
 const configToArgs = config => {
   if (typeof config === 'undefined') {
-    return '';
+    return [];
   } else if (typeof config === 'string') {
-    return `-f ${config}`;
+    return [ '-f', config ];
   } else if (config instanceof Array) {
-    return config.map(configToArgs).join(' ');
+    return config.reduce((args, item) => args.concat([ '-f', item ]), []);
   }
   throw new Error(`Invalid argument supplied: ${config}`);
 };
@@ -33,34 +21,31 @@ const configToArgs = config => {
 /**
  * Executes docker-compose command with common options
  * @param {string} command
+ * @param {string[]} args
  * @param {object} options
  * @param {string} options.cwd
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
  */
-const execCompose = (command, options) => new Promise((resolve, reject) => {
-  const cmd = `docker-compose ${configToArgs(options.config)} ${command}`;
+const execCompose = (command, args, options) => new Promise((resolve, reject) => {
+  const composeArgs = configToArgs(options.config);
   const cwd = options.cwd;
 
-  execute(cmd, { cwd }).then(
-      standards => {
-        const std = {
-          out: standards[0],
-          err: standards[1]
-        };
+  const childProc = childProcess.spawn('docker-compose', composeArgs.concat([ command ], args), { cwd }, (err, stdout, stderr) => {
+    if (err) {
+      reject(err);
+    } else {
+      resolve({
+        err: stderr,
+        out: stdout
+      });
+    }
+  });
 
-        if (options.log) {
-          logStandards(std);
-        }
-
-        resolve(std);
-      },
-      error => {
-        logger.error(error.message);
-
-        return reject(error);
-      }
-    );
+  if (options.log) {
+    childProc.stdout.pipe(process.stdout);
+    childProc.stderr.pipe(process.stderr);
+  }
 });
 
 /**
@@ -70,7 +55,7 @@ const execCompose = (command, options) => new Promise((resolve, reject) => {
  * @param {?(string|string[])} [options.config]
  */
 const up = function (options) {
-  return execCompose('up -d', options);
+  return execCompose('up', [ '-d' ], options);
 };
 
 /**
@@ -80,7 +65,7 @@ const up = function (options) {
  * @param {?(string|string[])} [options.config]
  */
 const down = function (options) {
-  return execCompose('down', options);
+  return execCompose('down', [], options);
 };
 
 /**
@@ -90,7 +75,7 @@ const down = function (options) {
  * @param {?(string|string[])} [options.config]
  */
 const stop = function (options) {
-  return execCompose('stop', options);
+  return execCompose('stop', [], options);
 };
 
 /**
@@ -100,7 +85,7 @@ const stop = function (options) {
  * @param {?(string|string[])} [options.config]
  */
 const kill = function (options) {
-  return execCompose('kill', options);
+  return execCompose('kill', [], options);
 };
 
 /**
@@ -110,7 +95,7 @@ const kill = function (options) {
  * @param {?(string|string[])} [options.config]
  */
 const rm = function (options) {
-  return execCompose('rm -f', options);
+  return execCompose('rm', [ '-f' ], options);
 };
 
 /**
@@ -125,7 +110,7 @@ const rm = function (options) {
  * @return {object} std.out / std.err
  */
 const exec = function (container, command, options) {
-  return execCompose(`exec -T ${container} ${command}`, options);
+  return execCompose('exec', [ '-T', container, command ], options);
 };
 
 /**
@@ -140,7 +125,7 @@ const exec = function (container, command, options) {
  * @return {object} std.out / std.err
  */
 const run = function (container, command, options) {
-  return execCompose(`run -T ${container} ${command}`, options);
+  return execCompose('run', [ '-T', container, command ], options);
 };
 
 module.exports = { up, kill, down, stop, rm, exec, run };
