@@ -77,7 +77,7 @@ Also please add tests and make sure to run `npm run eslint`.
 
 MIT License
 
-Copyright (c) 2017 PDMLab
+Copyright (c) 2018 PDMLab
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -1,6 +1,6 @@
 {
   "name": "docker-compose",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/tape test",
@@ -16,13 +16,15 @@
       "name": "Ignatiev Mikhail"
     },
     {
+      "name": "Ezekiel Warren"
+    },
+    {
       "name": "Palash Mondal"
     }
   ],
   "license": "MIT",
   "description": "Manage docker-compose from Node.js",
   "dependencies": {
-    "es6-promisify": "^5.0.0",
     "winston": "^2.3.1"
   },
   "devDependencies": {
