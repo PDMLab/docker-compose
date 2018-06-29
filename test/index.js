@@ -129,7 +129,7 @@ test('build single service', async assert => {
 
   await removeImagesStartingWith('compose-test-build-image');
 
-  await compose.build('build_test_1', opts);
+  await compose.buildOne('build_test_1', opts);
 
   assert.true(await imageExists('compose-test-build-image-1:test'));
   assert.false(await imageExists('compose-test-build-image-2:test'));
@@ -148,7 +148,7 @@ test('build multiple services', async assert => {
     config: 'docker-compose-build.yml'
   };
 
-  await compose.build([ 'build_test_2', 'build_test_3' ], opts);
+  await compose.buildMany([ 'build_test_2', 'build_test_3' ], opts);
 
   assert.false(await imageExists('compose-test-build-image-1:test'));
   assert.true(await imageExists('compose-test-build-image-2:test'));
@@ -167,7 +167,7 @@ test('build all services', async assert => {
     config: 'docker-compose-build.yml'
   };
 
-  await compose.build(opts);
+  await compose.buildAll(opts);
 
   assert.true(await imageExists('compose-test-build-image-1:test'));
   assert.true(await imageExists('compose-test-build-image-2:test'));
