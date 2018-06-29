@@ -29,19 +29,31 @@ const configToArgs = config => {
  * @param {?object} [options.env]
  */
 const execCompose = (command, args, options) => new Promise((resolve, reject) => {
-  const composeArgs = configToArgs(options.config);
+  const composeArgs = configToArgs(options.config).concat([ command ], args);
   const cwd = options.cwd;
   const env = options.env || null;
 
-  const childProc = childProcess.spawn('docker-compose', composeArgs.concat([ command ], args), { cwd, env }, (err, stdout, stderr) => {
-    if (err) {
-      reject(err);
-    } else {
-      resolve({
-        err: stderr,
-        out: stdout
-      });
-    }
+  const childProc = childProcess.spawn('docker-compose', composeArgs, { cwd, env });
+
+  childProc.on('error', err => {
+    reject(err);
+  });
+
+  const result = {
+    err: '',
+    out: ''
+  };
+
+  childProc.stdout.on('data', chunk => {
+    result.out += chunk.toString();
+  });
+
+  childProc.stderr.on('data', chunk => {
+    result.err += chunk.toString();
+  });
+
+  childProc.on('close', () => {
+    resolve(result);
   });
 
   if (options.log) {
@@ -118,7 +130,9 @@ const rm = function (options) {
  * @return {object} std.out / std.err
  */
 const exec = function (container, command, options) {
-  return execCompose('exec', [ '-T', container, command ], options);
+  const args = command.split(/\s+/);
+
+  return execCompose('exec', [ '-T', container ].concat(args), options);
 };
 
 /**
@@ -134,7 +148,53 @@ const exec = function (container, command, options) {
  * @return {object} std.out / std.err
  */
 const run = function (container, command, options) {
-  return execCompose('run', [ '-T', container, command ], options);
+  const args = command.split(/\s+/);
+
+  return execCompose('run', [ '-T', container ].concat(args), options);
 };
 
-module.exports = { up, kill, down, stop, rm, exec, run };
+/**
+ * Build command
+ * @param {object} options
+ * @param {string} options.cwd
+ * @param {boolean} [options.log]
+ * @param {?(string|string[])} [options.config]
+ * @param {?object} [options.env]
+ *
+ * @return {object} std.out / std.err
+ */
+const buildAll = function (options) {
+  return execCompose('build', [], options);
+};
+
+/**
+ * Build command
+ * @param {string[]} services list of service names
+ * @param {object} options
+ * @param {string} options.cwd
+ * @param {boolean} [options.log]
+ * @param {?(string|string[])} [options.config]
+ * @param {?object} [options.env]
+ *
+ * @return {object} std.out / std.err
+ */
+const buildMany = function (services, options) {
+  return execCompose('build', services, options);
+};
+
+/**
+ * Build command
+ * @param {string} service service name
+ * @param {object} options
+ * @param {string} options.cwd
+ * @param {boolean} [options.log]
+ * @param {?(string|string[])} [options.config]
+ * @param {?object} [options.env]
+ *
+ * @return {object} std.out / std.err
+ */
+const buildOne = function (service, options) {
+  return execCompose('build', [ service ], options);
+};
+
+module.exports = { up, kill, down, stop, rm, exec, run, buildAll, buildMany, buildOne };

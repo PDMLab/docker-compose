@@ -20,6 +20,29 @@ const isContainerRunning = async name => new Promise((resolve, reject) => {
   });
 });
 
+const imageExists = async name => {
+  const images = await docker.listImages();
+
+  const foundImage = images.findIndex(imageInfo => imageInfo.RepoTags.includes(name));
+
+  return foundImage > -1;
+};
+
+const removeImagesStartingWith = async searchString => {
+  const images = await docker.listImages();
+
+  for (const image of images) {
+    for (const repoTag of image.RepoTags) {
+      if (repoTag.startsWith(searchString)) {
+        const dockerImage = docker.getImage(repoTag);
+
+        console.log(`removing image ${repoTag} ${dockerImage.id || ''}`);
+        await dockerImage.remove();
+      }
+    }
+  }
+};
+
 test('ensure container gets started', async assert => {
   await compose.up({ cwd: path.join(__dirname), log: true });
 
@@ -97,7 +120,66 @@ test('ensure run and exec are working', async assert => {
   assert.end();
 });
 
-test('teardown', assert => {
+test('build single service', async assert => {
+  const opts = {
+    cwd: path.join(__dirname),
+    log: false,
+    config: 'docker-compose-build.yml'
+  };
+
+  await removeImagesStartingWith('compose-test-build-image');
+
+  await compose.buildOne('build_test_1', opts);
+
+  assert.true(await imageExists('compose-test-build-image-1:test'));
+  assert.false(await imageExists('compose-test-build-image-2:test'));
+  assert.false(await imageExists('compose-test-build-image-3:test'));
+  assert.false(await imageExists('compose-test-build-image-4:test'));
+
+  await removeImagesStartingWith('compose-test-build-image');
+
+  assert.end();
+});
+
+test('build multiple services', async assert => {
+  const opts = {
+    cwd: path.join(__dirname),
+    log: false,
+    config: 'docker-compose-build.yml'
+  };
+
+  await compose.buildMany([ 'build_test_2', 'build_test_3' ], opts);
+
+  assert.false(await imageExists('compose-test-build-image-1:test'));
+  assert.true(await imageExists('compose-test-build-image-2:test'));
+  assert.true(await imageExists('compose-test-build-image-3:test'));
+  assert.false(await imageExists('compose-test-build-image-4:test'));
+
+  await removeImagesStartingWith('compose-test-build-image');
+
+  assert.end();
+});
+
+test('build all services', async assert => {
+  const opts = {
+    cwd: path.join(__dirname),
+    log: false,
+    config: 'docker-compose-build.yml'
+  };
+
+  await compose.buildAll(opts);
+
+  assert.true(await imageExists('compose-test-build-image-1:test'));
+  assert.true(await imageExists('compose-test-build-image-2:test'));
+  assert.true(await imageExists('compose-test-build-image-3:test'));
+  assert.true(await imageExists('compose-test-build-image-4:test'));
+
+  await removeImagesStartingWith('compose-test-build-image');
+
+  assert.end();
+});
+
+test('teardown', async assert => {
   docker.listContainers((err, containers) => {
     if (err) {
       throw err;
@@ -112,6 +194,8 @@ test('teardown', assert => {
       });
     });
   });
+
+  await removeImagesStartingWith('compose-test-build-image');
 
   assert.end();
 });
