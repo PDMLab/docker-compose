@@ -1,6 +1,6 @@
 {
   "name": "docker-compose",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/tape test",
@@ -9,7 +9,14 @@
   "repository": {
     "url": "git@github.com:PDMLab/docker-compose.git"
   },
-  "keywords": [],
+  "keywords": [
+    "devops",
+    "devops-tools",
+    "docker",
+    "docker-compose",
+    "test",
+    "test-tools"
+  ],
   "author": "Alexander Zeitler <alexander.zeitler@pdmlab.com>",
   "contributors": [
     {
