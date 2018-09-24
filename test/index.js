@@ -20,10 +20,12 @@ const isContainerRunning = async name => new Promise((resolve, reject) => {
   });
 });
 
+const repoTags = imageInfo => imageInfo.RepoTags || [];
+
 const imageExists = async name => {
   const images = await docker.listImages();
 
-  const foundImage = images.findIndex(imageInfo => imageInfo.RepoTags.includes(name));
+  const foundImage = images.findIndex(imageInfo => repoTags(imageInfo).includes(name));
 
   return foundImage > -1;
 };
@@ -32,7 +34,7 @@ const removeImagesStartingWith = async searchString => {
   const images = await docker.listImages();
 
   for (const image of images) {
-    for (const repoTag of image.RepoTags) {
+    for (const repoTag of repoTags(image)) {
       if (repoTag.startsWith(searchString)) {
         const dockerImage = docker.getImage(repoTag);
 
@@ -44,14 +46,33 @@ const removeImagesStartingWith = async searchString => {
 };
 
 test('ensure container gets started', async assert => {
-  await compose.up({ cwd: path.join(__dirname), log: true });
+  await compose.down({ cwd: path.join(__dirname), log: true });
+  await compose.upAll({ cwd: path.join(__dirname), log: true });
 
   assert.true(await isContainerRunning('/compose_test_mongodb'));
   assert.end();
 });
 
+test('ensure only single container gets started', async assert => {
+  await compose.down({ cwd: path.join(__dirname), log: true });
+  await compose.upOne('alpine', { cwd: path.join(__dirname), log: true });
+
+  assert.true(await isContainerRunning('/compose_test_alpine'));
+  assert.false(await isContainerRunning('/compose_test_mongodb'));
+  assert.end();
+});
+
+test('ensure only multiple containers get started', async assert => {
+  await compose.down({ cwd: path.join(__dirname), log: true });
+  await compose.upMany([ 'alpine' ], { cwd: path.join(__dirname), log: true });
+
+  assert.true(await isContainerRunning('/compose_test_alpine'));
+  assert.false(await isContainerRunning('/compose_test_mongodb'));
+  assert.end();
+});
+
 test('ensure container gets down', async assert => {
-  await compose.up({ cwd: path.join(__dirname), log: true });
+  await compose.upAll({ cwd: path.join(__dirname), log: true });
   await compose.down({ cwd: path.join(__dirname), log: true });
 
   assert.false(await isContainerRunning('/compose_test_mongodb'));
@@ -59,7 +80,7 @@ test('ensure container gets down', async assert => {
 });
 
 test('ensure container gets stopped', async assert => {
-  await compose.up({ cwd: path.join(__dirname), log: true });
+  await compose.upAll({ cwd: path.join(__dirname), log: true });
   await compose.stop({ cwd: path.join(__dirname), log: true });
 
   assert.false(await isContainerRunning('/compose_test_mongodb'));
@@ -67,7 +88,7 @@ test('ensure container gets stopped', async assert => {
 });
 
 test('ensure container gets killed', async assert => {
-  await compose.up({ cwd: path.join(__dirname), log: true });
+  await compose.upAll({ cwd: path.join(__dirname), log: true });
   await compose.kill({ cwd: path.join(__dirname), log: true });
 
   assert.false(await isContainerRunning('/compose_test_mongodb'));
@@ -79,7 +100,7 @@ test('ensure custom ymls are working', async assert => {
   const cwd = path.join(__dirname);
   const log = true;
 
-  await compose.up({ cwd, log, config });
+  await compose.upAll({ cwd, log, config });
   assert.true(await isContainerRunning('/compose_test_mongodb_2'));
 
    // config & [config] are the same thing, ensures that multiple configs are handled properly
@@ -104,7 +125,7 @@ test('ensure run and exec are working', async assert => {
 
   const opts = { cwd: path.join(__dirname), log: false };
 
-  await compose.up(opts);
+  await compose.upAll(opts);
 
   assert.true(await isContainerRunning('/compose_test_mongodb'));
 
