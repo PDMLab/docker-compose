@@ -69,8 +69,32 @@ const execCompose = (command, args, options) => new Promise((resolve, reject) =>
  * @param {?(string|string[])} [options.config]
  * @param {?object} [options.env]
  */
-const up = function (options) {
+const upAll = function (options) {
   return execCompose('up', [ '-d' ], options);
+};
+
+/**
+ * @param {string[]} services
+ * @param {object} options
+ * @param {string} options.cwd
+ * @param {boolean} [options.log]
+ * @param {?(string|string[])} [options.config]
+ * @param {?object} [options.env]
+ */
+const upMany = function (services, options) {
+  return execCompose('up', [ '-d' ].concat(services), options);
+};
+
+/**
+ * @param {string} service
+ * @param {object} options
+ * @param {string} options.cwd
+ * @param {boolean} [options.log]
+ * @param {?(string|string[])} [options.config]
+ * @param {?object} [options.env]
+ */
+const upOne = function (service, options) {
+  return execCompose('up', [ '-d', service ], options);
 };
 
 /**
@@ -197,4 +221,4 @@ const buildOne = function (service, options) {
   return execCompose('build', [ service ], options);
 };
 
-module.exports = { up, kill, down, stop, rm, exec, run, buildAll, buildMany, buildOne };
+module.exports = { upAll, upMany, upOne, kill, down, stop, rm, exec, run, buildAll, buildMany, buildOne };
