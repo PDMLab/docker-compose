@@ -38,7 +38,7 @@ All commands return a `Promise({object})` with an stdout and stderr strings
 To start containers based on the `docker-compose.yml` file in your current directory, just call `compose.up` like this:
 
 ```javascript
-compose.up({ cwd: path.join(__dirname), log: true })
+compose.upAll({ cwd: path.join(__dirname), log: true })
   .then(
     () => { console.log('done')}, 
     err => { console.log('something went wrong:', err.message)}
