@@ -68,9 +68,17 @@ const execCompose = (command, args, options) => new Promise((resolve, reject) =>
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
  * @param {?object} [options.env]
+ * @param {boolean} [options.interactive]
  */
 const upAll = function (options) {
-  return execCompose('up', [ '-d' ], options);
+  const cmdFlags = [];
+
+  if (!options.interactive) {
+    cmdFlags.push('-d');
+  }
+  console.log(cmdFlags);
+
+  return execCompose('up', cmdFlags, options);
 };
 
 /**
@@ -80,9 +88,16 @@ const upAll = function (options) {
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
  * @param {?object} [options.env]
+ * @param {boolean} [options.interactive]
  */
 const upMany = function (services, options) {
-  return execCompose('up', [ '-d' ].concat(services), options);
+  const cmdFlags = [];
+
+  if (!options.interactive) {
+    cmdFlags.push('-d');
+  }
+
+  return execCompose('up', cmdFlags.concat(services), options);
 };
 
 /**
@@ -92,9 +107,17 @@ const upMany = function (services, options) {
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
  * @param {?object} [options.env]
+ * @param {boolean} [options.interactive]
  */
 const upOne = function (service, options) {
-  return execCompose('up', [ '-d', service ], options);
+  const cmdFlags = [];
+
+  if (!options.interactive) {
+    cmdFlags.push('-d');
+  }
+  cmdFlags.push(service);
+
+  return execCompose('up', cmdFlags, options);
 };
 
 /**
@@ -103,6 +126,7 @@ const upOne = function (service, options) {
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
  * @param {?object} [options.env]
+ * @param {boolean} [options.interactive]
  */
 const down = function (options) {
   return execCompose('down', [], options);
@@ -114,6 +138,7 @@ const down = function (options) {
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
  * @param {?object} [options.env]
+ * @param {boolean} [options.interactive]
  */
 const stop = function (options) {
   return execCompose('stop', [], options);
@@ -125,6 +150,7 @@ const stop = function (options) {
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
  * @param {?object} [options.env]
+ * @param {boolean} [options.interactive]
  */
 const kill = function (options) {
   return execCompose('kill', [], options);
@@ -136,6 +162,7 @@ const kill = function (options) {
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
  * @param {?object} [options.env]
+ * @param {boolean} [options.interactive]
  */
 const rm = function (options) {
   return execCompose('rm', [ '-f' ], options);
@@ -150,6 +177,7 @@ const rm = function (options) {
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
  * @param {?object} [options.env]
+ * @param {boolean} [options.interactive]
  *
  * @return {object} std.out / std.err
  */
@@ -168,6 +196,7 @@ const exec = function (container, command, options) {
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
  * @param {?object} [options.env]
+ * @param {boolean} [options.interactive]
  *
  * @return {object} std.out / std.err
  */
@@ -184,6 +213,7 @@ const run = function (container, command, options) {
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
  * @param {?object} [options.env]
+ * @param {boolean} [options.interactive]
  *
  * @return {object} std.out / std.err
  */
@@ -199,6 +229,7 @@ const buildAll = function (options) {
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
  * @param {?object} [options.env]
+ * @param {boolean} [options.interactive]
  *
  * @return {object} std.out / std.err
  */
@@ -214,6 +245,7 @@ const buildMany = function (services, options) {
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
  * @param {?object} [options.env]
+ * @param {boolean} [options.interactive]
  *
  * @return {object} std.out / std.err
  */
