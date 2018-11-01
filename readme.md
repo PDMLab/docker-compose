@@ -12,9 +12,9 @@ npm install --save-dev docker-compose
 
 `docker-compose` current supports these commands:
 
-* `upAll(options)` - Create and start containers - always uses the `-d` flag due to non interactive mode
-* `upMany(services, options)` - Create and start containers specified in `services` - always uses the `-d` flag due to non interactive mode
-* `upOne(service, options)` - Create and start container specified in `service` - always uses the `-d` flag due to non interactive mode
+* `upAll(options)` - Create and start containers - uses the `-d` flag due to non interactive mode as long as `options.interactive` is not true
+* `upMany(services, options)` - Create and start containers specified in `services` - uses the `-d` flag due to non interactive mode as long as `options.interactive` is not true
+* `upOne(service, options)` - Create and start container specified in `service` - uses the `-d` flag due to non interactive mode as long as `options.interactive` is not true
 * `down(options)` - Stop and remove containers, networks, images, and volumes
 * `kill(options)` - Kill containers
 * `stop(options)` - Stop services
@@ -57,6 +57,7 @@ compose.exec('node', 'npm install', { cwd: path.join(__dirname) })
 * `cwd {string}`: mandatory folder path to the `docker-compose.yml`
 * `config {(string|string[])}`: custom and/or multiple yml files can be specified (relative to `cwd`)
 * `[log] {boolean}`:  optional setting to enable console logging (output of `docker-compose` `stdout`/`stderr` output)
+* `[interactive] {boolean}`:  optional setting to start containers in interactive mode as opposed to using the `-d` flag
 
 ## Running the tests
 
