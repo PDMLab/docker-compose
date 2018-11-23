@@ -2,6 +2,7 @@
   "name": "docker-compose",
   "version": "0.9.1",
   "main": "index.js",
+  "typings": "index.d.ts",
   "scripts": {
     "test": "./node_modules/.bin/tape test",
     "eslint": "./node_modules/.bin/eslint ."
