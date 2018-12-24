@@ -143,7 +143,7 @@ const rm = function (options) {
 
 /**
  * Execute command in a running container
- * @param {string} contaier container name
+ * @param {string} container container name
  * @param {string} command command to execute
  * @param {object} options
  * @param {string} options.cwd
@@ -161,7 +161,7 @@ const exec = function (container, command, options) {
 
 /**
  * Run command
- * @param {string} contaier container name
+ * @param {string} container container name
  * @param {string} command command to execute
  * @param {object} options
  * @param {string} options.cwd
