@@ -12,18 +12,18 @@ npm install --save-dev docker-compose
 
 `docker-compose` current supports these commands:
 
-* `upAll(options)` - Create and start containers - always uses the `-d` flag due to non interactive mode
-* `upMany(services, options)` - Create and start containers specified in `services` - always uses the `-d` flag due to non interactive mode
-* `upOne(service, options)` - Create and start container specified in `service` - always uses the `-d` flag due to non interactive mode
-* `down(options)` - Stop and remove containers, networks, images, and volumes
-* `kill(options)` - Kill containers
-* `stop(options)` - Stop services
-* `rm(options)` - Remove stopped containers - always uses the `-f` flag due to non interactive mode
+* `upAll(options)` - Builds, (re)creates, starts, and attaches to containers for all services - always uses the `-d` flag due to non interactive mode
+* `upMany(services, options)` - Builds, (re)creates, starts, and attaches to containers for the services specified in `services` - always uses the `-d` flag due to non interactive mode
+* `upOne(service, options)` - Builds, (re)creates, starts, and attaches to containers for a service specified in `service` - always uses the `-d` flag due to non interactive mode
+* `down(options)` - Stops containers and removes containers, networks, volumes, and images created by `up`
+* `kill(options)` - Force stop service containers
+* `stop(options)` - Stop running containers without removing them
+* `rm(options)` - Remove stopped service containers - always uses the `-f` flag due to non interactive mode
 * `exec(container, command, options)` - Exec `command` inside `container`, uses `-T` to properly handle stdin & stdout
-* `run(container, command, options)` - Run `command` inside `container`, uses `-T` to properly handle stdin & stdout
-* `buildAll(options)` - Build all images
-* `buildMany(services, options)` - Build images of specified services
-* `buildOne(service, options)` - Build image of specified service
+* `run(service, command, options)` - Run a one-off `command` on a service, uses `-T` to properly handle stdin & stdout
+* `buildAll(options)` - Build or rebuild services
+* `buildMany(services, options)` - Build or rebuild services
+* `buildOne(service, options)` - Build or rebuild service
 
 All commands return a `Promise({object})` with an stdout and stderr strings
 ```javascript
@@ -35,7 +35,7 @@ All commands return a `Promise({object})` with an stdout and stderr strings
 
 ### Example
 
-To start containers based on the `docker-compose.yml` file in your current directory, just call `compose.up` like this:
+To start service containers based on the `docker-compose.yml` file in your current directory, just call `compose.up` like this:
 
 ```javascript
 compose.upAll({ cwd: path.join(__dirname), log: true })
