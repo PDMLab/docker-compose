@@ -220,3 +220,28 @@ test('teardown', async assert => {
 
   assert.end();
 });
+
+test('ps shows status data for started containers', async assert => {
+  await compose.upAll({ cwd: path.join(__dirname), log: true });
+
+  const std = await compose.ps({ cwd: path.join(__dirname), log: true });
+
+  assert.false(std.err);
+  assert.true(std.out.includes('compose_test_alpine'));
+  assert.true(std.out.includes('compose_test_mongodb'));
+
+  assert.end();
+});
+
+test('ps does not show status data for stopped containers', async assert => {
+  await compose.down({ cwd: path.join(__dirname), log: true });
+  await compose.upOne('alpine', { cwd: path.join(__dirname), log: true });
+
+  const std = await compose.ps({ cwd: path.join(__dirname), log: true });
+
+  assert.false(std.err);
+  assert.true(std.out.includes('compose_test_alpine'));
+  assert.false(std.out.includes('compose_test_mongodb'));
+
+  assert.end();
+});

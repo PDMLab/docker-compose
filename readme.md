@@ -24,6 +24,7 @@ npm install --save-dev docker-compose
 * `buildAll(options)` - Build or rebuild services
 * `buildMany(services, options)` - Build or rebuild services
 * `buildOne(service, options)` - Build or rebuild service
+* `ps(options)` - Lists containers information
 
 All commands return a `Promise({object})` with an stdout and stderr strings
 ```javascript
