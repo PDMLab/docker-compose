@@ -221,4 +221,16 @@ const buildOne = function (service, options) {
   return execCompose('build', [ service ], options);
 };
 
-module.exports = { upAll, upMany, upOne, kill, down, stop, rm, exec, run, buildAll, buildMany, buildOne };
+/**
+ * Ps command
+ * @param {object} options
+ * @param {string} options.cwd
+ * @param {boolean} [options.log]
+ * @param {?(string|string[])} [options.config]
+ * @param {?object} [options.env]
+ */
+const ps = function (options) {
+  return execCompose('ps', [], options);
+};
+
+module.exports = { upAll, upMany, upOne, kill, down, stop, rm, exec, run, buildAll, buildMany, buildOne, ps };
