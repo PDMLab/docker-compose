@@ -1,6 +1,6 @@
 {
   "name": "docker-compose",
-  "version": "0.9.3",
+  "version": "0.10.0",
   "main": "index.js",
   "typings": "index.d.ts",
   "scripts": {
@@ -31,6 +31,9 @@
     },
     {
       "name": "MartinJLee"
+    },
+    {
+      "name": "Sergey Falinsky"
     }
   ],
   "license": "MIT",
