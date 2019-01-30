@@ -245,3 +245,27 @@ test('ps does not show status data for stopped containers', async assert => {
 
   assert.end();
 });
+
+test('restartAll does restart all containers', async assert => {
+  await compose.upAll({ cwd: path.join(__dirname), log: true });
+  await compose.restartAll({ cwd: path.join(__dirname), log: true });
+
+  assert.true(await isContainerRunning('/compose_test_mongodb'));
+  assert.end();
+});
+
+test('restartMany does restart selected containers', async assert => {
+  await compose.upAll({ cwd: path.join(__dirname), log: true });
+  await compose.restartMany([ 'db', 'alpine' ], { cwd: path.join(__dirname), log: true });
+
+  assert.true(await isContainerRunning('/compose_test_mongodb'));
+  assert.end();
+});
+
+test('restartOne does restart container', async assert => {
+  await compose.upAll({ cwd: path.join(__dirname), log: true });
+  await compose.restartOne('db', { cwd: path.join(__dirname), log: true });
+
+  assert.true(await isContainerRunning('/compose_test_mongodb'));
+  assert.end();
+});
