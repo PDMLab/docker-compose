@@ -251,7 +251,6 @@ test('restartAll does restart all containers', async assert => {
   await compose.restartAll({ cwd: path.join(__dirname), log: true });
 
   assert.true(await isContainerRunning('/compose_test_mongodb'));
-  assert.true(await isContainerRunning('/compose_test_alpine'));
   assert.end();
 });
 
@@ -260,7 +259,6 @@ test('restartMany does restart selected containers', async assert => {
   await compose.restartMany([ 'db', 'alpine' ], { cwd: path.join(__dirname), log: true });
 
   assert.true(await isContainerRunning('/compose_test_mongodb'));
-  assert.true(await isContainerRunning('/compose_test_alpine'));
   assert.end();
 });
 
