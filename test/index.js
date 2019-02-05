@@ -269,3 +269,11 @@ test('restartOne does restart container', async assert => {
   assert.true(await isContainerRunning('/compose_test_mongodb'));
   assert.end();
 });
+
+test('logs does follow service logs', async assert => {
+  await compose.upAll({ cwd: path.join(__dirname), log: true });
+  await compose.logs('db', { cwd: path.join(__dirname), log: true });
+
+  assert.true(await isContainerRunning('/compose_test_mongodb'));
+  assert.end();
+});

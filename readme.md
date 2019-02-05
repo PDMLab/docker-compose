@@ -20,6 +20,7 @@ npm install --save-dev docker-compose
 * `stop(options)` - Stop running containers without removing them
 * `rm(options)` - Remove stopped service containers - always uses the `-f` flag due to non interactive mode
 * `exec(container, command, options)` - Exec `command` inside `container`, uses `-T` to properly handle stdin & stdout
+* `logs(container, command, options)` - Show logs of service. Use `options.follow` `true|false` to turn on `--follow` flag.
 * `run(service, command, options)` - Run a one-off `command` on a service, uses `-T` to properly handle stdin & stdout
 * `buildAll(options)` - Build or rebuild services
 * `buildMany(services, options)` - Build or rebuild services

@@ -268,4 +268,23 @@ const restartOne = function (service, options) {
   return restartMany([ service ], options);
 };
 
-module.exports = { upAll, upMany, upOne, kill, down, stop, rm, exec, restartAll, restartMany, restartOne, run, buildAll, buildMany, buildOne, ps };
+/**
+ * @param {string} service
+ * @param {object} options
+ * @param {string} options.cwd
+ * @param {boolean} [options.log]
+ * @param {boolean} [options.follow]
+ * @param {?(string|string[])} [options.config]
+ * @param {?object} [options.env]
+ */
+const logs = function (service, options) {
+  let args = [ service ];
+
+  if (options.follow) {
+    args = [ '--follow', ...args ];
+  }
+
+  return execCompose('logs', args, options);
+};
+
+module.exports = { upAll, upMany, upOne, kill, down, stop, rm, exec, logs, restartAll, restartMany, restartOne, run, buildAll, buildMany, buildOne, ps };

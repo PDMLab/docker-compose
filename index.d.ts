@@ -11,6 +11,7 @@ declare module "docker-compose" {
     restartOne(service:String, options: IDockerComposeOptions): Promise<IDockerComposeResult>;
     rm(options: IDockerComposeOptions): Promise<IDockerComposeResult>;
     exec(container:String, command:String, options: IDockerComposeOptions): Promise<IDockerComposeResult>;
+    logs(container:String, command:String, options: IDockerComposeLogOptions): Promise<IDockerComposeResult>;
     run(service:String, command:String, options: IDockerComposeOptions): Promise<IDockerComposeResult>;
     buildAll(options: IDockerComposeOptions): Promise<IDockerComposeResult>;
     buildMany(services:String[], options: IDockerComposeOptions): Promise<IDockerComposeResult>;
@@ -22,6 +23,10 @@ declare module "docker-compose" {
     cwd: string;
     config?: string | string[];
     log?: boolean;
+  }
+
+  interface IDockerComposeLogOptions extends IDockerComposeOptions{
+    follow: boolean;
   }
 
   interface IDockerComposeResult {
