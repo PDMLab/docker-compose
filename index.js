@@ -182,13 +182,18 @@ const run = function (container, command, options) {
  * @param {object} options
  * @param {string} options.cwd
  * @param {boolean} [options.log]
+ * @param {?boolean} [options.parallel]
  * @param {?(string|string[])} [options.config]
  * @param {?object} [options.env]
  *
  * @return {object} std.out / std.err
  */
 const buildAll = function (options) {
-  return execCompose('build', [], options);
+  return execCompose(
+    'build',
+    options.parallel ? [ '--parallel' ] : [],
+    options,
+  );
 };
 
 /**
@@ -197,13 +202,18 @@ const buildAll = function (options) {
  * @param {object} options
  * @param {string} options.cwd
  * @param {boolean} [options.log]
+ * @param {?boolean} [options.parallel]
  * @param {?(string|string[])} [options.config]
  * @param {?object} [options.env]
  *
  * @return {object} std.out / std.err
  */
 const buildMany = function (services, options) {
-  return execCompose('build', services, options);
+  return execCompose(
+    'build',
+    options.parallel ? [ '--parallel' ].concat(services) : services,
+    options,
+  );
 };
 
 /**
@@ -231,6 +241,23 @@ const buildOne = function (service, options) {
  */
 const ps = function (options) {
   return execCompose('ps', [], options);
+};
+
+/**
+ * Push command
+ * @param {object} options
+ * @param {string} options.cwd
+ * @param {boolean} [options.log]
+ * @param {?boolean} options.ignorePushFailures
+ * @param {?(string|string[])} [options.config]
+ * @param {?object} [options.env]
+ */
+const push = function (options) {
+  return execCompose(
+    'push',
+    options.ignorePushFailures ? [ '--ignore-push-failures' ] : [],
+    options,
+  );
 };
 
 /**
@@ -287,4 +314,23 @@ const logs = function (service, options) {
   return execCompose('logs', args, options);
 };
 
-module.exports = { upAll, upMany, upOne, kill, down, stop, rm, exec, logs, restartAll, restartMany, restartOne, run, buildAll, buildMany, buildOne, ps };
+module.exports = {
+  upAll,
+  upMany,
+  upOne,
+  kill,
+  down,
+  stop,
+  rm,
+  exec,
+  logs,
+  restartAll,
+  restartMany,
+  restartOne,
+  run,
+  buildAll,
+  buildMany,
+  buildOne,
+  ps,
+  push,
+};
