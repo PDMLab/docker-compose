@@ -19,6 +19,26 @@ const configToArgs = config => {
 };
 
 /**
+ * Converts docker-compose commandline options to cli arguments
+ * @param {string[]|Array<string|string[]>} composeOptions
+ * @return {Array}
+ */
+const composeOptionsToArgs = function (composeOptions) {
+  let composeArgs = [];
+
+  composeOptions.forEach(option => {
+    if (option instanceof Array) {
+      composeArgs = composeArgs.concat(option);
+    }
+    if (typeof option === 'string') {
+      composeArgs = composeArgs.concat([ option ]);
+    }
+  });
+
+  return composeArgs;
+};
+
+/**
  * Executes docker-compose command with common options
  * @param {string} command
  * @param {string[]} args
@@ -27,9 +47,13 @@ const configToArgs = config => {
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
  * @param {?object} [options.env]
+ * @param {?(string[]|Array<string|string[]>)} [options.composeOptions]
  */
 const execCompose = (command, args, options) => new Promise((resolve, reject) => {
-  const composeArgs = configToArgs(options.config).concat([ command ], args);
+  const composeOptions = options.composeOptions || [];
+  let composeArgs = configToArgs(options.config).concat([ command ], args);
+
+  composeArgs = composeArgs.concat(composeOptionsToArgs(composeOptions));
   const cwd = options.cwd;
   const env = options.env || null;
 
@@ -68,6 +92,7 @@ const execCompose = (command, args, options) => new Promise((resolve, reject) =>
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
  * @param {?object} [options.env]
+ * @param {?(string[]|Array<string|string[]>)} [options.composeOptions]
  */
 const upAll = function (options) {
   return execCompose('up', [ '-d' ], options);
@@ -80,6 +105,7 @@ const upAll = function (options) {
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
  * @param {?object} [options.env]
+ * @param {?(string[]|Array<string|string[]>)} [options.composeOptions]
  */
 const upMany = function (services, options) {
   return execCompose('up', [ '-d' ].concat(services), options);
@@ -92,6 +118,7 @@ const upMany = function (services, options) {
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
  * @param {?object} [options.env]
+ * @param {?(string[]|Array<string|string[]>)} [options.composeOptions]
  */
 const upOne = function (service, options) {
   return execCompose('up', [ '-d', service ], options);
@@ -103,6 +130,7 @@ const upOne = function (service, options) {
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
  * @param {?object} [options.env]
+ * @param {?(string[]|Array<string|string[]>)} [options.composeOptions]
  */
 const down = function (options) {
   return execCompose('down', [], options);
@@ -114,6 +142,7 @@ const down = function (options) {
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
  * @param {?object} [options.env]
+ * @param {?(string[]|Array<string|string[]>)} [options.composeOptions]
  */
 const stop = function (options) {
   return execCompose('stop', [], options);
@@ -125,6 +154,7 @@ const stop = function (options) {
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
  * @param {?object} [options.env]
+ * @param {?(string[]|Array<string|string[]>)} [options.composeOptions]
  */
 const kill = function (options) {
   return execCompose('kill', [], options);
@@ -136,6 +166,7 @@ const kill = function (options) {
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
  * @param {?object} [options.env]
+ * @param {?(string[]|Array<string|string[]>)} [options.composeOptions]
  */
 const rm = function (options) {
   return execCompose('rm', [ '-f' ], options);
@@ -150,6 +181,7 @@ const rm = function (options) {
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
  * @param {?object} [options.env]
+ * @param {?(string[]|Array<string|string[]>)} [options.composeOptions]
  *
  * @return {object} std.out / std.err
  */
@@ -168,6 +200,7 @@ const exec = function (container, command, options) {
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
  * @param {?object} [options.env]
+ * @param {?(string[]|Array<string|string[]>)} [options.composeOptions]
  *
  * @return {object} std.out / std.err
  */
@@ -185,6 +218,7 @@ const run = function (container, command, options) {
  * @param {?boolean} [options.parallel]
  * @param {?(string|string[])} [options.config]
  * @param {?object} [options.env]
+ * @param {?(string[]|Array<string|string[]>)} [options.composeOptions]
  *
  * @return {object} std.out / std.err
  */
@@ -224,6 +258,7 @@ const buildMany = function (services, options) {
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
  * @param {?object} [options.env]
+ * @param {?(string[]|Array<string|string[]>)} [options.composeOptions]
  *
  * @return {object} std.out / std.err
  */
@@ -238,6 +273,7 @@ const buildOne = function (service, options) {
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
  * @param {?object} [options.env]
+ * @param {?(string[]|Array<string|string[]>)} [options.composeOptions]
  */
 const ps = function (options) {
   return execCompose('ps', [], options);
@@ -251,6 +287,7 @@ const ps = function (options) {
  * @param {?boolean} options.ignorePushFailures
  * @param {?(string|string[])} [options.config]
  * @param {?object} [options.env]
+ * @param {?(string[]|Array<string|string[]>)} [options.composeOptions]
  */
 const push = function (options) {
   return execCompose(
@@ -266,6 +303,7 @@ const push = function (options) {
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
  * @param {?object} [options.env]
+ * @param {?(string[]|Array<string|string[]>)} [options.composeOptions]
  */
 const restartAll = function (options) {
   return execCompose('restart', [], options);
@@ -278,6 +316,7 @@ const restartAll = function (options) {
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
  * @param {?object} [options.env]
+ * @param {?(string[]|Array<string|string[]>)} [options.composeOptions]
  */
 const restartMany = function (services, options) {
   return execCompose('restart', services, options);
@@ -290,6 +329,7 @@ const restartMany = function (services, options) {
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
  * @param {?object} [options.env]
+ * @param {?(string[]|Array<string|string[]>)} [options.composeOptions]
  */
 const restartOne = function (service, options) {
   return restartMany([ service ], options);
@@ -303,6 +343,7 @@ const restartOne = function (service, options) {
  * @param {boolean} [options.follow]
  * @param {?(string|string[])} [options.config]
  * @param {?object} [options.env]
+ * @param {?(string[]|Array<string|string[]>)} [options.composeOptions]
  */
 const logs = function (service, options) {
   let args = [ service ];
