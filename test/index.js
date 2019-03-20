@@ -53,6 +53,33 @@ test('ensure container gets started', async assert => {
   assert.end();
 });
 
+test('ensure container gets started with --build option', async assert => {
+  await compose.down({ cwd: path.join(__dirname), log: true, config: 'docker-compose-build.yml' });
+  await compose.upAll({ cwd: path.join(__dirname), log: true, config: 'docker-compose-build.yml', composeOptions: [ '--build' ]});
+
+  assert.true(await isContainerRunning('/compose_test_mongodb'));
+  await compose.down({ cwd: path.join(__dirname), log: true, config: 'docker-compose-build.yml' });
+  assert.end();
+});
+
+test('ensure container gets started with --build and --timeout option', async assert => {
+  await compose.down({ cwd: path.join(__dirname), log: true, config: 'docker-compose-build.yml' });
+  await compose.upAll({ cwd: path.join(__dirname), log: true, config: 'docker-compose-build.yml', composeOptions: [[ '--build' ], [ '--timeout', '5' ]]});
+
+  assert.true(await isContainerRunning('/compose_test_mongodb'));
+  await compose.down({ cwd: path.join(__dirname), log: true, config: 'docker-compose-build.yml' });
+  assert.end();
+});
+
+test('ensure container gets started with --build and --timeout option', async assert => {
+  await compose.down({ cwd: path.join(__dirname), log: true, config: 'docker-compose-build.yml' });
+  await compose.upAll({ cwd: path.join(__dirname), log: true, config: 'docker-compose-build.yml', composeOptions: [ '--build', [ '--timeout', '5' ]]});
+
+  assert.true(await isContainerRunning('/compose_test_mongodb'));
+  await compose.down({ cwd: path.join(__dirname), log: true, config: 'docker-compose-build.yml' });
+  assert.end();
+});
+
 test('ensure only single container gets started', async assert => {
   await compose.down({ cwd: path.join(__dirname), log: true });
   await compose.upOne('alpine', { cwd: path.join(__dirname), log: true });

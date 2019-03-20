@@ -62,6 +62,7 @@ compose.exec('node', 'npm install', { cwd: path.join(__dirname) })
 * `cwd {string}`: mandatory folder path to the `docker-compose.yml`
 * `config {(string|string[])}`: custom and/or multiple yml files can be specified (relative to `cwd`)
 * `[log] {boolean}`:  optional setting to enable console logging (output of `docker-compose` `stdout`/`stderr` output)
+* `[commandOptions] string[]|Array<string|string[]`: pass optional command options like `"--build"` or `[["--build"], ["--timeout", "5"]]` or `["--build", ["--timeout", "5"]]` for the `up` command.
 
 ## Running the tests
 
