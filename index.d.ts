@@ -13,10 +13,11 @@ declare module "docker-compose" {
     exec(container:String, command:String, options: IDockerComposeOptions): Promise<IDockerComposeResult>;
     logs(container:String, command:String, options: IDockerComposeLogOptions): Promise<IDockerComposeResult>;
     run(service:String, command:String, options: IDockerComposeOptions): Promise<IDockerComposeResult>;
-    buildAll(options: IDockerComposeOptions): Promise<IDockerComposeResult>;
-    buildMany(services:String[], options: IDockerComposeOptions): Promise<IDockerComposeResult>;
+    buildAll(options: IDockerComposeBuildOptions): Promise<IDockerComposeResult>;
+    buildMany(services:String[], options: IDockerComposeBuildOptions): Promise<IDockerComposeResult>;
     buildOne(service:String, options: IDockerComposeOptions): Promise<IDockerComposeResult>;
     ps(options: IDockerComposeOptions): Promise<IDockerComposeResult>;
+    push(options: IDockerComposePushOptions): Promise<IDockerComposeResult>;
   }
 
   interface IDockerComposeOptions {
@@ -25,8 +26,16 @@ declare module "docker-compose" {
     log?: boolean;
   }
 
-  interface IDockerComposeLogOptions extends IDockerComposeOptions{
+  interface IDockerComposeLogOptions extends IDockerComposeOptions {
     follow: boolean;
+  }
+
+  interface IDockerComposeBuildOptions extends IDockerComposeOptions {
+    parallel?: boolean;
+  }
+
+  interface IDockerComposePushOptions extends IDockerComposeOptions {
+    ignorePushFailures?: boolean;
   }
 
   interface IDockerComposeResult {
