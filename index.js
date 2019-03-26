@@ -47,13 +47,16 @@ const composeOptionsToArgs = function (composeOptions) {
  * @param {boolean} [options.log]
  * @param {?(string|string[])} [options.config]
  * @param {?object} [options.env]
+ * @param {?(string[]|Array<string|string[]>)} [options.commandOptions]
  * @param {?(string[]|Array<string|string[]>)} [options.composeOptions]
  */
 const execCompose = (command, args, options) => new Promise((resolve, reject) => {
   const composeOptions = options.composeOptions || [];
-  let composeArgs = configToArgs(options.config).concat([ command ], args);
+  const commandOptions = options.commandOptions || [];
+  let composeArgs = composeOptionsToArgs(composeOptions);
 
-  composeArgs = composeArgs.concat(composeOptionsToArgs(composeOptions));
+  composeArgs = composeArgs.concat(configToArgs(options.config).concat([ command ].concat(composeOptionsToArgs(commandOptions), args)));
+
   const cwd = options.cwd;
   const env = options.env || null;
 
@@ -186,6 +189,7 @@ const rm = function (options) {
  * @return {object} std.out / std.err
  */
 const exec = function (container, command, options) {
+
   const args = command.split(/\s+/);
 
   return execCompose('exec', [ '-T', container ].concat(args), options);

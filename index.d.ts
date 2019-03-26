@@ -25,6 +25,7 @@ declare module "docker-compose" {
     config?: string | string[];
     log?: boolean;
     composeOptions?: string[] | Array<string | string[]>;
+    commandOptions?: string[] | Array<string | string[]>;
   }
 
   interface IDockerComposeLogOptions extends IDockerComposeOptions {
