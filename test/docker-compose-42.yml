@@ -1,0 +1,7 @@
+version: '3'
+
+services:
+  some-service:
+    image: alpine
+    volumes:
+      - ./volume:/mountedvolume

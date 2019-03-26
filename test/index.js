@@ -55,7 +55,7 @@ test('ensure container gets started', async assert => {
 
 test('ensure container gets started with --build option', async assert => {
   await compose.down({ cwd: path.join(__dirname), log: true, config: 'docker-compose-build.yml' });
-  await compose.upAll({ cwd: path.join(__dirname), log: true, config: 'docker-compose-build.yml', composeOptions: [ '--build' ]});
+  await compose.upAll({ cwd: path.join(__dirname), log: true, config: 'docker-compose-build.yml', commandOptions: [ '--build' ]});
 
   assert.true(await isContainerRunning('/compose_test_mongodb'));
   await compose.down({ cwd: path.join(__dirname), log: true, config: 'docker-compose-build.yml' });
@@ -64,7 +64,7 @@ test('ensure container gets started with --build option', async assert => {
 
 test('ensure container gets started with --build and --timeout option', async assert => {
   await compose.down({ cwd: path.join(__dirname), log: true, config: 'docker-compose-build.yml' });
-  await compose.upAll({ cwd: path.join(__dirname), log: true, config: 'docker-compose-build.yml', composeOptions: [[ '--build' ], [ '--timeout', '5' ]]});
+  await compose.upAll({ cwd: path.join(__dirname), log: true, config: 'docker-compose-build.yml', commandOptions: [[ '--build' ], [ '--timeout', '5' ]]});
 
   assert.true(await isContainerRunning('/compose_test_mongodb'));
   await compose.down({ cwd: path.join(__dirname), log: true, config: 'docker-compose-build.yml' });
@@ -73,10 +73,27 @@ test('ensure container gets started with --build and --timeout option', async as
 
 test('ensure container gets started with --build and --timeout option', async assert => {
   await compose.down({ cwd: path.join(__dirname), log: true, config: 'docker-compose-build.yml' });
-  await compose.upAll({ cwd: path.join(__dirname), log: true, config: 'docker-compose-build.yml', composeOptions: [ '--build', [ '--timeout', '5' ]]});
+  await compose.upAll({ cwd: path.join(__dirname), log: true, config: 'docker-compose-build.yml', commandOptions: [ '--build', [ '--timeout', '5' ]]});
 
   assert.true(await isContainerRunning('/compose_test_mongodb'));
   await compose.down({ cwd: path.join(__dirname), log: true, config: 'docker-compose-build.yml' });
+  assert.end();
+});
+
+test('ensure container command executed with --workdir command option', async assert => {
+  await compose.down({ cwd: path.join(__dirname), log: true, config: 'docker-compose-42.yml' });
+
+  assert.doesNotThrow(async () => {
+    await compose.run('some-service', 'cat hello.txt', {
+      cwd: path.join(__dirname),
+      log: true,
+      config: 'docker-compose-42.yml',
+      composeOptions: [ '--verbose' ],
+      commandOptions: [ '--workdir', '/mountedvolume/nested/dir' ]
+    });
+  });
+
+  await compose.down({ cwd: path.join(__dirname), log: true, config: 'docker-compose-42.yml' });
   assert.end();
 });
 
