@@ -2,7 +2,7 @@ version: '2'
 
 services:
   db:
-    image: mongo:3.4
+    image: mongo:3.4.0
     container_name: compose_test_mongodb
   alpine:
     image: alpine:3.7
