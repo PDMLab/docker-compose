@@ -4,3 +4,12 @@ test/
 # ignore ESLint and EditorConfig
 .editorconfig
 .eslintrc.json
+
+# JetBrains IDE settings
+.idea
+
+# VS Code settings
+.vscode
+
+# CircleCI
+.circleci
