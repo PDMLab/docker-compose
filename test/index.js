@@ -321,3 +321,15 @@ test('logs does follow service logs', async assert => {
   assert.true(await isContainerRunning('/compose_test_mongodb'));
   assert.end();
 });
+
+test('returns the port for a started service', async assert => {
+  const config = {
+    cwd: path.join(__dirname),
+    config: './docker-compose-2.yml'
+  }
+  await compose.upAll(config);
+  const port = await compose.port('db', 5432, config);
+
+  assert.true(port.out.match(/.*:[0-9]{1,5}/));
+  assert.end();
+})

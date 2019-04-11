@@ -18,6 +18,7 @@ declare module "docker-compose" {
     buildOne(service:String, options: IDockerComposeOptions): Promise<IDockerComposeResult>;
     ps(options: IDockerComposeOptions): Promise<IDockerComposeResult>;
     push(options: IDockerComposePushOptions): Promise<IDockerComposeResult>;
+    port(service:String, containerPort:String|Number, options: IDockerComposeOptions): Promise<IDockerComposeResult>;
   }
 
   interface IDockerComposeOptions {
