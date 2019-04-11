@@ -359,6 +359,21 @@ const logs = function (service, options) {
   return execCompose('logs', args, options);
 };
 
+/**
+ * @param {string} service
+ * @param {string|number} containerPort
+ * @param {object} options
+ * @param {string} options.cwd
+ * @param {boolean} [options.log]
+ * @param {?(string|string[])} [options.config]
+ * @param {?object} [options.env]
+ * @param {?(string[]|Array<string|string[]>)} [options.composeOptions]
+ */
+const port = function(service, containerPort, options) {
+  const args = [service, containerPort]
+  return execCompose('port', args, options)
+};
+
 module.exports = {
   upAll,
   upMany,
@@ -378,4 +393,5 @@ module.exports = {
   buildOne,
   ps,
   push,
+  port,
 };
