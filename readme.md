@@ -35,6 +35,9 @@ npm install --save-dev docker-compose
 * `restartMany(services, options)` - Restart services
 * `restartOne(service, options)` - Restart service
 * `ps(options)` - Lists containers information
+* `config(options)` - Validates configuration files and returns configuration yaml
+* `configServices(options)` - Returns list of services defined in configuration files
+* `configVolumes(options)` - Returns list of volumes defined in configuration files
 
 All commands return a `Promise({object})` with an stdout and stderr strings
 ```javascript

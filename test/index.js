@@ -147,7 +147,7 @@ test('ensure custom ymls are working', async assert => {
   await compose.upAll({ cwd, log, config });
   assert.true(await isContainerRunning('/compose_test_mongodb_2'));
 
-   // config & [config] are the same thing, ensures that multiple configs are handled properly
+  // config & [config] are the same thing, ensures that multiple configs are handled properly
   await compose.kill({ cwd, log, config: [ config ]});
   assert.false(await isContainerRunning('/compose_test_mongodb_2'));
   assert.end();
@@ -265,6 +265,28 @@ test('teardown', async assert => {
   assert.end();
 });
 
+test('config show data for docker-compose files', async assert => {
+  const std = await compose.config({ cwd: path.join(__dirname), log: true, config: 'docker-compose-42.yml' });
+
+  assert.false(std.err);
+  assert.true(std.out.includes('some-service'));
+  assert.true(std.out.includes('test/volume:/mountedvolume:rw'));
+});
+
+test('config show data for docker-compose files', async assert => {
+  const std = await compose.configServices({ cwd: path.join(__dirname), log: true, config: 'docker-compose-42.yml' });
+
+  assert.false(std.err);
+  assert.true(std.out.includes('some-service'));
+});
+
+test('config show data for docker-compose files', async assert => {
+  const std = await compose.configVolumes({ cwd: path.join(__dirname), log: true, config: 'docker-compose-42.yml' });
+
+  assert.false(std.err);
+  assert.true(std.out.includes('db-data'));
+});
+
 test('ps shows status data for started containers', async assert => {
   await compose.upAll({ cwd: path.join(__dirname), log: true });
 
@@ -326,10 +348,11 @@ test('returns the port for a started service', async assert => {
   const config = {
     cwd: path.join(__dirname),
     config: './docker-compose-2.yml'
-  }
+  };
+
   await compose.upAll(config);
   const port = await compose.port('db', 5432, config);
 
   assert.true(port.out.match(/.*:[0-9]{1,5}/));
   assert.end();
-})
+});
