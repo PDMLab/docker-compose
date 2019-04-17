@@ -5,3 +5,7 @@ services:
     image: alpine
     volumes:
       - ./volume:/mountedvolume
+      - db-data:/mountedsecondvolume
+
+volumes:
+  db-data:

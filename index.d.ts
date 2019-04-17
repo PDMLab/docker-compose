@@ -30,6 +30,12 @@ export declare function buildMany(services: String[], options: IDockerComposeBui
 
 export declare function buildOne(service: String, options: IDockerComposeOptions): Promise<IDockerComposeResult>;
 
+export declare function config(options: IDockerComposeOptions): Promise<IDockerComposeResult>;
+
+export declare function configServices(options: IDockerComposeOptions): Promise<IDockerComposeResult>;
+
+export declare function configVolumes(options: IDockerComposeOptions): Promise<IDockerComposeResult>;
+
 export declare function ps(options: IDockerComposeOptions): Promise<IDockerComposeResult>;
 
 export declare function push(options: IDockerComposePushOptions): Promise<IDockerComposeResult>;

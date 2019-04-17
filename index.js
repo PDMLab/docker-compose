@@ -189,7 +189,6 @@ const rm = function (options) {
  * @return {object} std.out / std.err
  */
 const exec = function (container, command, options) {
-
   const args = command.split(/\s+/);
 
   return execCompose('exec', [ '-T', container ].concat(args), options);
@@ -268,6 +267,51 @@ const buildMany = function (services, options) {
  */
 const buildOne = function (service, options) {
   return execCompose('build', [ service ], options);
+};
+
+/**
+ * Config command
+ * @param {object} options
+ * @param {string} options.cwd
+ * @param {boolean} [options.log]
+ * @param {?(string|string[])} [options.config]
+ * @param {?object} [options.env]
+ * @param {?(string[]|Array<string|string[]>)} [options.composeOptions]
+ *
+ * @return {object} std.out / std.err
+ */
+const config = function (options) {
+  return execCompose('config', [], options);
+};
+
+/**
+ * Config command with --services option
+ * @param {object} options
+ * @param {string} options.cwd
+ * @param {boolean} [options.log]
+ * @param {?(string|string[])} [options.config]
+ * @param {?object} [options.env]
+ * @param {?(string[]|Array<string|string[]>)} [options.composeOptions]
+ *
+ * @return {object} std.out / std.err
+ */
+const configServices = function (options) {
+  return execCompose('config', [ '--services' ], options);
+};
+
+/**
+ * Config command with --volumes option
+ * @param {object} options
+ * @param {string} options.cwd
+ * @param {boolean} [options.log]
+ * @param {?(string|string[])} [options.config]
+ * @param {?object} [options.env]
+ * @param {?(string[]|Array<string|string[]>)} [options.composeOptions]
+ *
+ * @return {object} std.out / std.err
+ */
+const configVolumes = function (options) {
+  return execCompose('config', [ '--volumes' ], options);
 };
 
 /**
@@ -369,9 +413,10 @@ const logs = function (service, options) {
  * @param {?object} [options.env]
  * @param {?(string[]|Array<string|string[]>)} [options.composeOptions]
  */
-const port = function(service, containerPort, options) {
-  const args = [service, containerPort]
-  return execCompose('port', args, options)
+const port = function (service, containerPort, options) {
+  const args = [ service, containerPort ];
+
+  return execCompose('port', args, options);
 };
 
 module.exports = {
@@ -392,6 +437,9 @@ module.exports = {
   buildMany,
   buildOne,
   ps,
+  config,
+  configServices,
+  configVolumes,
   push,
-  port,
+  port
 };
