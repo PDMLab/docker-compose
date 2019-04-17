@@ -65,12 +65,12 @@ const execCompose = (command, args, options) => {
   return pgen(function* () {
     const childProc = childProcess.spawn('docker-compose', composeArgs, {cwd, env});
     let error;
-    let stdout = '';
-    let stderr = '';
+    let stdoutChunk = '';
+    let stderrChunk = '';
     let isFinished = false;
 
     childProc.on('error', err => {
-      error = Error(err);
+      error = new Error(err);
     });
 
     const result = {
@@ -80,12 +80,12 @@ const execCompose = (command, args, options) => {
 
     childProc.stdout.on('data', chunk => {
       result.out += chunk.toString();
-      stdout += chunk.toString();
+      stdoutChunk += chunk.toString();
     });
 
     childProc.stderr.on('data', chunk => {
       result.err += chunk.toString();
-      stderr += chunk.toString();
+      stderrChunk += chunk.toString();
     });
 
     childProc.on('close', () => {
@@ -102,17 +102,17 @@ const execCompose = (command, args, options) => {
         throw error
       }
 
-      if (stdout !== '') {
-        const toYield = stdout;
-        stdout = '';
+      if (stdoutChunk !== '') {
+        const toYield = stdoutChunk;
+        stdoutChunk = '';
         yield {
           stdout: toYield,
         };
       }
 
-      if (stderr !== '') {
-        const toYield = stderr;
-        stderr = '';
+      if (stderrChunk !== '') {
+        const toYield = stderrChunk;
+        stderrChunk = '';
         yield {
           stderr: toYield,
         }
@@ -121,6 +121,9 @@ const execCompose = (command, args, options) => {
       if (isFinished) {
         return result;
       }
+      
+      // Return execution to parent context if nothing happened
+      yield null;
     }
   });
 };
