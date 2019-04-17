@@ -1,6 +1,6 @@
 {
   "name": "docker-compose",
-  "version": "0.15.1",
+  "version": "0.16.0",
   "main": "index.js",
   "typings": "index.d.ts",
   "scripts": {
@@ -34,6 +34,12 @@
     },
     {
       "name": "Sergey Falinsky"
+    },
+    {
+      "name": "Lars Kumbier"
+    },
+    {
+      "name": "Paweł Niedzielski"
     }
   ],
   "license": "MIT",
