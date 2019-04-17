@@ -45,6 +45,7 @@
   "license": "MIT",
   "description": "Manage docker-compose from Node.js",
   "dependencies": {
+    "promisify-generator": "^1.0.0",
     "winston": "^2.3.1"
   },
   "devDependencies": {

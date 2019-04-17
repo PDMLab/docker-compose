@@ -1,6 +1,7 @@
 'use strict';
 
 const childProcess = require('child_process');
+const pgen = require('promisify-generator');
 
 /**
  * Converts supplied yml files to cli arguments
@@ -50,44 +51,79 @@ const composeOptionsToArgs = function (composeOptions) {
  * @param {?(string[]|Array<string|string[]>)} [options.commandOptions]
  * @param {?(string[]|Array<string|string[]>)} [options.composeOptions]
  */
-const execCompose = (command, args, options) => new Promise((resolve, reject) => {
+const execCompose = (command, args, options) => {
+
   const composeOptions = options.composeOptions || [];
   const commandOptions = options.commandOptions || [];
   let composeArgs = composeOptionsToArgs(composeOptions);
 
-  composeArgs = composeArgs.concat(configToArgs(options.config).concat([ command ].concat(composeOptionsToArgs(commandOptions), args)));
+  composeArgs = composeArgs.concat(configToArgs(options.config).concat([command].concat(composeOptionsToArgs(commandOptions), args)));
 
   const cwd = options.cwd;
   const env = options.env || null;
 
-  const childProc = childProcess.spawn('docker-compose', composeArgs, { cwd, env });
+  return pgen(function* () {
+    const childProc = childProcess.spawn('docker-compose', composeArgs, {cwd, env});
+    let error;
+    let stdout = '';
+    let stderr = '';
+    let isFinished = false;
 
-  childProc.on('error', err => {
-    reject(err);
+    childProc.on('error', err => {
+      error = Error(err);
+    });
+
+    const result = {
+      err: '',
+      out: ''
+    };
+
+    childProc.stdout.on('data', chunk => {
+      result.out += chunk.toString();
+      stdout += chunk.toString();
+    });
+
+    childProc.stderr.on('data', chunk => {
+      result.err += chunk.toString();
+      stderr += chunk.toString();
+    });
+
+    childProc.on('close', () => {
+      isFinished = true;
+    });
+
+    if (options.log) {
+      childProc.stdout.pipe(process.stdout);
+      childProc.stderr.pipe(process.stderr);
+    }
+
+    while (true) {
+      if (typeof error !== 'undefined') {
+        throw error
+      }
+
+      if (stdout !== '') {
+        const toYield = stdout;
+        stdout = '';
+        yield {
+          stdout: toYield,
+        };
+      }
+
+      if (stderr !== '') {
+        const toYield = stderr;
+        stderr = '';
+        yield {
+          stderr: toYield,
+        }
+      }
+
+      if (isFinished) {
+        return result;
+      }
+    }
   });
-
-  const result = {
-    err: '',
-    out: ''
-  };
-
-  childProc.stdout.on('data', chunk => {
-    result.out += chunk.toString();
-  });
-
-  childProc.stderr.on('data', chunk => {
-    result.err += chunk.toString();
-  });
-
-  childProc.on('close', () => {
-    resolve(result);
-  });
-
-  if (options.log) {
-    childProc.stdout.pipe(process.stdout);
-    childProc.stderr.pipe(process.stderr);
-  }
-});
+};
 
 /**
  * @param {object} options
