@@ -2,8 +2,9 @@ version: '2'
 
 services:
   db:
-    image: mongo:3.4.0
-    container_name: compose_test_mongodb
+    image: nginx:1.16.0
+    container_name: compose_test_nginx
+    command: 'nginx -g "daemon off;"'
   alpine:
-    image: alpine:3.7
+    image: alpine:3.7.3
     container_name: compose_test_alpine

@@ -2,7 +2,7 @@ version: '3'
 
 services:
   some-service:
-    image: alpine
+    image: alpine:3.7.3
     volumes:
       - ./volume:/mountedvolume
       - db-data:/mountedsecondvolume
