@@ -49,7 +49,7 @@ test('ensure container gets started', async assert => {
   await compose.down({ cwd: path.join(__dirname), log: true });
   await compose.upAll({ cwd: path.join(__dirname), log: true });
 
-  assert.true(await isContainerRunning('/compose_test_mongodb'));
+  assert.true(await isContainerRunning('/compose_test_nginx'));
   assert.end();
 });
 
@@ -57,7 +57,7 @@ test('ensure container gets started with --build option', async assert => {
   await compose.down({ cwd: path.join(__dirname), log: true, config: 'docker-compose-build.yml' });
   await compose.upAll({ cwd: path.join(__dirname), log: true, config: 'docker-compose-build.yml', commandOptions: [ '--build' ]});
 
-  assert.true(await isContainerRunning('/compose_test_mongodb'));
+  assert.true(await isContainerRunning('/compose_test_nginx'));
   await compose.down({ cwd: path.join(__dirname), log: true, config: 'docker-compose-build.yml' });
   assert.end();
 });
@@ -66,7 +66,7 @@ test('ensure container gets started with --build and --timeout option', async as
   await compose.down({ cwd: path.join(__dirname), log: true, config: 'docker-compose-build.yml' });
   await compose.upAll({ cwd: path.join(__dirname), log: true, config: 'docker-compose-build.yml', commandOptions: [[ '--build' ], [ '--timeout', '5' ]]});
 
-  assert.true(await isContainerRunning('/compose_test_mongodb'));
+  assert.true(await isContainerRunning('/compose_test_nginx'));
   await compose.down({ cwd: path.join(__dirname), log: true, config: 'docker-compose-build.yml' });
   assert.end();
 });
@@ -75,7 +75,7 @@ test('ensure container gets started with --build and --timeout option', async as
   await compose.down({ cwd: path.join(__dirname), log: true, config: 'docker-compose-build.yml' });
   await compose.upAll({ cwd: path.join(__dirname), log: true, config: 'docker-compose-build.yml', commandOptions: [ '--build', [ '--timeout', '5' ]]});
 
-  assert.true(await isContainerRunning('/compose_test_mongodb'));
+  assert.true(await isContainerRunning('/compose_test_nginx'));
   await compose.down({ cwd: path.join(__dirname), log: true, config: 'docker-compose-build.yml' });
   assert.end();
 });
@@ -102,7 +102,7 @@ test('ensure only single container gets started', async assert => {
   await compose.upOne('alpine', { cwd: path.join(__dirname), log: true });
 
   assert.true(await isContainerRunning('/compose_test_alpine'));
-  assert.false(await isContainerRunning('/compose_test_mongodb'));
+  assert.false(await isContainerRunning('/compose_test_nginx'));
   assert.end();
 });
 
@@ -111,7 +111,7 @@ test('ensure only multiple containers get started', async assert => {
   await compose.upMany([ 'alpine' ], { cwd: path.join(__dirname), log: true });
 
   assert.true(await isContainerRunning('/compose_test_alpine'));
-  assert.false(await isContainerRunning('/compose_test_mongodb'));
+  assert.false(await isContainerRunning('/compose_test_nginx'));
   assert.end();
 });
 
@@ -119,7 +119,7 @@ test('ensure container gets down', async assert => {
   await compose.upAll({ cwd: path.join(__dirname), log: true });
   await compose.down({ cwd: path.join(__dirname), log: true });
 
-  assert.false(await isContainerRunning('/compose_test_mongodb'));
+  assert.false(await isContainerRunning('/compose_test_nginx'));
   assert.end();
 });
 
@@ -127,7 +127,7 @@ test('ensure container gets stopped', async assert => {
   await compose.upAll({ cwd: path.join(__dirname), log: true });
   await compose.stop({ cwd: path.join(__dirname), log: true });
 
-  assert.false(await isContainerRunning('/compose_test_mongodb'));
+  assert.false(await isContainerRunning('/compose_test_nginx'));
   assert.end();
 });
 
@@ -135,7 +135,7 @@ test('ensure container gets killed', async assert => {
   await compose.upAll({ cwd: path.join(__dirname), log: true });
   await compose.kill({ cwd: path.join(__dirname), log: true });
 
-  assert.false(await isContainerRunning('/compose_test_mongodb'));
+  assert.false(await isContainerRunning('/compose_test_nginx'));
   assert.end();
 });
 
@@ -145,11 +145,11 @@ test('ensure custom ymls are working', async assert => {
   const log = true;
 
   await compose.upAll({ cwd, log, config });
-  assert.true(await isContainerRunning('/compose_test_mongodb_2'));
+  assert.true(await isContainerRunning('/compose_test_nginx_2'));
 
   // config & [config] are the same thing, ensures that multiple configs are handled properly
   await compose.kill({ cwd, log, config: [ config ]});
-  assert.false(await isContainerRunning('/compose_test_mongodb_2'));
+  assert.false(await isContainerRunning('/compose_test_nginx_2'));
   assert.end();
 });
 
@@ -171,7 +171,7 @@ test('ensure run and exec are working', async assert => {
 
   await compose.upAll(opts);
 
-  assert.true(await isContainerRunning('/compose_test_mongodb'));
+  assert.true(await isContainerRunning('/compose_test_nginx'));
 
   let std = await compose.exec('db', 'cat /etc/os-release', opts);
 
@@ -294,7 +294,7 @@ test('ps shows status data for started containers', async assert => {
 
   assert.false(std.err);
   assert.true(std.out.includes('compose_test_alpine'));
-  assert.true(std.out.includes('compose_test_mongodb'));
+  assert.true(std.out.includes('compose_test_nginx'));
 
   assert.end();
 });
@@ -307,7 +307,7 @@ test('ps does not show status data for stopped containers', async assert => {
 
   assert.false(std.err);
   assert.true(std.out.includes('compose_test_alpine'));
-  assert.false(std.out.includes('compose_test_mongodb'));
+  assert.false(std.out.includes('compose_test_nginx'));
 
   assert.end();
 });
@@ -316,7 +316,7 @@ test('restartAll does restart all containers', async assert => {
   await compose.upAll({ cwd: path.join(__dirname), log: true });
   await compose.restartAll({ cwd: path.join(__dirname), log: true });
 
-  assert.true(await isContainerRunning('/compose_test_mongodb'));
+  assert.true(await isContainerRunning('/compose_test_nginx'));
   assert.end();
 });
 
@@ -324,7 +324,7 @@ test('restartMany does restart selected containers', async assert => {
   await compose.upAll({ cwd: path.join(__dirname), log: true });
   await compose.restartMany([ 'db', 'alpine' ], { cwd: path.join(__dirname), log: true });
 
-  assert.true(await isContainerRunning('/compose_test_mongodb'));
+  assert.true(await isContainerRunning('/compose_test_nginx'));
   assert.end();
 });
 
@@ -332,7 +332,7 @@ test('restartOne does restart container', async assert => {
   await compose.upAll({ cwd: path.join(__dirname), log: true });
   await compose.restartOne('db', { cwd: path.join(__dirname), log: true });
 
-  assert.true(await isContainerRunning('/compose_test_mongodb'));
+  assert.true(await isContainerRunning('/compose_test_nginx'));
   assert.end();
 });
 
@@ -340,7 +340,7 @@ test('logs does follow service logs', async assert => {
   await compose.upAll({ cwd: path.join(__dirname), log: true });
   await compose.logs('db', { cwd: path.join(__dirname), log: true });
 
-  assert.true(await isContainerRunning('/compose_test_mongodb'));
+  assert.true(await isContainerRunning('/compose_test_nginx'));
   assert.end();
 });
 

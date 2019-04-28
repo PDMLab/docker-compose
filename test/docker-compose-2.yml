@@ -1,8 +1,11 @@
 version: '2'
 
-services: 
+services:
   db:
-    image: mongo:3.4
-    container_name: compose_test_mongodb_2
+    image: nginx:1.16.0
+    container_name: compose_test_nginx_2
+    command: 'nginx -g "daemon off;"'
+    environment:
+      NGINX_PORT: 5432
     ports:
       - "5432"
