@@ -67,6 +67,7 @@ const execCompose = (command, args, options) => new Promise((resolve, reject) =>
   });
 
   const result = {
+    exitCode: 0,
     err: '',
     out: ''
   };
@@ -79,7 +80,8 @@ const execCompose = (command, args, options) => new Promise((resolve, reject) =>
     result.err += chunk.toString();
   });
 
-  childProc.on('close', () => {
+  childProc.on('close', (exitCode, _) => {
+    result.exitCode = exitCode;
     resolve(result);
   });
 
