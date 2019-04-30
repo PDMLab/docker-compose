@@ -231,7 +231,7 @@ const buildAll = function (options) {
   return execCompose(
     'build',
     options.parallel ? [ '--parallel' ] : [],
-    options,
+    options
   );
 };
 
@@ -251,7 +251,7 @@ const buildMany = function (services, options) {
   return execCompose(
     'build',
     options.parallel ? [ '--parallel' ].concat(services) : services,
-    options,
+    options
   );
 };
 
@@ -343,7 +343,7 @@ const push = function (options) {
   return execCompose(
     'push',
     options.ignorePushFailures ? [ '--ignore-push-failures' ] : [],
-    options,
+    options
   );
 };
 
