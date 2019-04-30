@@ -39,11 +39,12 @@ npm install --save-dev docker-compose
 * `configServices(options)` - Returns list of services defined in configuration files
 * `configVolumes(options)` - Returns list of volumes defined in configuration files
 
-All commands return a `Promise({object})` with an stdout and stderr strings
+All commands return a `Promise({object})` with stdout and stderr strings and an exit code:
 ```javascript
 {
-  out: 'stdout contents'
-  err: 'stderr contents'
+  out: 'stdout contents',
+  err: 'stderr contents',
+  exitCode: 0, // !== 0 in case of an error
 }
 ```
 

@@ -63,6 +63,7 @@ interface IDockerComposePushOptions extends IDockerComposeOptions {
 }
 
 interface IDockerComposeResult {
+    exitCode: ?number;
     out: string;
     err: string;
 }

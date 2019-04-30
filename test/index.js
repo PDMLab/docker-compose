@@ -53,6 +53,12 @@ test('ensure container gets started', async assert => {
   assert.end();
 });
 
+test('ensure exit code is returned correctly', async assert => {
+  assert.equal(0, (await compose.down({ cwd: path.join(__dirname), log: true })).exitCode);
+  assert.equal(0, (await compose.upAll({ cwd: path.join(__dirname), log: true })).exitCode);
+  assert.equal(1, (await compose.logs('non_existent_service', { cwd: path.join(__dirname) })).exitCode);
+});
+
 test('ensure container gets started with --build option', async assert => {
   await compose.down({ cwd: path.join(__dirname), log: true, config: 'docker-compose-build.yml' });
   await compose.upAll({ cwd: path.join(__dirname), log: true, config: 'docker-compose-build.yml', commandOptions: [ '--build' ]});
