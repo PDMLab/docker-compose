@@ -80,8 +80,11 @@ const execCompose = (command, args, options) => new Promise((resolve, reject) =>
     result.err += chunk.toString();
   });
 
-  childProc.on('close', (exitCode, _) => {
-    result.exitCode = exitCode;
+  childProc.on('exit', exitCode => {
+    result.exitCode = exitCode
+  })
+
+  childProc.on('close', () => {
     resolve(result);
   });
 
