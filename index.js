@@ -67,7 +67,7 @@ const execCompose = (command, args, options) => new Promise((resolve, reject) =>
   });
 
   const result = {
-    exitCode: 0,
+    exitCode: null,
     err: '',
     out: ''
   };
