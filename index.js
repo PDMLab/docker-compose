@@ -81,10 +81,7 @@ const execCompose = (command, args, options) => new Promise((resolve, reject) =>
   });
 
   childProc.on('exit', exitCode => {
-    result.exitCode = exitCode
-  })
-
-  childProc.on('close', () => {
+    result.exitCode = exitCode;
     resolve(result);
   });
 
