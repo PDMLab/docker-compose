@@ -47,9 +47,6 @@
   ],
   "license": "MIT",
   "description": "Manage docker-compose from Node.js",
-  "dependencies": {
-    "winston": "^2.3.1"
-  },
   "devDependencies": {
     "composefile": "^0.3.0",
     "dockerode": "^2.5.7",
