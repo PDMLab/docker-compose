@@ -1,3 +1,9 @@
+# 0.17.2 / 2019-05-02
+
+## :nut_and_bolt: Other
+
+* [#69](https://github.com/PDMLab/docker-compose/issues/69): Remove winston dependency and lib/log
+
 # 0.17.1 / 2019-05-01
 
 ## :bug: Fixes
