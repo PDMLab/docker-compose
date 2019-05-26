@@ -1,6 +1,6 @@
 version: '2'
 
-services: 
+services:
   build_test_1:
     image: compose-test-build-image-1:test
     build:
@@ -21,3 +21,7 @@ services:
     build:
       context: ./
       dockerfile: build-test.Dockerfile
+  build-nginx:
+    image: nginx:1.16.0
+    container_name: compose_test_nginx
+    command: 'nginx -g "daemon off;"'

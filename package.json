@@ -4,7 +4,7 @@
   "main": "index.js",
   "typings": "index.d.ts",
   "scripts": {
-    "test": "./node_modules/.bin/tape test",
+    "test": "jest test --verbose",
     "eslint": "./node_modules/.bin/eslint ."
   },
   "repository": {
@@ -59,6 +59,8 @@
     "eslint": "^5.6.0",
     "eslint-config-es": "^0.8.11",
     "eslint-plugin-extended": "^0.2.0",
+    "eslint-plugin-jest": "^22.6.4",
+    "jest": "^24.8.0",
     "tape": "^4.6.3",
     "tape-promise": "^2.0.1"
   }

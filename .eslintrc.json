@@ -1,6 +1,13 @@
 {
-  "extends": "es/2015/server",
+  "extends": [
+    "es/2015/server",
+    "plugin:jest/recommended"
+  ],
   "rules": {
     "no-console" :"off"
+  },
+  "plugins": ["jest"],
+  "env": {
+    "jest/globals": true
   }
 }

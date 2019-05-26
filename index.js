@@ -51,6 +51,9 @@ const composeOptionsToArgs = function (composeOptions) {
  * @param {?(string[]|Array<string|string[]>)} [options.composeOptions]
  */
 const execCompose = (command, args, options) => new Promise((resolve, reject) => {
+  if (typeof options === 'undefined') {
+    options = {};
+  }
   const composeOptions = options.composeOptions || [];
   const commandOptions = options.commandOptions || [];
   let composeArgs = composeOptionsToArgs(composeOptions);
@@ -82,11 +85,11 @@ const execCompose = (command, args, options) => new Promise((resolve, reject) =>
 
   childProc.on('exit', exitCode => {
     result.exitCode = exitCode;
-    if (exitCode !== 0) {
-      return reject(new Error(result.err));
+    if (exitCode === 0) {
+      resolve(result);
+    } else {
+      reject(result);
     }
-
-    return resolve(result);
   });
 
   if (options.log) {
