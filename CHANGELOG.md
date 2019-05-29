@@ -1,3 +1,9 @@
+# 0.17.3 / 2019-05-29
+
+## :bug: Fixes
+
+* [#69](https://github.com/PDMLab/docker-compose/pull/76): Fix declaration for `logs` function
+
 # 0.17.2 / 2019-05-02
 
 ## :nut_and_bolt: Other
