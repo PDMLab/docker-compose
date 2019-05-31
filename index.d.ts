@@ -20,7 +20,7 @@ export declare function rm(options: IDockerComposeOptions): Promise<IDockerCompo
 
 export declare function exec(container: String, command: String, options: IDockerComposeOptions): Promise<IDockerComposeResult>;
 
-export declare function logs(container: String, options: IDockerComposeLogOptions): Promise<IDockerComposeResult>;
+export declare function logs(services: String[], options: IDockerComposeLogOptions): Promise<IDockerComposeResult>;
 
 export declare function run(service: String, command: String, options: IDockerComposeOptions): Promise<IDockerComposeResult>;
 

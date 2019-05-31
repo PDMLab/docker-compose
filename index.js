@@ -386,7 +386,7 @@ const restartOne = function (service, options) {
 };
 
 /**
- * @param {string} service
+ * @param {?(string|string[])} services
  * @param {object} options
  * @param {string} options.cwd
  * @param {boolean} [options.log]
@@ -395,8 +395,8 @@ const restartOne = function (service, options) {
  * @param {?object} [options.env]
  * @param {?(string[]|Array<string|string[]>)} [options.composeOptions]
  */
-const logs = function (service, options) {
-  let args = [ service ];
+const logs = function (services, options) {
+  let args = Array.isArray(services) ? services : [ services ];
 
   if (options.follow) {
     args = [ '--follow', ...args ];
