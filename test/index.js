@@ -191,6 +191,38 @@ test('ensure run and exec are working', async assert => {
   assert.end();
 });
 
+test('ensure run and exec with command defined as array are working', async assert => {
+  const checkOSID = (out, id) => {
+    // parse /etc/os-release contents
+    const re = /([\w,_]+)=(.*)/g;
+    let match = null;
+    const os = {};
+
+    while ((match = re.exec(out)) !== null) { // eslint-disable-line no-cond-assign
+      os[match[1]] = match[2];
+    }
+
+    assert.equals(os.ID, id);
+  };
+
+  const opts = { cwd: path.join(__dirname), log: false };
+
+  await compose.upAll(opts);
+
+  assert.true(await isContainerRunning('/compose_test_nginx'));
+
+  let std = await compose.exec('db', ['/bin/sh', '-c', 'cat /etc/os-release'], opts);
+
+  assert.false(std.err);
+  checkOSID(std.out, 'debian');
+
+  std = await compose.run('alpine', ['/bin/sh', '-c', 'cat /etc/os-release'], opts);
+  assert.false(std.err);
+  checkOSID(std.out, 'alpine');
+
+  assert.end();
+});
+
 test('build single service', async assert => {
   const opts = {
     cwd: path.join(__dirname),
