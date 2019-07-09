@@ -211,12 +211,12 @@ test('ensure run and exec with command defined as array are working', async asse
 
   assert.true(await isContainerRunning('/compose_test_nginx'));
 
-  let std = await compose.exec('db', ['/bin/sh', '-c', 'cat /etc/os-release'], opts);
+  let std = await compose.exec('db', [ '/bin/sh', '-c', 'cat /etc/os-release' ], opts);
 
   assert.false(std.err);
   checkOSID(std.out, 'debian');
 
-  std = await compose.run('alpine', ['/bin/sh', '-c', 'cat /etc/os-release'], opts);
+  std = await compose.run('alpine', [ '/bin/sh', '-c', 'cat /etc/os-release' ], opts);
   assert.false(std.err);
   checkOSID(std.out, 'alpine');
 
