@@ -180,7 +180,7 @@ const rm = function (options) {
 /**
  * Execute command in a running container
  * @param {string} container container name
- * @param {string} command command to execute
+ * @param {string|string[]} command command to execute
  * @param {object} options
  * @param {string} options.cwd
  * @param {boolean} [options.log]
@@ -191,7 +191,7 @@ const rm = function (options) {
  * @return {object} std.out / std.err
  */
 const exec = function (container, command, options) {
-  const args = command.split(/\s+/);
+  const args = Array.isArray(command) ? command : command.split(/\s+/);
 
   return execCompose('exec', [ '-T', container ].concat(args), options);
 };
@@ -199,7 +199,7 @@ const exec = function (container, command, options) {
 /**
  * Run command
  * @param {string} container container name
- * @param {string} command command to execute
+ * @param {string|string[]} command command to execute
  * @param {object} options
  * @param {string} options.cwd
  * @param {boolean} [options.log]
@@ -210,7 +210,7 @@ const exec = function (container, command, options) {
  * @return {object} std.out / std.err
  */
 const run = function (container, command, options) {
-  const args = command.split(/\s+/);
+  const args = Array.isArray(command) ? command : command.split(/\s+/);
 
   return execCompose('run', [ '-T', container ].concat(args), options);
 };
