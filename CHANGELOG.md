@@ -1,3 +1,9 @@
+# 0.18.0 / 2019-07-10
+
+## :tada: Enhancements
+
+* [#82](https://github.com/PDMLab/docker-compose/pull/82): Allow passing an array as command to `run` and `exec`
+
 # 0.17.3 / 2019-05-29
 
 ## :bug: Fixes
