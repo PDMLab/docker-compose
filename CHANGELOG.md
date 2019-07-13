@@ -1,3 +1,11 @@
+# 0.19.0 / 2019-07-13
+
+## :tada: Enhancements
+
+* [#77](https://github.com/PDMLab/docker-compose/pull/77): 
+  * handle error based on exit code
+  * replace `tape` with `jest`
+
 # 0.18.0 / 2019-07-10
 
 ## :tada: Enhancements
