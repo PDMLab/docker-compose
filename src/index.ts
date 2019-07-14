@@ -112,11 +112,11 @@ export const upAll = function (options?: IDockerComposeOptions): Promise<IDocker
   return execCompose('up', [ '-d' ], options);
 };
 
-export const upMany = function (services, options?: IDockerComposeOptions): Promise<IDockerComposeResult> {
+export const upMany = function (services: string[], options?: IDockerComposeOptions): Promise<IDockerComposeResult> {
   return execCompose('up', [ '-d' ].concat(services), options);
 };
 
-export const upOne = function (service, options?: IDockerComposeOptions): Promise<IDockerComposeResult> {
+export const upOne = function (service: string, options?: IDockerComposeOptions): Promise<IDockerComposeResult> {
   return execCompose('up', [ '-d', service ], options);
 };
 
