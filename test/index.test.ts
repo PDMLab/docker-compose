@@ -1,8 +1,7 @@
-'use strict';
+import Docker from 'dockerode';
+import * as compose from '../src/index';
+import * as path from 'path';
 
-const compose = require('../index');
-const path = require('path');
-const Docker = require('dockerode');
 const docker = new Docker();
 
 // Docker commands, especially builds, can take some time. This makes sure that they can take the time they need.
@@ -11,29 +10,29 @@ jest.setTimeout(25000);
 // Set to true if you need to diagnose using output
 const logOutput = false;
 
-const isContainerRunning = async name => new Promise((resolve, reject) => {
-  docker.listContainers((err, containers) => {
+const isContainerRunning = async (name: string): Promise<boolean> => new Promise((resolve, reject): void => {
+  docker.listContainers((err, containers): void => {
     if (err) {
       reject(err);
     }
 
-    const running = containers.filter(container => container.Names.includes(name));
+    const running = containers.filter((container): boolean => container.Names.includes(name));
 
     resolve(running.length > 0);
   });
 });
 
-const repoTags = imageInfo => imageInfo.RepoTags || [];
+const repoTags = (imageInfo): string[] => imageInfo.RepoTags || [];
 
-const imageExists = async name => {
+const imageExists = async (name: string): Promise<boolean> => {
   const images = await docker.listImages();
 
-  const foundImage = images.findIndex(imageInfo => repoTags(imageInfo).includes(name));
+  const foundImage = images.findIndex((imageInfo): boolean => repoTags(imageInfo).includes(name));
 
   return foundImage > -1;
 };
 
-const removeImagesStartingWith = async searchString => {
+const removeImagesStartingWith = async (searchString: string): Promise<void> => {
   const images = await docker.listImages();
 
   for (const image of images) {
@@ -50,7 +49,7 @@ const removeImagesStartingWith = async searchString => {
   }
 };
 
-test('ensure container gets started', async () => {
+test('ensure container gets started', async (): Promise<void> => {
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
   await compose.upAll({ cwd: path.join(__dirname), log: logOutput });
 
@@ -58,7 +57,7 @@ test('ensure container gets started', async () => {
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
 });
 
-test('ensure exit code is returned correctly', async () => {
+test('ensure exit code is returned correctly', async (): Promise<void> => {
   let result = await compose.down({ cwd: path.join(__dirname), log: logOutput });
 
   await expect(result).toMatchObject({
@@ -78,16 +77,16 @@ test('ensure exit code is returned correctly', async () => {
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
 });
 
-describe('starts containers properly with --build and --timeout options', () => {
-  beforeEach(async () => {
+describe('starts containers properly with --build and --timeout options', (): void => {
+  beforeEach(async (): Promise<void> => {
     await compose.down({ cwd: path.join(__dirname), log: logOutput, config: 'docker-compose-build.yml' });
   });
 
-  afterEach(async () => {
+  afterEach(async (): Promise<void> => {
     await compose.down({ cwd: path.join(__dirname), log: logOutput, config: 'docker-compose-build.yml' });
   });
 
-  test('ensure container gets started with --build option', async () => {
+  test('ensure container gets started with --build option', async (): Promise<void> => {
     await compose.upAll({
       cwd: path.join(__dirname),
       log: logOutput,
@@ -98,7 +97,7 @@ describe('starts containers properly with --build and --timeout options', () => 
     expect(await isContainerRunning('/compose_test_nginx')).toBeTruthy();
   });
 
-  test('ensure container gets started with --build and --timeout option', async () => {
+  test('ensure container gets started with --build and --timeout option', async (): Promise<void> => {
     await compose.upAll({
       cwd: path.join(__dirname),
       log: logOutput,
@@ -109,7 +108,7 @@ describe('starts containers properly with --build and --timeout options', () => 
     expect(await isContainerRunning('/compose_test_nginx')).toBeTruthy();
   });
 
-  test('ensure container gets started with --build and --timeout option with different command style', async () => {
+  test('ensure container gets started with --build and --timeout option with different command style', async (): Promise<void> => {
     await compose.upAll({
       cwd: path.join(__dirname),
       log: logOutput,
@@ -121,7 +120,7 @@ describe('starts containers properly with --build and --timeout options', () => 
   });
 });
 
-test('ensure container command executed with --workdir command option', async () => {
+test('ensure container command executed with --workdir command option', async (): Promise<void> => {
   await compose.down({ cwd: path.join(__dirname), log: logOutput, config: 'docker-compose-42.yml' });
   const result = await compose.run('some-service', 'pwd', {
     cwd: path.join(__dirname),
@@ -138,7 +137,7 @@ test('ensure container command executed with --workdir command option', async ()
   await compose.down({ cwd: path.join(__dirname), log: logOutput, config: 'docker-compose-42.yml' });
 });
 
-test('ensure only single container gets started', async () => {
+test('ensure only single container gets started', async (): Promise<void> => {
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
   await compose.upOne('alpine', { cwd: path.join(__dirname), log: logOutput });
 
@@ -147,7 +146,7 @@ test('ensure only single container gets started', async () => {
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
 });
 
-test('ensure only multiple containers get started', async () => {
+test('ensure only multiple containers get started', async (): Promise<void> => {
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
   await compose.upMany([ 'alpine' ], { cwd: path.join(__dirname), log: logOutput });
 
@@ -156,7 +155,7 @@ test('ensure only multiple containers get started', async () => {
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
 });
 
-test('ensure container gets down', async () => {
+test('ensure container gets down', async (): Promise<void> => {
   await compose.upAll({ cwd: path.join(__dirname), log: logOutput });
   expect(await isContainerRunning('/compose_test_nginx')).toBeTruthy();
 
@@ -164,7 +163,7 @@ test('ensure container gets down', async () => {
   expect(await isContainerRunning('/compose_test_nginx')).toBeFalsy();
 });
 
-test('ensure container gets stopped', async () => {
+test('ensure container gets stopped', async (): Promise<void> => {
   await compose.upAll({ cwd: path.join(__dirname), log: logOutput });
   expect(await isContainerRunning('/compose_test_nginx')).toBeTruthy();
 
@@ -173,7 +172,7 @@ test('ensure container gets stopped', async () => {
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
 });
 
-test('ensure container gets killed', async () => {
+test('ensure container gets killed', async (): Promise<void> => {
   await compose.upAll({ cwd: path.join(__dirname), log: logOutput });
   expect(await isContainerRunning('/compose_test_nginx')).toBeTruthy();
 
@@ -183,7 +182,7 @@ test('ensure container gets killed', async () => {
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
 });
 
-test('ensure custom ymls are working', async () => {
+test('ensure custom ymls are working', async (): Promise<void> => {
   const config = './docker-compose-2.yml';
   const cwd = path.join(__dirname);
 
@@ -197,12 +196,12 @@ test('ensure custom ymls are working', async () => {
   await compose.down({ cwd, log: logOutput, config });
 });
 
-test('ensure run and exec are working', async () => {
-  const checkOSID = (out, id) => {
+test('ensure run and exec are working', async (): Promise<void> => {
+  const checkOSID = (out, id): void => {
     // parse /etc/os-release contents
     const re = /([\w,_]+)=(.*)/g;
     let match;
-    const os = {};
+    const os: {ID?: string} = {};
 
     while ((match = re.exec(out)) !== null) { // eslint-disable-line no-cond-assign
       os[match[1]] = match[2];
@@ -229,12 +228,12 @@ test('ensure run and exec are working', async () => {
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
 });
 
-test('ensure run and exec with command defined as array are working', async () => {
-  const checkOSID = (out, id) => {
+test('ensure run and exec with command defined as array are working', async (): Promise<void> => {
+  const checkOSID = (out, id): void => {
     // parse /etc/os-release contents
     const re = /([\w,_]+)=(.*)/g;
     let match;
-    const os = {};
+    const os: {ID?: string} = {};
 
     while ((match = re.exec(out)) !== null) { // eslint-disable-line no-cond-assign
       os[match[1]] = match[2];
@@ -261,7 +260,7 @@ test('ensure run and exec with command defined as array are working', async () =
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
 });
 
-test('build single service', async () => {
+test('build single service', async (): Promise<void> => {
   const opts = {
     cwd: path.join(__dirname),
     log: logOutput,
@@ -280,7 +279,7 @@ test('build single service', async () => {
   await removeImagesStartingWith('compose-test-build-image');
 });
 
-test('build multiple services', async () => {
+test('build multiple services', async (): Promise<void> => {
   const opts = {
     cwd: path.join(__dirname),
     log: logOutput,
@@ -297,7 +296,7 @@ test('build multiple services', async () => {
   await removeImagesStartingWith('compose-test-build-image');
 });
 
-test('build all services', async () => {
+test('build all services', async (): Promise<void> => {
   const opts = {
     cwd: path.join(__dirname),
     log: logOutput,
@@ -314,14 +313,19 @@ test('build all services', async () => {
   await removeImagesStartingWith('compose-test-build-image');
 });
 
-test('teardown', async () => {
-  docker.listContainers((err, containers) => {
+test('teardown', async (): Promise<void> => {
+  interface Container {
+    Names: string[];
+    Id: string;
+  }
+
+  docker.listContainers((err, containers: Container[]): void => {
     if (err) {
       throw err;
     }
 
-    containers.forEach(container => {
-      container.Names.forEach(name => {
+    containers.forEach((container): void => {
+      container.Names.forEach((name: string): void => {
         if (name.startsWith('/compose_test_')) {
           console.log(`stopping ${container.Id} ${container.Names}`);
           docker.getContainer(container.Id).stop();
@@ -333,7 +337,7 @@ test('teardown', async () => {
   await removeImagesStartingWith('compose-test-build-image');
 });
 
-test('config show data for docker-compose files', async () => {
+test('config show data for docker-compose files', async (): Promise<void> => {
   const std = await compose.config({ cwd: path.join(__dirname), log: logOutput, config: 'docker-compose-42.yml' });
 
   expect(std.err).toBeFalsy();
@@ -341,21 +345,21 @@ test('config show data for docker-compose files', async () => {
   expect(std.out.includes('test/volume:/mountedvolume:rw')).toBeTruthy();
 });
 
-test('config show data for docker-compose files (services)', async () => {
+test('config show data for docker-compose files (services)', async (): Promise<void> => {
   const std = await compose.configServices({ cwd: path.join(__dirname), log: logOutput, config: 'docker-compose-42.yml' });
 
   expect(std.err).toBeFalsy();
   expect(std.out.includes('some-service')).toBeTruthy();
 });
 
-test('config show data for docker-compose files (volumes)', async () => {
+test('config show data for docker-compose files (volumes)', async (): Promise<void> => {
   const std = await compose.configVolumes({ cwd: path.join(__dirname), log: logOutput, config: 'docker-compose-42.yml' });
 
   expect(std.err).toBeFalsy();
   expect(std.out.includes('db-data')).toBeTruthy();
 });
 
-test('ps shows status data for started containers', async () => {
+test('ps shows status data for started containers', async (): Promise<void> => {
   await compose.upAll({ cwd: path.join(__dirname), log: logOutput });
 
   const std = await compose.ps({ cwd: path.join(__dirname), log: logOutput });
@@ -366,7 +370,7 @@ test('ps shows status data for started containers', async () => {
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
 });
 
-test('ps does not show status data for stopped containers', async () => {
+test('ps does not show status data for stopped containers', async (): Promise<void> => {
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
   await compose.upOne('alpine', { cwd: path.join(__dirname), log: logOutput });
 
@@ -378,7 +382,7 @@ test('ps does not show status data for stopped containers', async () => {
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
 });
 
-test('restartAll does restart all containers', async () => {
+test('restartAll does restart all containers', async (): Promise<void> => {
   await compose.upAll({ cwd: path.join(__dirname), log: logOutput });
   await compose.restartAll({ cwd: path.join(__dirname), log: logOutput });
 
@@ -386,7 +390,7 @@ test('restartAll does restart all containers', async () => {
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
 });
 
-test('restartMany does restart selected containers', async () => {
+test('restartMany does restart selected containers', async (): Promise<void> => {
   await compose.upAll({ cwd: path.join(__dirname), log: logOutput });
   await compose.restartMany([ 'db', 'alpine' ], { cwd: path.join(__dirname), log: logOutput });
 
@@ -394,7 +398,7 @@ test('restartMany does restart selected containers', async () => {
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
 });
 
-test('restartOne does restart container', async () => {
+test('restartOne does restart container', async (): Promise<void> => {
   await compose.upAll({ cwd: path.join(__dirname), log: logOutput });
   await compose.restartOne('db', { cwd: path.join(__dirname), log: logOutput });
 
@@ -402,7 +406,7 @@ test('restartOne does restart container', async () => {
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
 });
 
-test('logs does follow service logs', async () => {
+test('logs does follow service logs', async (): Promise<void> => {
   await compose.upAll({ cwd: path.join(__dirname), log: logOutput });
   await compose.logs('db', { cwd: path.join(__dirname), log: logOutput });
 
@@ -410,7 +414,7 @@ test('logs does follow service logs', async () => {
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
 });
 
-test('returns the port for a started service', async () => {
+test('returns the port for a started service', async (): Promise<void> => {
   const config = {
     cwd: path.join(__dirname),
     config: './docker-compose-2.yml',
