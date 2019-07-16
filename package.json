@@ -8,7 +8,7 @@
     "test": "jest test --verbose",
     "eslint": "./node_modules/.bin/eslint .",
     "build": "tsc",
-    "prepublish": "tsc"
+    "prepublishOnly": "tsc"
   },
   "repository": {
     "url": "git@github.com:PDMLab/docker-compose.git"
