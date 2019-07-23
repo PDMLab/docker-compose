@@ -1,11 +1,14 @@
 {
   "name": "docker-compose",
   "version": "0.19.0",
-  "main": "index.js",
-  "typings": "index.d.ts",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest test --verbose",
-    "eslint": "./node_modules/.bin/eslint ."
+    "eslint": "./node_modules/.bin/eslint .",
+    "build": "tsc",
+    "prepublishOnly": "tsc"
   },
   "repository": {
     "url": "git@github.com:PDMLab/docker-compose.git"
@@ -54,6 +57,10 @@
   "license": "MIT",
   "description": "Manage docker-compose from Node.js",
   "devDependencies": {
+    "@types/jest": "^24.0.15",
+    "@types/node": "^12.6.2",
+    "@typescript-eslint/eslint-plugin": "^1.12.0",
+    "@typescript-eslint/parser": "^1.12.0",
     "composefile": "^0.3.0",
     "dockerode": "^2.5.7",
     "eslint": "^5.6.0",
@@ -61,7 +68,7 @@
     "eslint-plugin-extended": "^0.2.0",
     "eslint-plugin-jest": "^22.6.4",
     "jest": "^24.8.0",
-    "tape": "^4.6.3",
-    "tape-promise": "^2.0.1"
+    "ts-jest": "^24.0.2",
+    "typescript": "^3.5.3"
   }
 }
