@@ -1,8 +1,15 @@
+# 0.20.0 / 2019-07-23
+
+## :tada: Enhancements
+
+* [#83](https://github.com/PDMLab/docker-compose/pull/83):
+  * Migrate to Typescript
+
 # 0.19.0 / 2019-07-13
 
 ## :tada: Enhancements
 
-* [#77](https://github.com/PDMLab/docker-compose/pull/77): 
+* [#77](https://github.com/PDMLab/docker-compose/pull/77):
   * handle error based on exit code
   * replace `tape` with `jest`
 
