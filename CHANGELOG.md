@@ -1,3 +1,10 @@
+# 0.20.1 / 2019-07-26
+
+## :tada: Enhancements
+
+* [#84](https://github.com/PDMLab/docker-compose/pull/84):
+  * Set Node 6.0 as minimum version
+
 # 0.20.0 / 2019-07-23
 
 ## :tada: Enhancements
