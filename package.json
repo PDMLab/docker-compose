@@ -6,7 +6,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest test --verbose",
-    "eslint": "./node_modules/.bin/eslint .",
+    "eslint": "eslint src/**/*.ts test/**/*.ts",
     "build": "tsc",
     "prepublishOnly": "tsc"
   },
@@ -42,7 +42,8 @@
       "name": "Sergey Falinsky"
     },
     {
-      "name": "Lars Kumbier"
+      "name": "Lars Kumbier",
+      "url": "https://kumbier.it"
     },
     {
       "name": "Paweł Niedzielski"
