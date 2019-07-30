@@ -1,3 +1,17 @@
+# 0.20.2 / 2019-07-30
+
+## :tada: Enhancements
+
+* [#87](https://github.com/PDMLab/docker-compose/pull/87):
+  * Use proper `es2015` library (for Promises, etc.) in `tsconfig`
+
+## :bug: Fixes
+
+* [#87](https://github.com/PDMLab/docker-compose/pull/87):
+  * Fix linting after build was called
+* [#86](https://github.com/PDMLab/docker-compose/pull/86):
+  * Fix interfaces not being exposed in typings file
+
 # 0.20.1 / 2019-07-26
 
 ## :tada: Enhancements
