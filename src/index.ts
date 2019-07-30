@@ -1,6 +1,6 @@
 import childProcess from 'child_process';
 
-interface IDockerComposeOptions {
+export interface IDockerComposeOptions {
   cwd?: string;
   config?: string | string[];
   log?: boolean;
@@ -9,19 +9,19 @@ interface IDockerComposeOptions {
   env?: NodeJS.ProcessEnv;
 }
 
-interface IDockerComposeLogOptions extends IDockerComposeOptions {
+export interface IDockerComposeLogOptions extends IDockerComposeOptions {
   follow?: boolean;
 }
 
-interface IDockerComposeBuildOptions extends IDockerComposeOptions {
+export interface IDockerComposeBuildOptions extends IDockerComposeOptions {
   parallel?: boolean;
 }
 
-interface IDockerComposePushOptions extends IDockerComposeOptions {
+export interface IDockerComposePushOptions extends IDockerComposeOptions {
   ignorePushFailures?: boolean;
 }
 
-interface IDockerComposeResult {
+export interface IDockerComposeResult {
   exitCode: number | null;
   out: string;
   err: string;
