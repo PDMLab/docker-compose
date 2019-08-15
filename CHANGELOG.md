@@ -1,3 +1,10 @@
+# 0.21.0 / 2019-08-15
+
+## :tada: Enhancements
+
+* [#89](https://github.com/PDMLab/docker-compose/pull/89):
+  * Add `stopOne()` command
+
 # 0.20.2 / 2019-07-30
 
 ## :tada: Enhancements
