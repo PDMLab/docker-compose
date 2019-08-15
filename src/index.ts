@@ -128,6 +128,10 @@ export const stop = function (options?: IDockerComposeOptions): Promise<IDockerC
   return execCompose('stop', [], options);
 };
 
+export const stopOne = function (service: string, options?: IDockerComposeOptions): Promise<IDockerComposeResult> {
+  return execCompose('stop', [ service ], options);
+};
+
 export const kill = function (options?: IDockerComposeOptions): Promise<IDockerComposeResult> {
   return execCompose('kill', [], options);
 };

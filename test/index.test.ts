@@ -172,6 +172,16 @@ test('ensure container gets stopped', async (): Promise<void> => {
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
 });
 
+test('ensure only single container gets stopped', async (): Promise<void> => {
+  await compose.upAll({ cwd: path.join(__dirname), log: logOutput });
+  expect(await isContainerRunning('/compose_test_alpine')).toBeTruthy();
+
+  await compose.stopOne('alpine', { cwd: path.join(__dirname), log: logOutput });
+  expect(await isContainerRunning('/compose_test_alpine')).toBeFalsy();
+  expect(await isContainerRunning('/compose_test_nginx')).toBeTruthy();
+  await compose.down({ cwd: path.join(__dirname), log: logOutput });
+});
+
 test('ensure container gets killed', async (): Promise<void> => {
   await compose.upAll({ cwd: path.join(__dirname), log: logOutput });
   expect(await isContainerRunning('/compose_test_nginx')).toBeTruthy();
