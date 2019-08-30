@@ -172,6 +172,18 @@ export const buildOne = function (service: string, options?: IDockerComposeBuild
   return execCompose('build', [ service ], options);
 };
 
+export const pullAll = function (options: IDockerComposeOptions = {}): Promise<IDockerComposeResult> {
+  return execCompose('pull', [], options);
+};
+
+export const pullMany = function (services: string[], options: IDockerComposeOptions = {}): Promise<IDockerComposeResult> {
+  return execCompose('pull', services, options);
+};
+
+export const pullOne = function (service: string, options?: IDockerComposeOptions): Promise<IDockerComposeResult> {
+  return execCompose('pull', [ service ], options);
+};
+
 export const config = function (options?: IDockerComposeOptions): Promise<IDockerComposeResult> {
   return execCompose('config', [], options);
 };
