@@ -323,6 +323,59 @@ test('build all services', async (): Promise<void> => {
   await removeImagesStartingWith('compose-test-build-image');
 });
 
+test('pull single service', async (): Promise<void> => {
+  const opts = {
+    cwd: path.join(__dirname),
+    log: logOutput,
+    config: 'docker-compose.yml'
+  };
+
+  await removeImagesStartingWith('nginx:1.16.0');
+  expect(await imageExists('nginx:1.16.0')).toBeFalsy();
+
+  await compose.pullOne('db', opts);
+
+  expect(await imageExists('nginx:1.16.0')).toBeTruthy();
+});
+
+test('pull multiple services', async (): Promise<void> => {
+  const opts = {
+    cwd: path.join(__dirname),
+    log: logOutput,
+    config: 'docker-compose.yml'
+  };
+
+  await removeImagesStartingWith('nginx:1.16.0');
+  await removeImagesStartingWith('alpine:3.7.3');
+
+  expect(await imageExists('nginx:1.16.0')).toBeFalsy();
+  expect(await imageExists('alpine:3.7.3')).toBeFalsy();
+
+  await compose.pullMany([ 'db', 'alpine' ], opts);
+
+  expect(await imageExists('nginx:1.16.0')).toBeTruthy();
+  expect(await imageExists('alpine:3.7.3')).toBeTruthy();
+});
+
+test('pull all services', async (): Promise<void> => {
+  const opts = {
+    cwd: path.join(__dirname),
+    log: logOutput,
+    config: 'docker-compose.yml'
+  };
+
+  await removeImagesStartingWith('nginx:1.16.0');
+  await removeImagesStartingWith('alpine:3.7.3');
+
+  expect(await imageExists('nginx:1.16.0')).toBeFalsy();
+  expect(await imageExists('alpine:3.7.3')).toBeFalsy();
+
+  await compose.pullAll(opts);
+
+  expect(await imageExists('nginx:1.16.0')).toBeTruthy();
+  expect(await imageExists('alpine:3.7.3')).toBeTruthy();
+});
+
 test('teardown', async (): Promise<void> => {
   interface Container {
     Names: string[];
