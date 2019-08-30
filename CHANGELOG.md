@@ -1,3 +1,10 @@
+# 0.22.0 / 2019-08-30
+
+## :tada: Enhancements
+
+* [#90](https://github.com/PDMLab/docker-compose/pull/90):
+  * Add `Add pullOne, pullMany and pullAll methods` command
+
 # 0.21.0 / 2019-08-15
 
 ## :tada: Enhancements
