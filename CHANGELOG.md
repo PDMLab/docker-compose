@@ -1,3 +1,10 @@
+# 0.22.2 / 2019-08-31
+
+## :bug: Fixes
+
+* [#94](https://github.com/PDMLab/docker-compose/pull/94):
+  * Fix a copy-paste typo for pull commands
+
 # 0.22.1 / 2019-08-31
 
 ## :tada: Enhancements
