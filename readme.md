@@ -34,6 +34,9 @@ npm install --save-dev docker-compose
 * `buildAll(options)` - Build or rebuild services
 * `buildMany(services, options)` - Build or rebuild services
 * `buildOne(service, options)` - Build or rebuild service
+* `pullMany(services, options)` - Pull service images specified
+* `pullOne(service, options)` - Pull a service image
+* `buildOne(service, options)` - Build or rebuild service
 * `restartAll(options)` - Restart all services
 * `restartMany(services, options)` - Restart services
 * `restartOne(service, options)` - Restart service
