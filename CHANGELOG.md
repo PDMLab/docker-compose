@@ -1,9 +1,20 @@
+# 0.22.1 / 2019-08-31
+
+## :tada: Enhancements
+
+* [#93](https://github.com/PDMLab/docker-compose/pull/93):
+  * Add pull command methods to readme
+
+## :lock: Security Fixes
+* [#92](https://github.com/PDMLab/docker-compose/pull/92):
+  * Fix `eslint-utils` security issue
+
 # 0.22.0 / 2019-08-30
 
 ## :tada: Enhancements
 
 * [#90](https://github.com/PDMLab/docker-compose/pull/90):
-  * Add `Add pullOne, pullMany and pullAll methods` command
+  * Add `pullOne`, `pullMany` and `pullAll` methods
 
 # 0.21.0 / 2019-08-15
 
