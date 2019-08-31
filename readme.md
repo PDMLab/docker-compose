@@ -36,7 +36,7 @@ npm install --save-dev docker-compose
 * `buildOne(service, options)` - Build or rebuild service
 * `pullMany(services, options)` - Pull service images specified
 * `pullOne(service, options)` - Pull a service image
-* `buildOne(service, options)` - Build or rebuild service
+* `pullAll(options)` - Pull all service images
 * `restartAll(options)` - Restart all services
 * `restartMany(services, options)` - Restart services
 * `restartOne(service, options)` - Restart service
@@ -103,7 +103,7 @@ Also please add tests and make sure to run `npm run eslint`.
 
 ### Slack
 
-If you want to discuss an `docker-compose` issue or PR in more detail, feel free to [join our Slack workspace](https://join.slack.com/t/pdmlab-oss/shared_invite/enQtNjEyMjQ0MDY3NTczLTg1ZDc0YjQxMGE3MTcyYTdkODU1YjFmMTBiODE2ZTZiNDFkNjc1MWE4OTE4NWY0Y2YyMWYzYmNhZGY0NDAyYWY). 
+If you want to discuss an `docker-compose` issue or PR in more detail, feel free to [join our Slack workspace](https://join.slack.com/t/pdmlab-oss/shared_invite/enQtNjEyMjQ0MDY3NTczLTg1ZDc0YjQxMGE3MTcyYTdkODU1YjFmMTBiODE2ZTZiNDFkNjc1MWE4OTE4NWY0Y2YyMWYzYmNhZGY0NDAyYWY).
 
 ## License
 
