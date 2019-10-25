@@ -235,3 +235,7 @@ export const port = function (service: string, containerPort: string | number, o
 
   return execCompose('port', args, options);
 };
+
+export const version = function (options?: IDockerComposeOptions): Promise<IDockerComposeResult> {
+  return execCompose('version', [ '--short' ], options);
+};
