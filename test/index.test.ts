@@ -490,3 +490,9 @@ test('returns the port for a started service', async (): Promise<void> => {
   expect(port.out).toMatch(/.*:[0-9]{1,5}/);
   await compose.down(config);
 });
+
+test('returns version information', async (): Promise<void> => {
+  const version = await compose.version();
+
+  expect(version.out).toBeTruthy();
+});
