@@ -1,3 +1,10 @@
+# 0.23.0 / 2019-10-25
+
+## :tada: Enhancements
+
+* [#97](https://github.com/PDMLab/docker-compose/pull/97):
+  * Add a `version` function
+
 # 0.22.2 / 2019-08-31
 
 ## :bug: Fixes
