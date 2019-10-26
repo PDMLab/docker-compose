@@ -1,4 +1,4 @@
-<img src="https://img.shields.io/circleci/project/github/PDMLab/docker-compose.svg" /> <a href="https://join.slack.com/t/pdmlab-oss/shared_invite/enQtNjEyMjQ0MDY3NTczLTg1ZDc0YjQxMGE3MTcyYTdkODU1YjFmMTBiODE2ZTZiNDFkNjc1MWE4OTE4NWY0Y2YyMWYzYmNhZGY0NDAyYWY"><img src="https://img.shields.io/npm/dm/docker-compose.svg" /> <img src="https://img.shields.io/badge/Slack-join-green.svg?logo=slack" /></a>
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org) <img src="https://img.shields.io/circleci/project/github/PDMLab/docker-compose.svg" /> <a href="https://join.slack.com/t/pdmlab-oss/shared_invite/enQtNjEyMjQ0MDY3NTczLTg1ZDc0YjQxMGE3MTcyYTdkODU1YjFmMTBiODE2ZTZiNDFkNjc1MWE4OTE4NWY0Y2YyMWYzYmNhZGY0NDAyYWY"><img src="https://img.shields.io/npm/dm/docker-compose.svg" /> <img src="https://img.shields.io/badge/Slack-join-green.svg?logo=slack" /></a>
 
 # Manage Docker-Compose via Node.js
 
@@ -98,6 +98,8 @@ If you want to contribute - we'd love it! Just open an issue to work against so 
 If you see a bug, please be so kind as to show how it's failing, and we'll do our best to get it fixed quickly.
 
 Before sending a PR, please [create an issue](https://github.com/PDMLab/docker-compose/issues/new) to introduce your idea and have a reference for your PR.
+
+We're using [conventional commits](https://www.conventionalcommits.org), so please use it for your commits as well.
 
 Also please add tests and make sure to run `npm run eslint`.
 
