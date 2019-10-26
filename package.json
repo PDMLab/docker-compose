@@ -8,7 +8,8 @@
     "test": "jest test --verbose",
     "eslint": "eslint src/**/*.ts test/**/*.ts",
     "build": "tsc",
-    "prepublishOnly": "tsc"
+    "prepublishOnly": "tsc",
+    "release": "yarn build && standard-version"
   },
   "repository": {
     "url": "git@github.com:PDMLab/docker-compose.git"
@@ -64,6 +65,8 @@
   "license": "MIT",
   "description": "Manage docker-compose from Node.js",
   "devDependencies": {
+    "@commitlint/cli": "^8.2.0",
+    "@commitlint/config-conventional": "^8.2.0",
     "@types/jest": "^24.0.15",
     "@types/node": "^12.6.2",
     "@typescript-eslint/eslint-plugin": "^1.12.0",
@@ -74,11 +77,23 @@
     "eslint-config-es": "^0.8.11",
     "eslint-plugin-extended": "^0.2.0",
     "eslint-plugin-jest": "^22.6.4",
+    "husky": "^3.0.9",
     "jest": "^24.8.0",
+    "standard-version": "^7.0.0",
     "ts-jest": "^24.0.2",
     "typescript": "^3.5.3"
   },
   "engines": {
     "node": ">= 6.0.0"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   }
 }
