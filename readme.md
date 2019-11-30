@@ -4,12 +4,6 @@
 
 `docker-compose` is a small library that allows you to run [docker-compose](https://docs.docker.com/compose/)(which is still required) via Node.js. This is useful to bootstrap test environments. You might also generate your `docker-compose.yml` files using [composefile](https://www.npmjs.com/package/composefile).
 
-## Existing user? We need your help
-First of all: thanks for using the `docker-compose` module.
-As described in [#44][i44], we're planning to provide more guidance for CI/CD when using the `docker-compose` module and it would be great if you could support us here. More details in [#44][i44].
-
-[i44]: https://github.com/PDMLab/docker-compose/issues/44
-
 ## Installation
 
 ```
