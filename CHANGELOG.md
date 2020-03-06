@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.23.3](https://github.com/PDMLab/docker-compose/compare/v0.23.2...v0.23.3) (2020-03-06)
+
+
+### Features
+
+* add ability to pass --abort-on-container-exit flag to up methods ([e85af8c](https://github.com/PDMLab/docker-compose/commit/e85af8c092a54a3fb48519bb39956324bbef4fc2))
+
+
+### Bug Fixes
+
+* reset jest set timeout to original value ([c4ed7ed](https://github.com/PDMLab/docker-compose/commit/c4ed7ed2de9c4c161518ab1d1fc50877df4c7fa2))
+
 ### [0.23.2](https://github.com/PDMLab/docker-compose/compare/v0.23.1...v0.23.2) (2019-12-31)
 
 ### [0.23.1](https://github.com/PDMLab/docker-compose/compare/v0.23.0...v0.23.1) (2019-10-26)
