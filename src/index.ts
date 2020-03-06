@@ -108,16 +108,30 @@ const execCompose = (command, args, options: IDockerComposeOptions = {}): Promis
   }
 });
 
+/**
+ * Determines whether or not to use the default non-interactive flag -d for up commands
+ */
+const shouldUseDefaultNonInteractiveFlag = function(options: IDockerComposeOptions = {}): boolean {
+  const commandOptions = options.commandOptions || [];
+  const containsOtherNonInteractiveFlag = commandOptions.reduce((memo: boolean, item: string | string[]) => {
+    return memo && !item.includes('--abort-on-container-exit');
+  }, true);
+  return containsOtherNonInteractiveFlag;
+};
+
 export const upAll = function (options?: IDockerComposeOptions): Promise<IDockerComposeResult> {
-  return execCompose('up', [ '-d' ], options);
+  const args = shouldUseDefaultNonInteractiveFlag(options) ? [ '-d' ] : [];
+  return execCompose('up', args, options);
 };
 
 export const upMany = function (services: string[], options?: IDockerComposeOptions): Promise<IDockerComposeResult> {
-  return execCompose('up', [ '-d' ].concat(services), options);
+  const args = shouldUseDefaultNonInteractiveFlag(options) ? [ '-d' ].concat(services) : services;
+  return execCompose('up', args, options);
 };
 
 export const upOne = function (service: string, options?: IDockerComposeOptions): Promise<IDockerComposeResult> {
-  return execCompose('up', [ '-d', service ], options);
+  const args = shouldUseDefaultNonInteractiveFlag(options) ? [ '-d', service ] : [ service ];
+  return execCompose('up', args, options);
 };
 
 export const down = function (options?: IDockerComposeOptions): Promise<IDockerComposeResult> {
