@@ -37,6 +37,9 @@
       "name": "lacabra"
     },
     {
+      "name": "Lance Rutkin"
+    },
+    {
       "name": "MartinJLee"
     },
     {
@@ -95,4 +98,4 @@
       "@commitlint/config-conventional"
     ]
   }
-}
+  }
