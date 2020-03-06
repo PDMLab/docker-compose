@@ -5,7 +5,7 @@ import * as path from 'path';
 const docker = new Docker();
 
 // Docker commands, especially builds, can take some time. This makes sure that they can take the time they need.
-jest.setTimeout(25000);
+jest.setTimeout(50000);
 
 // Set to true if you need to diagnose using output
 const logOutput = false;
@@ -182,6 +182,36 @@ test('ensure only single container gets stopped', async (): Promise<void> => {
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
 });
 
+test('ensure container gets started with --abort-on-container-exit option', async (): Promise<void> => {
+  const result = await compose.upAll({
+    cwd: path.join(__dirname),
+    log: logOutput,
+    commandOptions: [ '--abort-on-container-exit' ]
+  });
+
+  expect(result).toMatchObject({
+    exitCode: 0
+  });
+
+  expect(await isContainerRunning('/compose_test_nginx')).toBeFalsy();
+  expect(await isContainerRunning('/compose_test_alpine')).toBeFalsy();
+  await compose.down({ cwd: path.join(__dirname), log: logOutput });
+});
+
+test('ensure container gets started with --abort-on-container-exit option correctly aborts all services when a container exits', async (): Promise<void> => {
+  const result = await compose.upAll({
+    cwd: path.join(__dirname),
+    log: logOutput,
+    commandOptions: [ '--abort-on-container-exit' ]
+  });
+
+  expect(result.out).toMatch(/Aborting on container exit/);
+
+  expect(await isContainerRunning('/compose_test_nginx')).toBeFalsy();
+  expect(await isContainerRunning('/compose_test_alpine')).toBeFalsy();
+  await compose.down({ cwd: path.join(__dirname), log: logOutput });
+});
+
 test('ensure container gets killed', async (): Promise<void> => {
   await compose.upAll({ cwd: path.join(__dirname), log: logOutput });
   expect(await isContainerRunning('/compose_test_nginx')).toBeTruthy();
@@ -205,6 +235,8 @@ test('ensure custom ymls are working', async (): Promise<void> => {
 
   await compose.down({ cwd, log: logOutput, config });
 });
+
+
 
 test('ensure run and exec are working', async (): Promise<void> => {
   const checkOSID = (out, id): void => {
