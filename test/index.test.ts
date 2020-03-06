@@ -5,7 +5,7 @@ import * as path from 'path';
 const docker = new Docker();
 
 // Docker commands, especially builds, can take some time. This makes sure that they can take the time they need.
-jest.setTimeout(50000);
+jest.setTimeout(25000);
 
 // Set to true if you need to diagnose using output
 const logOutput = false;
