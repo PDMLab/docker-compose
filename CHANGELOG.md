@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.23.4](https://github.com/PDMLab/docker-compose/compare/v0.23.3...v0.23.4) (2020-04-23)
+
+
+### Features
+
+* allow passing service names to `rm` function ([3a68db7](https://github.com/PDMLab/docker-compose/commit/3a68db75e3b879f12fe3c6cedbc9ad09a52914a5))
+
 ### [0.23.3](https://github.com/PDMLab/docker-compose/compare/v0.23.2...v0.23.3) (2020-03-06)
 
 
