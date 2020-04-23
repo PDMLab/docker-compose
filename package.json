@@ -70,6 +70,7 @@
   "devDependencies": {
     "@commitlint/cli": "^8.2.0",
     "@commitlint/config-conventional": "^8.2.0",
+    "@types/dockerode": "^2.5.27",
     "@types/jest": "^25.1.4",
     "@types/node": "^10.17.17",
     "@typescript-eslint/eslint-plugin": "^2.23.0",

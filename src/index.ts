@@ -150,8 +150,8 @@ export const kill = function (options?: IDockerComposeOptions): Promise<IDockerC
   return execCompose('kill', [], options);
 };
 
-export const rm = function (options?: IDockerComposeOptions): Promise<IDockerComposeResult> {
-  return execCompose('rm', [ '-f' ], options);
+export const rm = function (options?: IDockerComposeOptions, ...services: string[]): Promise<IDockerComposeResult> {
+  return execCompose('rm', [ '-f', ...services ], options);
 };
 
 export const exec = function (container: string, command: string | string[], options?: IDockerComposeOptions): Promise<IDockerComposeResult> {
