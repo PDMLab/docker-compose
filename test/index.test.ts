@@ -16,7 +16,7 @@ const isContainerRunning = async (name: string): Promise<boolean> => new Promise
       reject(err);
     }
 
-    const running = containers.filter((container): boolean => container.Names.includes(name));
+    const running = (containers || []).filter((container): boolean => container.Names.includes(name));
 
     resolve(running.length > 0);
   });
@@ -521,6 +521,26 @@ test('returns the port for a started service', async (): Promise<void> => {
 
   expect(port.out).toMatch(/.*:[0-9]{1,5}/);
   await compose.down(config);
+});
+
+test('removes container', async (): Promise<void> => {
+  const config = {
+    cwd: path.join(__dirname),
+    config: './docker-compose.yml',
+    log: logOutput
+  };
+
+  await compose.upAll(config);
+  expect(await isContainerRunning('/compose_test_nginx')).toBeTruthy();
+  expect(await isContainerRunning('/compose_test_alpine')).toBeTruthy();
+
+  await compose.rm({ ...config, commandOptions: ['-s'] }, 'alpine');
+  expect(await isContainerRunning('/compose_test_nginx')).toBeTruthy();
+  expect(await isContainerRunning('/compose_test_alpine')).toBeFalsy();
+
+  await compose.rm({ ...config, commandOptions: ['-s'] }, 'alpine', 'db');
+  expect(await isContainerRunning('/compose_test_nginx')).toBeFalsy();
+  expect(await isContainerRunning('/compose_test_alpine')).toBeFalsy();
 });
 
 test('returns version information', async (): Promise<void> => {
