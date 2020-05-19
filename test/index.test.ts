@@ -532,7 +532,6 @@ test('removes container', async (): Promise<void> => {
 
   await compose.upAll(config);
   expect(await isContainerRunning('/compose_test_nginx')).toBeTruthy();
-  expect(await isContainerRunning('/compose_test_alpine')).toBeTruthy();
 
   await compose.rm({ ...config, commandOptions: ['-s'] }, 'alpine');
   expect(await isContainerRunning('/compose_test_nginx')).toBeTruthy();
