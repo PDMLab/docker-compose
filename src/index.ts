@@ -114,7 +114,7 @@ const execCompose = (command, args, options: IDockerComposeOptions = {}): Promis
 const shouldUseDefaultNonInteractiveFlag = function(options: IDockerComposeOptions = {}): boolean {
   const commandOptions = options.commandOptions || [];
   const containsOtherNonInteractiveFlag = commandOptions.reduce((memo: boolean, item: string | string[]) => {
-    return memo && !item.includes('--abort-on-container-exit');
+    return memo && !item.includes('--abort-on-container-exit') && !item.includes('--no-start');
   }, true);
   return containsOtherNonInteractiveFlag;
 };
