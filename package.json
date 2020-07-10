@@ -1,6 +1,6 @@
 {
   "name": "docker-compose",
-  "version": "0.23.4",
+  "version": "0.23.5",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "types": "dist/index.d.ts",
@@ -63,7 +63,7 @@
     },
     {
       "name": "Will O'Beirne"
-    }, 
+    },
     {
       "name": "Sebastián Balay"
     }
