@@ -1,7 +1,7 @@
 import Docker from 'dockerode';
 import * as compose from '../src/index';
 import * as path from 'path';
-
+import { readFile } from 'fs'
 const docker = new Docker();
 
 // Docker commands, especially builds, can take some time. This makes sure that they can take the time they need.
@@ -300,6 +300,27 @@ test('ensure run and exec with command defined as array are working', async (): 
   checkOSID(std.out, 'alpine');
 
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
+});
+
+test('build accepts config as string', async (): Promise<void> => {
+  const configuration = await new Promise(function (resolve, reject) {
+    readFile(path.join(__dirname, 'docker-compose-2.yml'), function (err, content) {
+      if (err) {
+        return reject(err);
+      }
+      return resolve(content.toString());
+    })
+  });
+  const config = {
+    configAsString: <string> configuration,
+    log: logOutput
+  };
+
+  await compose.upAll(config);
+  const port = await compose.port('db', 5432, config);
+
+  expect(port.out).toMatch(/.*:[0-9]{1,5}/);
+  await compose.down(config);
 });
 
 test('build single service', async (): Promise<void> => {
