@@ -1,8 +1,9 @@
 import childProcess from 'child_process';
-
+import { Readable } from 'stream'
 export interface IDockerComposeOptions {
   cwd?: string;
   config?: string | string[];
+  configAsString?: string;
   log?: boolean;
   composeOptions?: string[] | (string | string[])[];
   commandOptions?: string[] | (string | string[])[];
@@ -67,8 +68,11 @@ const execCompose = (command, args, options: IDockerComposeOptions = {}): Promis
   const composeOptions = options.composeOptions || [];
   const commandOptions = options.commandOptions || [];
   let composeArgs = composeOptionsToArgs(composeOptions);
+  const isConfigProvidedAsString = !!options.configAsString;
 
-  composeArgs = composeArgs.concat(configToArgs(options.config).concat([ command ].concat(composeOptionsToArgs(commandOptions), args)));
+  const configArgs = isConfigProvidedAsString ? [ '-f', '-' ] : configToArgs(options.config);
+
+  composeArgs = composeArgs.concat(configArgs.concat([ command ].concat(composeOptionsToArgs(commandOptions), args)));
 
   const cwd = options.cwd;
   const env = options.env || undefined;
@@ -101,6 +105,11 @@ const execCompose = (command, args, options: IDockerComposeOptions = {}): Promis
       reject(result);
     }
   });
+
+  if (isConfigProvidedAsString) {
+    childProc.stdin.write(options.configAsString);
+    childProc.stdin.end();
+  }
 
   if (options.log) {
     childProc.stdout.pipe(process.stdout);
