@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.23.6](https://github.com/PDMLab/docker-compose/compare/v0.23.5...v0.23.6) (2021-01-06)
+
+
+### Features
+
+* allow to pass docker compose configuration as string ([e8c14d3](https://github.com/PDMLab/docker-compose/commit/e8c14d318ce440ab02c858b1ca1dbeeb2985dc00))
+
 ### [0.23.5](https://github.com/PDMLab/docker-compose/compare/v0.23.4...v0.23.5) (2020-07-10)
 
 
