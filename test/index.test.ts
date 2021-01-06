@@ -303,17 +303,18 @@ test('ensure run and exec with command defined as array are working', async (): 
 });
 
 test('build accepts config as string', async (): Promise<void> => {
-  const configuration = await new Promise(function (resolve, reject) {
+  const configuration = await new Promise<string>(function (resolve, reject) {
     readFile(path.join(__dirname, 'docker-compose-2.yml'), function (err, content) {
       if (err) {
-        return reject(err);
+        reject(err);
+        return;
       }
-      return resolve(content.toString());
+      resolve(content.toString());
     })
   });
   const config = {
-    configAsString: <string> configuration,
-    log: logOutput
+    configAsString: configuration,
+    log: logOutput,
   };
 
   await compose.upAll(config);
