@@ -38,6 +38,7 @@ npm install --save-dev docker-compose
 * `config(options)` - Validates configuration files and returns configuration yaml
 * `configServices(options)` - Returns list of services defined in configuration files
 * `configVolumes(options)` - Returns list of volumes defined in configuration files
+* `port(options)` - Returns the public port of the given service and internal port. 
 
 All commands return a `Promise({object})` with stdout and stderr strings and an exit code:
 ```javascript
