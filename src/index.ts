@@ -366,9 +366,7 @@ export const port = async function (
     const result = await execCompose('port', args, options)
     const [address, port] = result.out.split(':')
     return {
-      exitCode: result.exitCode,
-      out: result.out,
-      err: result.err,
+      ...result,
       result: {
         address,
         port: Number(port)
