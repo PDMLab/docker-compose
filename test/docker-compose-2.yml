@@ -1,11 +1,11 @@
 version: '2'
 
 services:
-  db:
+  web:
     image: nginx:1.16.0
-    container_name: compose_test_nginx_2
+    container_name: compose_test_web_2
     command: 'nginx -g "daemon off;"'
     environment:
-      NGINX_PORT: 5432
+      NGINX_PORT: 8888
     ports:
-      - "5432"
+      - "8888"

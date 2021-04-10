@@ -53,7 +53,8 @@ test('ensure container gets started', async (): Promise<void> => {
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
   await compose.upAll({ cwd: path.join(__dirname), log: logOutput });
 
-  expect(await isContainerRunning('/compose_test_nginx')).toBeTruthy();
+  expect(await isContainerRunning('/compose_test_web')).toBeTruthy();
+  expect(await isContainerRunning('/compose_test_proxy')).toBeTruthy();
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
 });
 
@@ -139,46 +140,51 @@ test('ensure container command executed with --workdir command option', async ()
 
 test('ensure only single container gets started', async (): Promise<void> => {
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
-  await compose.upOne('alpine', { cwd: path.join(__dirname), log: logOutput });
+  await compose.upOne('web', { cwd: path.join(__dirname), log: logOutput });
 
-  expect(await isContainerRunning('/compose_test_alpine')).toBeTruthy();
-  expect(await isContainerRunning('/compose_test_nginx')).toBeFalsy();
+  expect(await isContainerRunning('/compose_test_web')).toBeTruthy();
+  expect(await isContainerRunning('/compose_test_proxy')).toBeFalsy();
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
 });
 
 test('ensure only multiple containers get started', async (): Promise<void> => {
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
-  await compose.upMany([ 'alpine' ], { cwd: path.join(__dirname), log: logOutput });
+  await compose.upMany([ 'web' ], { cwd: path.join(__dirname), log: logOutput });
 
-  expect(await isContainerRunning('/compose_test_alpine')).toBeTruthy();
-  expect(await isContainerRunning('/compose_test_nginx')).toBeFalsy();
+  expect(await isContainerRunning('/compose_test_web')).toBeTruthy();
+  expect(await isContainerRunning('/compose_test_proxy')).toBeFalsy();
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
 });
 
 test('ensure container gets down', async (): Promise<void> => {
   await compose.upAll({ cwd: path.join(__dirname), log: logOutput });
-  expect(await isContainerRunning('/compose_test_nginx')).toBeTruthy();
+  expect(await isContainerRunning('/compose_test_web')).toBeTruthy();
+  expect(await isContainerRunning('/compose_test_proxy')).toBeTruthy();
 
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
-  expect(await isContainerRunning('/compose_test_nginx')).toBeFalsy();
+  expect(await isContainerRunning('/compose_test_web')).toBeFalsy();
+  expect(await isContainerRunning('/compose_test_proxy')).toBeFalsy();
 });
 
 test('ensure container gets stopped', async (): Promise<void> => {
   await compose.upAll({ cwd: path.join(__dirname), log: logOutput });
-  expect(await isContainerRunning('/compose_test_nginx')).toBeTruthy();
+  expect(await isContainerRunning('/compose_test_web')).toBeTruthy();
+  expect(await isContainerRunning('/compose_test_proxy')).toBeTruthy();
 
   await compose.stop({ cwd: path.join(__dirname), log: logOutput });
-  expect(await isContainerRunning('/compose_test_nginx')).toBeFalsy();
+  expect(await isContainerRunning('/compose_test_web')).toBeFalsy();
+  expect(await isContainerRunning('/compose_test_proxy')).toBeFalsy();
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
 });
 
 test('ensure only single container gets stopped', async (): Promise<void> => {
   await compose.upAll({ cwd: path.join(__dirname), log: logOutput });
-  expect(await isContainerRunning('/compose_test_alpine')).toBeTruthy();
+  expect(await isContainerRunning('/compose_test_web')).toBeTruthy();
+  expect(await isContainerRunning('/compose_test_proxy')).toBeTruthy();
 
-  await compose.stopOne('alpine', { cwd: path.join(__dirname), log: logOutput });
-  expect(await isContainerRunning('/compose_test_alpine')).toBeFalsy();
-  expect(await isContainerRunning('/compose_test_nginx')).toBeTruthy();
+  await compose.stopOne('proxy', { cwd: path.join(__dirname), log: logOutput });
+  expect(await isContainerRunning('/compose_test_web')).toBeTruthy();
+  expect(await isContainerRunning('/compose_test_proxy')).toBeFalsy();
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
 });
 
@@ -193,8 +199,8 @@ test('ensure container gets started with --abort-on-container-exit option', asyn
     exitCode: 0
   });
 
-  expect(await isContainerRunning('/compose_test_nginx')).toBeFalsy();
-  expect(await isContainerRunning('/compose_test_alpine')).toBeFalsy();
+  expect(await isContainerRunning('/compose_test_web')).toBeFalsy();
+  expect(await isContainerRunning('/compose_test_proxy')).toBeFalsy();
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
 });
 
@@ -207,17 +213,19 @@ test('ensure container gets started with --abort-on-container-exit option correc
 
   expect(result.out).toMatch(/Aborting on container exit/);
 
-  expect(await isContainerRunning('/compose_test_nginx')).toBeFalsy();
-  expect(await isContainerRunning('/compose_test_alpine')).toBeFalsy();
+  expect(await isContainerRunning('/compose_test_web')).toBeFalsy();
+  expect(await isContainerRunning('/compose_test_proxy')).toBeFalsy();
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
 });
 
 test('ensure container gets killed', async (): Promise<void> => {
   await compose.upAll({ cwd: path.join(__dirname), log: logOutput });
-  expect(await isContainerRunning('/compose_test_nginx')).toBeTruthy();
+  expect(await isContainerRunning('/compose_test_web')).toBeTruthy();
+  expect(await isContainerRunning('/compose_test_proxy')).toBeTruthy();
 
   await compose.kill({ cwd: path.join(__dirname), log: logOutput });
-  expect(await isContainerRunning('/compose_test_nginx')).toBeFalsy();
+  expect(await isContainerRunning('/compose_test_web')).toBeFalsy();
+  expect(await isContainerRunning('/compose_test_proxy')).toBeFalsy();
 
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
 });
@@ -227,11 +235,11 @@ test('ensure custom ymls are working', async (): Promise<void> => {
   const cwd = path.join(__dirname);
 
   await compose.upAll({ cwd, log: logOutput, config });
-  expect(await isContainerRunning('/compose_test_nginx_2')).toBeTruthy();
+  expect(await isContainerRunning('/compose_test_web_2')).toBeTruthy();
 
   // config & [config] are the same thing, ensures that multiple configs are handled properly
   await compose.kill({ cwd, log: logOutput, config: [ config ]});
-  expect(await isContainerRunning('/compose_test_nginx_2')).toBeFalsy();
+  expect(await isContainerRunning('/compose_test_web_2')).toBeFalsy();
 
   await compose.down({ cwd, log: logOutput, config });
 });
@@ -255,18 +263,15 @@ test('ensure run and exec are working', async (): Promise<void> => {
   const opts = { cwd: path.join(__dirname), log: logOutput };
 
   await compose.upAll(opts);
+  const console = require('console');
+  expect(await isContainerRunning('/compose_test_web')).toBeTruthy();
 
-  expect(await isContainerRunning('/compose_test_nginx')).toBeTruthy();
+  let std = await compose.exec('web', 'cat /etc/os-release', opts);
 
-  let std = await compose.exec('db', 'cat /etc/os-release', opts);
-
-  // expect(std.err).toBeFalsy();
   checkOSID(std.out, 'debian');
 
-  std = await compose.run('alpine', 'cat /etc/os-release', opts);
-  const console = require('console');
-  console.log('std.err', std.err)
-  // expect(std.err).toBeFalsy();
+  std = await compose.run('proxy', 'cat /etc/os-release', opts);
+  
   checkOSID(std.out, 'alpine');
 
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
@@ -290,14 +295,14 @@ test('ensure run and exec with command defined as array are working', async (): 
 
   await compose.upAll(opts);
 
-  expect(await isContainerRunning('/compose_test_nginx')).toBe(true);
+  expect(await isContainerRunning('/compose_test_web')).toBe(true);
 
-  let std = await compose.exec('db', [ '/bin/sh', '-c', 'cat /etc/os-release' ], opts);
+  let std = await compose.exec('web', [ '/bin/sh', '-c', 'cat /etc/os-release' ], opts);
 
   // expect(std.err).toBeFalsy();
   checkOSID(std.out, 'debian');
 
-  std = await compose.run('alpine', [ '/bin/sh', '-c', 'cat /etc/os-release' ], opts);
+  std = await compose.run('proxy', [ '/bin/sh', '-c', 'cat /etc/os-release' ], opts);
   // expect(std.err).toBeFalsy();
   checkOSID(std.out, 'alpine');
 
@@ -320,7 +325,7 @@ test('build accepts config as string', async (): Promise<void> => {
   };
 
   await compose.upAll(config);
-  const port = await compose.port('db', 5432, config);
+  const port = await compose.port('web', 8888, config);
 
   expect(port.out).toMatch(/.*:[0-9]{1,5}/);
   await compose.down(config);
@@ -386,12 +391,12 @@ test('pull single service', async (): Promise<void> => {
     config: 'docker-compose.yml'
   };
 
-  await removeImagesStartingWith('nginx:1.16.0');
-  expect(await imageExists('nginx:1.16.0')).toBeFalsy();
+  await removeImagesStartingWith('nginx:1.19.9-alpine');
+  expect(await imageExists('nginx:1.19.9-alpine')).toBeFalsy();
 
-  await compose.pullOne('db', opts);
+  await compose.pullOne('proxy', opts);
 
-  expect(await imageExists('nginx:1.16.0')).toBeTruthy();
+  expect(await imageExists('nginx:1.19.9-alpine')).toBeTruthy();
 });
 
 test('pull multiple services', async (): Promise<void> => {
@@ -402,15 +407,15 @@ test('pull multiple services', async (): Promise<void> => {
   };
 
   await removeImagesStartingWith('nginx:1.16.0');
-  await removeImagesStartingWith('alpine:3.7.3');
+  await removeImagesStartingWith('nginx:1.19.9-alpine');
 
   expect(await imageExists('nginx:1.16.0')).toBeFalsy();
-  expect(await imageExists('alpine:3.7.3')).toBeFalsy();
+  expect(await imageExists('nginx:1.19.9-alpine')).toBeFalsy();
 
-  await compose.pullMany([ 'db', 'alpine' ], opts);
+  await compose.pullMany([ 'web', 'proxy' ], opts);
 
   expect(await imageExists('nginx:1.16.0')).toBeTruthy();
-  expect(await imageExists('alpine:3.7.3')).toBeTruthy();
+  expect(await imageExists('nginx:1.19.9-alpine')).toBeTruthy();
 });
 
 test('pull all services', async (): Promise<void> => {
@@ -421,15 +426,15 @@ test('pull all services', async (): Promise<void> => {
   };
 
   await removeImagesStartingWith('nginx:1.16.0');
-  await removeImagesStartingWith('alpine:3.7.3');
+  await removeImagesStartingWith('nginx:1.19.9-alpine');
 
   expect(await imageExists('nginx:1.16.0')).toBeFalsy();
-  expect(await imageExists('alpine:3.7.3')).toBeFalsy();
+  expect(await imageExists('nginx:1.19.9-alpine')).toBeFalsy();
 
   await compose.pullAll(opts);
 
   expect(await imageExists('nginx:1.16.0')).toBeTruthy();
-  expect(await imageExists('alpine:3.7.3')).toBeTruthy();
+  expect(await imageExists('nginx:1.19.9-alpine')).toBeTruthy();
 });
 
 test('teardown', async (): Promise<void> => {
@@ -484,20 +489,20 @@ test('ps shows status data for started containers', async (): Promise<void> => {
   const std = await compose.ps({ cwd: path.join(__dirname), log: logOutput });
 
   expect(std.err).toBeFalsy();
-  expect(std.out.includes('compose_test_alpine')).toBeTruthy();
-  expect(std.out.includes('compose_test_nginx')).toBeTruthy();
+  expect(std.out.includes('compose_test_web')).toBeTruthy();
+  expect(std.out.includes('compose_test_proxy')).toBeTruthy();
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
 });
 
 test('ps does not show status data for stopped containers', async (): Promise<void> => {
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
-  await compose.upOne('alpine', { cwd: path.join(__dirname), log: logOutput });
+  await compose.upOne('web', { cwd: path.join(__dirname), log: logOutput });
 
   const std = await compose.ps({ cwd: path.join(__dirname), log: logOutput });
 
   expect(std.err).toBeFalsy();
-  expect(std.out.includes('compose_test_alpine')).toBeTruthy();
-  expect(std.out.includes('compose_test_nginx')).toBeFalsy();
+  expect(std.out.includes('compose_test_web')).toBeTruthy();
+  expect(std.out.includes('compose_test_proxy')).toBeFalsy();
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
 });
 
@@ -505,31 +510,32 @@ test('restartAll does restart all containers', async (): Promise<void> => {
   await compose.upAll({ cwd: path.join(__dirname), log: logOutput });
   await compose.restartAll({ cwd: path.join(__dirname), log: logOutput });
 
-  expect(await isContainerRunning('/compose_test_nginx')).toBeTruthy();
+  expect(await isContainerRunning('/compose_test_web')).toBeTruthy();
+  expect(await isContainerRunning('/compose_test_proxy')).toBeTruthy();
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
 });
 
 test('restartMany does restart selected containers', async (): Promise<void> => {
   await compose.upAll({ cwd: path.join(__dirname), log: logOutput });
-  await compose.restartMany([ 'db', 'alpine' ], { cwd: path.join(__dirname), log: logOutput });
+  await compose.restartMany([ 'web', 'proxy' ], { cwd: path.join(__dirname), log: logOutput });
 
-  expect(await isContainerRunning('/compose_test_nginx')).toBeTruthy();
+  expect(await isContainerRunning('/compose_test_web')).toBeTruthy();
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
 });
 
 test('restartOne does restart container', async (): Promise<void> => {
   await compose.upAll({ cwd: path.join(__dirname), log: logOutput });
-  await compose.restartOne('db', { cwd: path.join(__dirname), log: logOutput });
+  await compose.restartOne('proxy', { cwd: path.join(__dirname), log: logOutput });
 
-  expect(await isContainerRunning('/compose_test_nginx')).toBeTruthy();
+  expect(await isContainerRunning('/compose_test_proxy')).toBeTruthy();
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
 });
 
 test('logs does follow service logs', async (): Promise<void> => {
   await compose.upAll({ cwd: path.join(__dirname), log: logOutput });
-  await compose.logs('db', { cwd: path.join(__dirname), log: logOutput });
+  const std = await compose.logs('proxy', { cwd: path.join(__dirname), log: logOutput });
 
-  expect(await isContainerRunning('/compose_test_nginx')).toBeTruthy();
+  expect(std.out.includes('compose_test_proxy')).toBeTruthy();
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
 });
 
@@ -541,7 +547,7 @@ test('returns the port for a started service', async (): Promise<void> => {
   };
 
   await compose.upAll(config);
-  const port = await compose.port('db', 5432, config);
+  const port = await compose.port('web', 8888, config);
 
   expect(port.out).toMatch(/.*:[0-9]{1,5}/);
   await compose.down(config);
@@ -555,16 +561,16 @@ test('removes container', async (): Promise<void> => {
   };
 
   await compose.upAll(config);
-  expect(await isContainerRunning('/compose_test_nginx')).toBeTruthy();
-  expect(await isContainerRunning('/compose_test_alpine')).toBeTruthy();
+  expect(await isContainerRunning('/compose_test_web')).toBeTruthy();
+  expect(await isContainerRunning('/compose_test_proxy')).toBeTruthy();
 
-  await compose.rm({ ...config, commandOptions: ['-s'] }, 'alpine');
-  expect(await isContainerRunning('/compose_test_nginx')).toBeTruthy();
-  expect(await isContainerRunning('/compose_test_alpine')).toBeFalsy();
+  await compose.rm({ ...config, commandOptions: ['-s'] }, 'proxy');
+  expect(await isContainerRunning('/compose_test_web')).toBeTruthy();
+  expect(await isContainerRunning('/compose_test_proxy')).toBeFalsy();
 
-  await compose.rm({ ...config, commandOptions: ['-s'] }, 'alpine', 'db');
-  expect(await isContainerRunning('/compose_test_nginx')).toBeFalsy();
-  expect(await isContainerRunning('/compose_test_alpine')).toBeFalsy();
+  await compose.rm({ ...config, commandOptions: ['-s'] }, 'proxy', 'web');
+  expect(await isContainerRunning('/compose_test_web')).toBeFalsy();
+  expect(await isContainerRunning('/compose_test_proxy')).toBeFalsy();
 });
 
 test('returns version information', async (): Promise<void> => {

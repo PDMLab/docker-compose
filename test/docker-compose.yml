@@ -1,10 +1,14 @@
 version: '2'
 
 services:
-  db:
+  web:
     image: nginx:1.16.0
-    container_name: compose_test_nginx
+    container_name: compose_test_web
     command: 'nginx -g "daemon off;"'
-  alpine:
-    image: alpine:3.7.3
-    container_name: compose_test_alpine
+  proxy:
+    image: nginx:1.19.9-alpine
+    container_name: compose_test_proxy
+    command: 'nginx -g "daemon off;"'
+  hello:
+    image: hello-world
+    container_name: compose_test_hello
