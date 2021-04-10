@@ -370,9 +370,10 @@ test('build accepts config as string', async (): Promise<void> => {
   }
 
   await compose.upAll(config)
-  const port = await compose.port('web', 8888, config)
+  const result = await compose.port('web', 8888, config)
 
-  expect(port.out).toMatch(/.*:[0-9]{1,5}/)
+  expect(result.result.address).toBe('0.0.0.0')
+  expect(result.result.port).toBe(8888)
   await compose.down(config)
 })
 
