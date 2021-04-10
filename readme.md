@@ -82,7 +82,7 @@ compose.exec('node', 'npm install', { cwd: path.join(__dirname) })
 While `docker-compose` runs on Node.js 6+, running the tests requires you to use Node.js 8 as they make use of `async/await`.
 
 ```
-npm test
+yarn test
 ```
 
 ## Want to help?
