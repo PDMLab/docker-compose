@@ -299,11 +299,9 @@ test('ensure run and exec with command defined as array are working', async (): 
 
   let std = await compose.exec('web', [ '/bin/sh', '-c', 'cat /etc/os-release' ], opts);
 
-  // expect(std.err).toBeFalsy();
   checkOSID(std.out, 'debian');
 
   std = await compose.run('proxy', [ '/bin/sh', '-c', 'cat /etc/os-release' ], opts);
-  // expect(std.err).toBeFalsy();
   checkOSID(std.out, 'alpine');
 
   await compose.down({ cwd: path.join(__dirname), log: logOutput });
