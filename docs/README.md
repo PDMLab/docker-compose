@@ -100,7 +100,7 @@ Before sending a PR, please [create an issue](https://github.com/PDMLab/docker-c
 
 We're using [conventional commits](https://www.conventionalcommits.org), so please use it for your commits as well.
 
-Also please add tests and make sure to run `npm run eslint`.
+Also please add tests and make sure to run `yarn lint`.
 
 ### Slack
 
