@@ -4,17 +4,9 @@ title: README
 nav_order: 99
 ---
 
-<img src="https://img.shields.io/circleci/project/github/PDMLab/docker-compose.svg" /> <a href="https://join.slack.com/t/pdmlab-oss/shared_invite/enQtNjEyMjQ0MDY3NTczLTg1ZDc0YjQxMGE3MTcyYTdkODU1YjFmMTBiODE2ZTZiNDFkNjc1MWE4OTE4NWY0Y2YyMWYzYmNhZGY0NDAyYWY"><img src="https://img.shields.io/badge/Slack-join-green.svg?logo=slack" /></a>
-
 # Manage Docker-Compose via Node.js
 
 `docker-compose` is a small library that allows you to run [docker-compose](https://docs.docker.com/compose/)(which is still required) via Node.js. This is useful to bootstrap test environments. You might also generate your `docker-compose.yml` files using [composefile](https://www.npmjs.com/package/composefile).
-
-## Existing user? We need your help
-First of all: thanks for using the `docker-compose` module.
-As described in [#44][i44], we're planning to provide more guidance for CI/CD when using the `docker-compose` module and it would be great if you could support us here. More details in [#44][i44].
-
-[i44]: https://github.com/PDMLab/docker-compose/issues/44
 
 ## Installation
 
@@ -32,13 +24,17 @@ npm install --save-dev docker-compose
 * `down(options)` - Stops containers and removes containers, networks, volumes, and images created by `up`
 * `kill(options)` - Force stop service containers
 * `stop(options)` - Stop running containers without removing them
+* `stopOne(service, options)` - Stops one container without removing it
 * `rm(options)` - Remove stopped service containers - always uses the `-f` flag due to non interactive mode
 * `exec(container, command, options)` - Exec `command` inside `container`, uses `-T` to properly handle stdin & stdout
-* `logs(container, command, options)` - Show logs of service. Use `options.follow` `true|false` to turn on `--follow` flag.
+* `logs(services, options)` - Show logs of service(s). Use `options.follow` `true|false` to turn on `--follow` flag.
 * `run(service, command, options)` - Run a one-off `command` on a service, uses `-T` to properly handle stdin & stdout
 * `buildAll(options)` - Build or rebuild services
 * `buildMany(services, options)` - Build or rebuild services
 * `buildOne(service, options)` - Build or rebuild service
+* `pullMany(services, options)` - Pull service images specified
+* `pullOne(service, options)` - Pull a service image
+* `pullAll(options)` - Pull all service images
 * `restartAll(options)` - Restart all services
 * `restartMany(services, options)` - Restart services
 * `restartOne(service, options)` - Restart service
@@ -46,6 +42,7 @@ npm install --save-dev docker-compose
 * `config(options)` - Validates configuration files and returns configuration yaml
 * `configServices(options)` - Returns list of services defined in configuration files
 * `configVolumes(options)` - Returns list of volumes defined in configuration files
+* `port(options)` - Returns the public port of the given service and internal port. 
 
 All commands return a `Promise({object})` with stdout and stderr strings and an exit code:
 ```javascript
@@ -79,6 +76,7 @@ compose.exec('node', 'npm install', { cwd: path.join(__dirname) })
 
 * `cwd {string}`: mandatory folder path to the `docker-compose.yml`
 * `config {(string|string[])}`: custom and/or multiple yml files can be specified (relative to `cwd`)
+* `configAsString {string}`: configuration can be provided as is, instead of relying on a file. In case `configAsString` is provided `config` will be ignored.
 * `[log] {boolean}`:  optional setting to enable console logging (output of `docker-compose` `stdout`/`stderr` output)
 * `[composeOptions] string[]|Array<string|string[]`: pass optional compose options like `"--verbose"` or `[["--verbose"], ["--log-level", "DEBUG"]]` or `["--verbose", ["--loglevel", "DEBUG"]]` for *all* commands.
 * `[commandOptions] string[]|Array<string|string[]`: pass optional command options like `"--build"` or `[["--build"], ["--timeout", "5"]]` or `["--build", ["--timeout", "5"]]` for the `up` command. Viable `commandOptions` depend on the command (`up`, `down` etc.) itself
@@ -101,17 +99,19 @@ If you see a bug, please be so kind as to show how it's failing, and we'll do ou
 
 Before sending a PR, please [create an issue](https://github.com/PDMLab/docker-compose/issues/new) to introduce your idea and have a reference for your PR.
 
+We're using [conventional commits](https://www.conventionalcommits.org), so please use it for your commits as well.
+
 Also please add tests and make sure to run `npm run eslint`.
 
 ### Slack
 
-If you want to discuss an `docker-compose` issue or PR in more detail, feel free to [join our Slack workspace](https://join.slack.com/t/pdmlab-oss/shared_invite/enQtNjEyMjQ0MDY3NTczLTg1ZDc0YjQxMGE3MTcyYTdkODU1YjFmMTBiODE2ZTZiNDFkNjc1MWE4OTE4NWY0Y2YyMWYzYmNhZGY0NDAyYWY). 
+If you want to discuss an `docker-compose` issue or PR in more detail, feel free to [join our Slack workspace](https://join.slack.com/t/pdmlab-oss/shared_invite/enQtNjEyMjQ0MDY3NTczLTg1ZDc0YjQxMGE3MTcyYTdkODU1YjFmMTBiODE2ZTZiNDFkNjc1MWE4OTE4NWY0Y2YyMWYzYmNhZGY0NDAyYWY).
 
 ## License
 
 MIT License
 
-Copyright (c) 2017 - 2019 PDMLab
+Copyright (c) 2017 - 2021 PDMLab
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
