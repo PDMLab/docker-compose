@@ -9,6 +9,11 @@ export interface IDockerComposeOptions {
   env?: NodeJS.ProcessEnv
 }
 
+export type DockerComposePortResult = {
+  address: string
+  port: number
+}
+
 export interface IDockerComposeLogOptions extends IDockerComposeOptions {
   follow?: boolean
 }
@@ -25,6 +30,13 @@ export interface IDockerComposeResult {
   exitCode: number | null
   out: string
   err: string
+}
+
+export type TypedDockerComposeResult<T> = {
+  exitCode: number | null
+  out: string
+  err: string
+  result: T
 }
 
 /**
@@ -343,14 +355,28 @@ export const logs = function (
   return execCompose('logs', args, options)
 }
 
-export const port = function (
+export const port = async function (
   service: string,
   containerPort: string | number,
   options?: IDockerComposeOptions
-): Promise<IDockerComposeResult> {
+): Promise<TypedDockerComposeResult<DockerComposePortResult>> {
   const args = [service, containerPort]
 
-  return execCompose('port', args, options)
+  try {
+    const result = await execCompose('port', args, options)
+    const [address, port] = result.out.split(':')
+    return {
+      exitCode: result.exitCode,
+      out: result.out,
+      err: result.err,
+      result: {
+        address,
+        port: Number(port)
+      }
+    }
+  } catch (error) {
+    return Promise.reject(error)
+  }
 }
 
 export const version = function (
