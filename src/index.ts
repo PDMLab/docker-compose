@@ -1,5 +1,4 @@
 import childProcess from 'child_process'
-import { Readable } from 'stream'
 export interface IDockerComposeOptions {
   cwd?: string
   config?: string | string[]

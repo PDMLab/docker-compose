@@ -70,7 +70,7 @@ test('ensure container gets started', async (): Promise<void> => {
 test('ensure exit code is returned correctly', async (): Promise<void> => {
   let result = await compose.down({ cwd: path.join(__dirname), log: logOutput })
 
-  await expect(result).toMatchObject({
+  expect(result).toMatchObject({
     exitCode: 0
   })
 
@@ -78,12 +78,17 @@ test('ensure exit code is returned correctly', async (): Promise<void> => {
   expect(result).toMatchObject({
     exitCode: 0
   })
+
+  let failedResult = 0
   try {
-    await compose.logs('non_existent_service', { cwd: path.join(__dirname) })
-    expect(false).toBeTruthy()
-  } catch (rejectionResult) {
-    expect(rejectionResult.exitCode).toBe(1)
+    await compose.logs('non_existent_service', {
+      cwd: path.join(__dirname)
+    })
+  } catch (error) {
+    failedResult = error.exitCode
   }
+  expect(failedResult).toBe(1)
+
   await compose.down({ cwd: path.join(__dirname), log: logOutput })
 })
 
@@ -291,7 +296,6 @@ test('ensure run and exec are working', async (): Promise<void> => {
   const opts = { cwd: path.join(__dirname), log: logOutput }
 
   await compose.upAll(opts)
-  const console = require('console')
   expect(await isContainerRunning('/compose_test_web')).toBeTruthy()
 
   let std = await compose.exec('web', 'cat /etc/os-release', opts)
