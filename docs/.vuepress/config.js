@@ -1,10 +1,12 @@
 module.exports = {
-  base:'/docker-compose/'
-  // lang: 'en-US',
-  // title: 'Hello, VuePress!',
-  // description: 'This is my first VuePress site',
-
-  // themeConfig: {
-  //   logo: 'https://vuejs.org/images/logo.png'
-  // }
+  base: '/docker-compose/',
+  themeConfig: {
+    navbar: [
+      { text: 'GitHub', link: 'https://github.com/PDMLab/docker-compose' },
+      { text: 'npm', link: 'https://npmjs.com/docker-compose' }
+    ],
+    displayAllHeaders: true,
+    lastUpdated: true,
+    sidebar: []
+  }
 }
