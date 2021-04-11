@@ -109,17 +109,17 @@ export const mapPsOutput = (output: string): DockerComposePsResult => {
     .filter((_, index) => index > 1)
     .map((line) => {
       const [
-        nameString,
-        commandString,
-        stateString,
-        allPortsString
+        nameFragment,
+        commandFragment,
+        stateFragment,
+        untypedPortsFragment
       ] = line.split(/\s{3,}/)
 
       return {
-        name: nameString.trim(),
-        command: commandString.trim(),
-        state: stateString.trim(),
-        ports: mapPorts(allPortsString.trim())
+        name: nameFragment.trim(),
+        command: commandFragment.trim(),
+        state: stateFragment.trim(),
+        ports: mapPorts(untypedPortsFragment.trim())
       }
     })
   return { services }
