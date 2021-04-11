@@ -540,8 +540,9 @@ test('config show data for docker-compose files (volumes)', async (): Promise<vo
     config: 'docker-compose-42.yml'
   })
 
+  expect(std.data.volumes.length).toBe(1)
+  expect(std.data.volumes[0]).toBe('db-data')
   expect(std.err).toBeFalsy()
-  expect(std.out.includes('db-data')).toBeTruthy()
 })
 
 test('ps shows status data for started containers', async (): Promise<void> => {
