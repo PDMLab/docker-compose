@@ -36,7 +36,7 @@ export type TypedDockerComposeResult<T> = {
   exitCode: number | null
   out: string
   err: string
-  result: T
+  data: T
 }
 
 /**
@@ -367,7 +367,7 @@ export const port = async function (
     const [address, port] = result.out.split(':')
     return {
       ...result,
-      result: {
+      data: {
         address,
         port: Number(port)
       }
