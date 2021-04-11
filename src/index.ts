@@ -80,29 +80,32 @@ export const mapPorts = (
   mapped?: { address: string; port: number }
   exposed: { port: number; protocol: string }
 }> => {
-  if (!ports) return []
-  const allPorts = ports.split(',')
-  return allPorts.map((portString) => {
-    const exposedFragments = portString.trim().split('->')
-    const [port, protocol] =
-      exposedFragments.length === 1
-        ? exposedFragments[0].split('/')
-        : exposedFragments[1].split('/')
-    const [address, mappedPort] =
-      exposedFragments.length === 2 ? exposedFragments[0].split(':') : []
-    const result = {
-      exposed: { port: Number(port), protocol },
-      ...(address &&
-        mappedPort && { mapped: { port: Number(mappedPort), address } })
-    }
-    return result
-  })
+  const result = !ports
+    ? []
+    : (() => {
+        const allPorts = ports.split(',')
+        return allPorts.map((untypedPort) => {
+          const exposedFragments = untypedPort.trim().split('->')
+          const [port, protocol] =
+            exposedFragments.length === 1
+              ? exposedFragments[0].split('/')
+              : exposedFragments[1].split('/')
+          const [address, mappedPort] =
+            exposedFragments.length === 2 ? exposedFragments[0].split(':') : []
+          return {
+            exposed: { port: Number(port), protocol },
+            ...(address &&
+              mappedPort && { mapped: { port: Number(mappedPort), address } })
+          }
+        })
+      })()
+  return result
 }
 
 export const mapPsOutput = (output: string): DockerComposePsResult => {
-  const lines = output.split(`\n`).filter(nonEmptyString)
-  const lines2 = lines.filter((line, index) => index > 1)
-  const services = lines2.map((line) => {
+  const allLines = output.split(`\n`).filter(nonEmptyString)
+  const linesWithServices = allLines.filter((_, index) => index > 1)
+  const services = linesWithServices.map((line) => {
     const [nameString, commandString, stateString, allPortsString] = line.split(
       /\s{3,}/
     )
