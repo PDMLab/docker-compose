@@ -103,20 +103,25 @@ export const mapPorts = (
 }
 
 export const mapPsOutput = (output: string): DockerComposePsResult => {
-  const allLines = output.split(`\n`).filter(nonEmptyString)
-  const linesWithServices = allLines.filter((_, index) => index > 1)
-  const services = linesWithServices.map((line) => {
-    const [nameString, commandString, stateString, allPortsString] = line.split(
-      /\s{3,}/
-    )
+  const services = output
+    .split(`\n`)
+    .filter(nonEmptyString)
+    .filter((_, index) => index > 1)
+    .map((line) => {
+      const [
+        nameString,
+        commandString,
+        stateString,
+        allPortsString
+      ] = line.split(/\s{3,}/)
 
-    return {
-      name: nameString.trim(),
-      command: commandString.trim(),
-      state: stateString.trim(),
-      ports: mapPorts(allPortsString.trim())
-    }
-  })
+      return {
+        name: nameString.trim(),
+        command: commandString.trim(),
+        state: stateString.trim(),
+        ports: mapPorts(allPortsString.trim())
+      }
+    })
   return { services }
 }
 
