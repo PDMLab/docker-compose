@@ -1,4 +1,5 @@
 import childProcess from 'child_process'
+import yaml from 'yaml'
 export interface IDockerComposeOptions {
   cwd?: string
   config?: string | string[]
@@ -16,6 +17,14 @@ export type DockerComposePortResult = {
 
 export type DockerComposeVersionResult = {
   version: string
+}
+
+export type DockerComposeConfigResult = {
+  config: {
+    version: Record<string, string>
+    services: Record<string, string | Record<string, string>>
+    volumes: Record<string, string>
+  }
 }
 
 export interface IDockerComposeLogOptions extends IDockerComposeOptions {
@@ -292,10 +301,19 @@ export const pullOne = function (
   return execCompose('pull', [service], options)
 }
 
-export const config = function (
+export const config = async function (
   options?: IDockerComposeOptions
-): Promise<IDockerComposeResult> {
-  return execCompose('config', [], options)
+): Promise<TypedDockerComposeResult<DockerComposeConfigResult>> {
+  try {
+    const result = await execCompose('config', [], options)
+    const config = yaml.parse(result.out)
+    return {
+      ...result,
+      data: { config }
+    }
+  } catch (error) {
+    return Promise.reject(error)
+  }
 }
 
 export const configServices = function (

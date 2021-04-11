@@ -111,5 +111,8 @@
     "extends": [
       "@commitlint/config-conventional"
     ]
+  },
+  "dependencies": {
+    "yaml": "^1.10.2"
   }
 }

@@ -514,9 +514,11 @@ test('config show data for docker-compose files', async (): Promise<void> => {
     config: 'docker-compose-42.yml'
   })
 
-  expect(std.err).toBeFalsy()
-  expect(std.out.includes('some-service')).toBeTruthy()
-  expect(std.out.includes('test/volume:/mountedvolume:rw')).toBeTruthy()
+  expect(std.data.config.version).toBe('3')
+  expect(std.data.config.services['some-service']['image']).toBe(
+    'nginx:1.19.9-alpine'
+  )
+  expect(std.data.config.volumes['db-data']).toEqual({})
 })
 
 test('config show data for docker-compose files (services)', async (): Promise<void> => {
