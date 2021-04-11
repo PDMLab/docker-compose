@@ -525,11 +525,12 @@ test('config show data for docker-compose files (services)', async (): Promise<v
   const std = await compose.configServices({
     cwd: path.join(__dirname),
     log: logOutput,
-    config: 'docker-compose-42.yml'
+    config: 'docker-compose-build.yml'
   })
 
+  expect(std.data.services.length).toBe(6)
+  expect(std.data.services[0]).toBe('build_test_1')
   expect(std.err).toBeFalsy()
-  expect(std.out.includes('some-service')).toBeTruthy()
 })
 
 test('config show data for docker-compose files (volumes)', async (): Promise<void> => {

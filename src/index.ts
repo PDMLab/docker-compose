@@ -27,6 +27,10 @@ export type DockerComposeConfigResult = {
   }
 }
 
+export type DockerComposeConfigServicesResult = {
+  services: string[]
+}
+
 export interface IDockerComposeLogOptions extends IDockerComposeOptions {
   follow?: boolean
 }
@@ -316,10 +320,19 @@ export const config = async function (
   }
 }
 
-export const configServices = function (
+export const configServices = async function (
   options?: IDockerComposeOptions
-): Promise<IDockerComposeResult> {
-  return execCompose('config', ['--services'], options)
+): Promise<TypedDockerComposeResult<DockerComposeConfigServicesResult>> {
+  try {
+    const result = await execCompose('config', ['--services'], options)
+    const services = result.out.split('\n')
+    return {
+      ...result,
+      data: { services }
+    }
+  } catch (error) {
+    return Promise.reject(error)
+  }
 }
 
 export const configVolumes = function (
