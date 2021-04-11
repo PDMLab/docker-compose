@@ -14,6 +14,10 @@ export type DockerComposePortResult = {
   port: number
 }
 
+export type DockerComposeVersionResult = {
+  version: string
+}
+
 export interface IDockerComposeLogOptions extends IDockerComposeOptions {
   follow?: boolean
 }
@@ -377,8 +381,17 @@ export const port = async function (
   }
 }
 
-export const version = function (
+export const version = async function (
   options?: IDockerComposeOptions
-): Promise<IDockerComposeResult> {
-  return execCompose('version', ['--short'], options)
+): Promise<TypedDockerComposeResult<DockerComposeVersionResult>> {
+  try {
+    const result = await execCompose('version', ['--short'], options)
+    const version = result.out.replace('\n', '')
+    return {
+      ...result,
+      data: { version }
+    }
+  } catch (error) {
+    return Promise.reject(error)
+  }
 }

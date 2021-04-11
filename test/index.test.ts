@@ -641,7 +641,7 @@ test('removes container', async (): Promise<void> => {
 })
 
 test('returns version information', async (): Promise<void> => {
-  const version = await compose.version()
+  const version = await (await compose.version()).data.version
 
-  expect(version.out).toBeTruthy()
+  expect(version).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)$/)
 })
