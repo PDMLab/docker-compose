@@ -60,6 +60,8 @@ export type TypedDockerComposeResult<T> = {
   data: T
 }
 
+const nonEmptyString = (v: string) => v !== ''
+
 /**
  * Converts supplied yml files to cli arguments
  * https://docs.docker.com/compose/reference/overview/#use--f-to-specify-name-and-path-of-one-or-more-compose-files
@@ -329,7 +331,7 @@ export const configServices = async function (
 ): Promise<TypedDockerComposeResult<DockerComposeConfigServicesResult>> {
   try {
     const result = await execCompose('config', ['--services'], options)
-    const services = result.out.split('\n')
+    const services = result.out.split('\n').filter(nonEmptyString)
     return {
       ...result,
       data: { services }
@@ -344,8 +346,7 @@ export const configVolumes = async function (
 ): Promise<TypedDockerComposeResult<DockerComposeConfigVolumesResult>> {
   try {
     const result = await execCompose('config', ['--volumes'], options)
-    const nonEmpty = (v: string) => v !== ''
-    const volumes = result.out.split('\n').filter(nonEmpty)
+    const volumes = result.out.split('\n').filter(nonEmptyString)
     return {
       ...result,
       data: { volumes }

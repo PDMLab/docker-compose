@@ -528,7 +528,7 @@ test('config show data for docker-compose files (services)', async (): Promise<v
     config: 'docker-compose-build.yml'
   })
 
-  expect(std.data.services.length).toBe(6)
+  expect(std.data.services.length).toBe(5)
   expect(std.data.services[0]).toBe('build_test_1')
   expect(std.err).toBeFalsy()
 })
