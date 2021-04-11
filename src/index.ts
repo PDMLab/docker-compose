@@ -83,8 +83,7 @@ export const mapPorts = (
   const result = !ports
     ? []
     : (() => {
-        const allPorts = ports.split(',')
-        return allPorts.map((untypedPort) => {
+        return ports.split(',').map((untypedPort) => {
           const exposedFragments = untypedPort.trim().split('->')
           const [port, protocol] =
             exposedFragments.length === 1
