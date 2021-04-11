@@ -2,6 +2,7 @@ import Docker from 'dockerode'
 import * as compose from '../src/index'
 import * as path from 'path'
 import { readFile } from 'fs'
+import { mapPorts, mapPsOutput } from '../src/index'
 const docker = new Docker()
 
 // Docker commands, especially builds, can take some time. This makes sure that they can take the time they need.
@@ -551,8 +552,16 @@ test('ps shows status data for started containers', async (): Promise<void> => {
   const std = await compose.ps({ cwd: path.join(__dirname), log: logOutput })
 
   expect(std.err).toBeFalsy()
-  expect(std.out.includes('compose_test_web')).toBeTruthy()
-  expect(std.out.includes('compose_test_proxy')).toBeTruthy()
+  expect(std.data.services.length).toBe(3)
+  const web = std.data.services.find(
+    (service) => service.name === 'compose_test_web'
+  )
+  expect(std.data.services.length).toBe(3)
+  expect(web?.ports.length).toBe(2)
+  expect(web?.ports[0].exposed.port).toBe(443)
+  expect(web?.ports[0].exposed.protocol).toBe('tcp')
+  expect(web?.ports[0].mapped?.port).toBe(443)
+  expect(web?.ports[0].mapped?.address).toBe('0.0.0.0')
   await compose.down({ cwd: path.join(__dirname), log: logOutput })
 })
 
@@ -563,8 +572,14 @@ test('ps does not show status data for stopped containers', async (): Promise<vo
   const std = await compose.ps({ cwd: path.join(__dirname), log: logOutput })
 
   expect(std.err).toBeFalsy()
-  expect(std.out.includes('compose_test_web')).toBeTruthy()
-  expect(std.out.includes('compose_test_proxy')).toBeFalsy()
+  const web = std.data.services.find(
+    (service) => service.name === 'compose_test_web'
+  )
+  const proxy = std.data.services.find(
+    (service) => service.name === 'compose_test_proxy'
+  )
+  expect(web?.name).toBe('compose_test_web')
+  expect(proxy).toBeFalsy()
   await compose.down({ cwd: path.join(__dirname), log: logOutput })
 })
 
@@ -648,4 +663,67 @@ test('returns version information', async (): Promise<void> => {
   const version = await (await compose.version()).data.version
 
   expect(version).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)$/)
+})
+
+test('parse ps output', () => {
+  const output = `       Name                     Command               State                     Ports                  \n-------------------------------------------------------------------------------------------------------\ncompose_test_hello   /hello                           Exit 0                                           \ncompose_test_proxy   /docker-entrypoint.sh ngin ...   Up       80/tcp                                  \ncompose_test_web     nginx -g daemon off;             Up       0.0.0.0:443->443/tcp, 0.0.0.0:80->80/tcp\n`
+
+  const psOut = mapPsOutput(output)
+  expect(psOut.services[0]).toEqual({
+    command: '/hello',
+    name: 'compose_test_hello',
+    state: 'Exit 0',
+    ports: []
+  })
+
+  expect(psOut.services[1]).toEqual({
+    command: '/docker-entrypoint.sh ngin ...',
+    name: 'compose_test_proxy',
+    state: 'Up',
+    ports: [{ exposed: { port: 80, protocol: 'tcp' } }]
+  })
+
+  expect(psOut.services[2]).toEqual({
+    command: 'nginx -g daemon off;',
+    name: 'compose_test_web',
+    state: 'Up',
+    ports: [
+      {
+        exposed: { port: 443, protocol: 'tcp' },
+        mapped: { port: 443, address: '0.0.0.0' }
+      },
+      {
+        exposed: { port: 80, protocol: 'tcp' },
+        mapped: { port: 80, address: '0.0.0.0' }
+      }
+    ]
+  })
+})
+
+test('parse ports', () => {
+  const noPort = ''
+  const exposedTcp = '80/tcp'
+  const mappedExposedTcp = '0.0.0.0:443->443/tcp'
+  const multipleExposedMappedTcp = '0.0.0.0:443->443/tcp, 0.0.0.0:80->80/tcp'
+
+  expect(mapPorts(noPort)).toEqual([])
+  expect(mapPorts(exposedTcp)).toEqual([
+    { exposed: { port: 80, protocol: 'tcp' } }
+  ])
+  expect(mapPorts(mappedExposedTcp)).toEqual([
+    {
+      exposed: { port: 443, protocol: 'tcp' },
+      mapped: { address: '0.0.0.0', port: 443 }
+    }
+  ])
+  expect(mapPorts(multipleExposedMappedTcp)).toEqual([
+    {
+      exposed: { port: 443, protocol: 'tcp' },
+      mapped: { address: '0.0.0.0', port: 443 }
+    },
+    {
+      exposed: { port: 80, protocol: 'tcp' },
+      mapped: { address: '0.0.0.0', port: 80 }
+    }
+  ])
 })

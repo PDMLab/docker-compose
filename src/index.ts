@@ -62,6 +62,61 @@ export type TypedDockerComposeResult<T> = {
 
 const nonEmptyString = (v: string) => v !== ''
 
+export type DockerComposePsResult = {
+  services: Array<{
+    name: string
+    command: string
+    state: string
+    ports: Array<{
+      mapped?: { address: string; port: number }
+      exposed: { port: number; protocol: string }
+    }>
+  }>
+}
+
+export const mapPorts = (
+  ports: string
+): Array<{
+  mapped?: { address: string; port: number }
+  exposed: { port: number; protocol: string }
+}> => {
+  if (!ports) return []
+  const allPorts = ports.split(',')
+  return allPorts.map((portString) => {
+    const exposedFragments = portString.trim().split('->')
+    const [port, protocol] =
+      exposedFragments.length === 1
+        ? exposedFragments[0].split('/')
+        : exposedFragments[1].split('/')
+    const [address, mappedPort] =
+      exposedFragments.length === 2 ? exposedFragments[0].split(':') : []
+    const result = {
+      exposed: { port: Number(port), protocol },
+      ...(address &&
+        mappedPort && { mapped: { port: Number(mappedPort), address } })
+    }
+    return result
+  })
+}
+
+export const mapPsOutput = (output: string): DockerComposePsResult => {
+  const lines = output.split(`\n`).filter(nonEmptyString)
+  const lines2 = lines.filter((line, index) => index > 1)
+  const services = lines2.map((line) => {
+    const [nameString, commandString, stateString, allPortsString] = line.split(
+      /\s{3,}/
+    )
+
+    return {
+      name: nameString.trim(),
+      command: commandString.trim(),
+      state: stateString.trim(),
+      ports: mapPorts(allPortsString.trim())
+    }
+  })
+  return { services }
+}
+
 /**
  * Converts supplied yml files to cli arguments
  * https://docs.docker.com/compose/reference/overview/#use--f-to-specify-name-and-path-of-one-or-more-compose-files
@@ -356,10 +411,19 @@ export const configVolumes = async function (
   }
 }
 
-export const ps = function (
+export const ps = async function (
   options?: IDockerComposeOptions
-): Promise<IDockerComposeResult> {
-  return execCompose('ps', [], options)
+): Promise<TypedDockerComposeResult<DockerComposePsResult>> {
+  try {
+    const result = await execCompose('ps', [], options)
+    const data = mapPsOutput(result.out)
+    return {
+      ...result,
+      data
+    }
+  } catch (error) {
+    return Promise.reject(error)
+  }
 }
 
 export const push = function (
