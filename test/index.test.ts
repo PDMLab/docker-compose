@@ -700,7 +700,7 @@ test('parse ps output', () => {
   })
 })
 
-test('parse ports', () => {
+test('map ports', () => {
   const noPort = ''
   const exposedTcp = '80/tcp'
   const mappedExposedTcp = '0.0.0.0:443->443/tcp'
