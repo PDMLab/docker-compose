@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.23.7](https://github.com/PDMLab/docker-compose/compare/v0.23.5...v0.23.7) (2021-04-14)
+
+
+### Features
+
+* allow to pass docker compose configuration as string ([e8c14d3](https://github.com/PDMLab/docker-compose/commit/e8c14d318ce440ab02c858b1ca1dbeeb2985dc00))
+* make result for `config --services` command type safe ([6f105ca](https://github.com/PDMLab/docker-compose/commit/6f105ca16098ba8de11f85ec0d092130b65293e4))
+* make result for `config --volumes` command type safe ([51b20b4](https://github.com/PDMLab/docker-compose/commit/51b20b43d6eccac45653553437a546e4ccee51a6))
+* make result for `config` command type safe ([a2f5a4e](https://github.com/PDMLab/docker-compose/commit/a2f5a4ec0eee8fcbd60fa12f969b8eb83a4730fb))
+* make result for `port` command type safe ([70a98f4](https://github.com/PDMLab/docker-compose/commit/70a98f473b7bd46f0aa03c1a4334fa2abf6c3455))
+* make result for `ps` command type safe ([880d252](https://github.com/PDMLab/docker-compose/commit/880d2522b5777db30c48569a41dd09fb7e46a4b3))
+* make result for `version` command type safe ([a7da038](https://github.com/PDMLab/docker-compose/commit/a7da0380a8464bbd2efc2c16b70b67d4fdf77c24))
+
+
+### Bug Fixes
+
+* filter empty entries from `config --services` command ([ed91eba](https://github.com/PDMLab/docker-compose/commit/ed91eba770d3a32d82dda4e927d31ed4b6d01db4))
+* **test:** fix broken tests ([afb2b11](https://github.com/PDMLab/docker-compose/commit/afb2b1116b12c4800563e85adb15ebd39e030516))
+
 ### [0.23.6](https://github.com/PDMLab/docker-compose/compare/v0.23.5...v0.23.6) (2021-01-06)
 
 
