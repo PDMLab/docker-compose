@@ -17,7 +17,7 @@ jobs:
     - run: yarn lint
   build:
     runs-on: ubuntu-18.04
-    name: Test
+    name: Build + Test
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v1
