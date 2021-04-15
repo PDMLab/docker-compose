@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.23.8](https://github.com/PDMLab/docker-compose/compare/v0.23.7...v0.23.8) (2021-04-15)
+
+
+### Bug Fixes
+
+* ignore vuepress cache + temp files on release ([#148](https://github.com/PDMLab/docker-compose/issues/148)) ([e58387d](https://github.com/PDMLab/docker-compose/commit/e58387d82e4586f7a8156446f12c999c9a6f9f42))
+
 ### [0.23.7](https://github.com/PDMLab/docker-compose/compare/v0.23.5...v0.23.7) (2021-04-14)
 
 
