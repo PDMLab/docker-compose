@@ -11,5 +11,6 @@ test/
 # VS Code settings
 .vscode
 
-# CircleCI
-.circleci
+# VuePress
+.cache
+.temp
