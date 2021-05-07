@@ -74,6 +74,7 @@ compose.exec('node', 'npm install', { cwd: path.join(__dirname) })
 `docker-compose` accepts these params:
 
 * `cwd {string}`: mandatory folder path to the `docker-compose.yml`
+* `execPath {string}`: optional path to docker-compose exec in case it's not located in $PATH `/path/to/docker-compose`
 * `config {(string|string[])}`: custom and/or multiple yml files can be specified (relative to `cwd`)
 * `configAsString {string}`: configuration can be provided as is, instead of relying on a file. In case `configAsString` is provided `config` will be ignored.
 * `[log] {boolean}`:  optional setting to enable console logging (output of `docker-compose` `stdout`/`stderr` output)
