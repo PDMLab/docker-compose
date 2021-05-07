@@ -2,6 +2,7 @@ import childProcess from 'child_process'
 import yaml from 'yaml'
 export interface IDockerComposeOptions {
   cwd?: string
+  execPath?: string
   config?: string | string[]
   configAsString?: string
   log?: boolean
@@ -186,8 +187,9 @@ const execCompose = (
 
     const cwd = options.cwd
     const env = options.env || undefined
+    const execPath = options.execPath || 'docker-compose'
 
-    const childProc = childProcess.spawn('docker-compose', composeArgs, {
+    const childProc = childProcess.spawn(execPath, composeArgs, {
       cwd,
       env
     })
