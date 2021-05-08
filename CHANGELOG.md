@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.23.9](https://github.com/PDMLab/docker-compose/compare/v0.23.8...v0.23.9) (2021-05-08)
+
+
+### Features
+
+* Add execPath option to set path to docker-compose executable ([58f09f4](https://github.com/PDMLab/docker-compose/commit/58f09f4c7414df5a6ee7af7f77d2af297d84d6c1))
+
 ### [0.23.8](https://github.com/PDMLab/docker-compose/compare/v0.23.7...v0.23.8) (2021-04-15)
 
 
