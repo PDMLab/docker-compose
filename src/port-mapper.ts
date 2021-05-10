@@ -4,26 +4,35 @@ const mapPorts = (
   mapped?: { address: string; port: number }
   exposed: { port: number; protocol: string }
 }> => {
-  const result = !ports
-    ? []
-    : (() => {
-        return ports.split(',').map((untypedPort) => {
-          const exposedFragments = untypedPort.trim().split('->')
+  if (!ports) {
+    return []
+  }
 
-          const [port, protocol] =
-            exposedFragments.length === 1
-              ? exposedFragments[0].split('/')
-              : exposedFragments[1].split('/')
-          const [address, mappedPort] =
-            exposedFragments.length === 2 ? exposedFragments[0].split(':') : []
-          return {
-            exposed: { port: Number(port), protocol },
-            ...(address &&
-              mappedPort && { mapped: { port: Number(mappedPort), address } })
-          }
-        })
-      })()
-  return result
+  return ports.split(',').map((untypedPort) => {
+    const exposedFragments = untypedPort.trim().split('->')
+
+    const [port, protocol] =
+      exposedFragments.length === 1
+        ? exposedFragments[0].split('/')
+        : exposedFragments[1].split('/')
+
+    const mapped = exposedFragments[0]
+    const lastDoubleColon = mapped.lastIndexOf(':')
+
+    if (lastDoubleColon === -1) {
+      return {
+        exposed: { port: Number(port), protocol },
+      }
+    }
+
+    const address = mapped.substr(0, lastDoubleColon)
+    const mappedPort = mapped.substr(lastDoubleColon + 1)
+
+    return {
+      exposed: { port: Number(port), protocol },
+      mapped: { port: Number(mappedPort), address },
+    }
+  })
 }
 
 export default mapPorts
