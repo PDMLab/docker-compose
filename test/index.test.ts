@@ -2,7 +2,7 @@ import Docker from 'dockerode'
 import * as compose from '../src/index'
 import * as path from 'path'
 import { readFile } from 'fs'
-import { mapPorts, mapPsOutput } from '../src/index'
+import { mapPsOutput } from '../src/index'
 const docker = new Docker()
 
 // Docker commands, especially builds, can take some time. This makes sure that they can take the time they need.
@@ -94,25 +94,21 @@ test('ensure exit code is returned correctly', async (): Promise<void> => {
 })
 
 describe('starts containers properly with --build and --timeout options', (): void => {
-  beforeEach(
-    async (): Promise<void> => {
-      await compose.down({
-        cwd: path.join(__dirname),
-        log: logOutput,
-        config: 'docker-compose-build.yml'
-      })
-    }
-  )
+  beforeEach(async (): Promise<void> => {
+    await compose.down({
+      cwd: path.join(__dirname),
+      log: logOutput,
+      config: 'docker-compose-build.yml'
+    })
+  })
 
-  afterEach(
-    async (): Promise<void> => {
-      await compose.down({
-        cwd: path.join(__dirname),
-        log: logOutput,
-        config: 'docker-compose-build.yml'
-      })
-    }
-  )
+  afterEach(async (): Promise<void> => {
+    await compose.down({
+      cwd: path.join(__dirname),
+      log: logOutput,
+      config: 'docker-compose-build.yml'
+    })
+  })
 
   test('ensure container gets started with --build option', async (): Promise<void> => {
     await compose.upAll({
