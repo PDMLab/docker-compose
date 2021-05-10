@@ -44,7 +44,7 @@ test('map multiple tcp ports exposed on ipv4 and ipv6 interfaces', () => {
     },
     {
       exposed: { port: 443, protocol: 'tcp' },
-      mapped: { address: ':::', port: 443 }
+      mapped: { address: '::', port: 443 }
     },
     {
       exposed: { port: 80, protocol: 'tcp' },
@@ -52,7 +52,7 @@ test('map multiple tcp ports exposed on ipv4 and ipv6 interfaces', () => {
     },
     {
       exposed: { port: 80, protocol: 'tcp' },
-      mapped: { address: ':::', port: 80 }
+      mapped: { address: '::', port: 80 }
     }
   ])
 })
