@@ -6,8 +6,8 @@ services:
     container_name: compose_test_web
     command: 'nginx -g "daemon off;"'
     ports: 
-      - 80:80
-      - 443:443
+      - '0.0.0.0:80:80'
+      - '0.0.0.0:443:443'
   proxy:
     image: nginx:1.19.9-alpine
     container_name: compose_test_proxy

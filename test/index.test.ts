@@ -699,31 +699,3 @@ test('parse ps output', () => {
     ]
   })
 })
-
-test('map ports', () => {
-  const noPort = ''
-  const exposedTcp = '80/tcp'
-  const mappedExposedTcp = '0.0.0.0:443->443/tcp'
-  const multipleExposedMappedTcp = '0.0.0.0:443->443/tcp, 0.0.0.0:80->80/tcp'
-
-  expect(mapPorts(noPort)).toEqual([])
-  expect(mapPorts(exposedTcp)).toEqual([
-    { exposed: { port: 80, protocol: 'tcp' } }
-  ])
-  expect(mapPorts(mappedExposedTcp)).toEqual([
-    {
-      exposed: { port: 443, protocol: 'tcp' },
-      mapped: { address: '0.0.0.0', port: 443 }
-    }
-  ])
-  expect(mapPorts(multipleExposedMappedTcp)).toEqual([
-    {
-      exposed: { port: 443, protocol: 'tcp' },
-      mapped: { address: '0.0.0.0', port: 443 }
-    },
-    {
-      exposed: { port: 80, protocol: 'tcp' },
-      mapped: { address: '0.0.0.0', port: 80 }
-    }
-  ])
-})
