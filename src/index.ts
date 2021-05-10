@@ -489,5 +489,3 @@ export const version = async function (
     return Promise.reject(error)
   }
 }
-
-export { mapPorts }
