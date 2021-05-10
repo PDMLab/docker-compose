@@ -94,21 +94,25 @@ test('ensure exit code is returned correctly', async (): Promise<void> => {
 })
 
 describe('starts containers properly with --build and --timeout options', (): void => {
-  beforeEach(async (): Promise<void> => {
-    await compose.down({
-      cwd: path.join(__dirname),
-      log: logOutput,
-      config: 'docker-compose-build.yml'
-    })
-  })
+  beforeEach(
+    async (): Promise<void> => {
+      await compose.down({
+        cwd: path.join(__dirname),
+        log: logOutput,
+        config: 'docker-compose-build.yml'
+      })
+    }
+  )
 
-  afterEach(async (): Promise<void> => {
-    await compose.down({
-      cwd: path.join(__dirname),
-      log: logOutput,
-      config: 'docker-compose-build.yml'
-    })
-  })
+  afterEach(
+    async (): Promise<void> => {
+      await compose.down({
+        cwd: path.join(__dirname),
+        log: logOutput,
+        config: 'docker-compose-build.yml'
+      })
+    }
+  )
 
   test('ensure container gets started with --build option', async (): Promise<void> => {
     await compose.upAll({
