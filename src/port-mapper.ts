@@ -21,7 +21,7 @@ const mapPorts = (
 
     if (lastDoubleColon === -1) {
       return {
-        exposed: { port: Number(port), protocol },
+        exposed: { port: Number(port), protocol }
       }
     }
 
@@ -30,7 +30,7 @@ const mapPorts = (
 
     return {
       exposed: { port: Number(port), protocol },
-      mapped: { port: Number(mappedPort), address },
+      mapped: { port: Number(mappedPort), address }
     }
   })
 }
