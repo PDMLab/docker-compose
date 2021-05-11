@@ -1,6 +1,6 @@
 import childProcess from 'child_process'
 import yaml from 'yaml'
-import mapPorts from './port-mapper'
+import mapPorts from './map-ports'
 
 export interface IDockerComposeOptions {
   cwd?: string
