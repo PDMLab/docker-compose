@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.23.10](https://github.com/PDMLab/docker-compose/compare/v0.23.9...v0.23.10) (2021-05-11)
+
+
+### Bug Fixes
+
+* fix mapping ipv6-based port mappings ([53fb971](https://github.com/PDMLab/docker-compose/commit/53fb97196f3cf0ebb229d127e9b630c863eaf8fc))
+* fix mapping ipv6-based port mappings ([6dec0c6](https://github.com/PDMLab/docker-compose/commit/6dec0c6bb6220b06eff188a26220b405d632bed3))
+* fix mapping ipv6-based port mappings ([dbdb900](https://github.com/PDMLab/docker-compose/commit/dbdb9008f25d237254312d79382e342d03f4c5bb))
+* fix mapping ipv6-based port mappings ([8aa8465](https://github.com/PDMLab/docker-compose/commit/8aa846553c2d045f610392bf38569fb3579b9aa6))
+* fix mapping ipv6-based port mappings ([21b63cb](https://github.com/PDMLab/docker-compose/commit/21b63cbc53635ee8532c388e57f4552f1b3ae6e3))
+* fix mapping ipv6-based port mappings ([48c9f08](https://github.com/PDMLab/docker-compose/commit/48c9f0841af2bbcb8ec666a38eee3ab8236304d0))
+* fix mapping ipv6-based port mappings ([e7013df](https://github.com/PDMLab/docker-compose/commit/e7013dfab10e4e369ee076b465c40a5bcb50802b))
+
 ### [0.23.9](https://github.com/PDMLab/docker-compose/compare/v0.23.8...v0.23.9) (2021-05-08)
 
 
