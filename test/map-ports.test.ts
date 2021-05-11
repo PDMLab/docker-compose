@@ -1,4 +1,4 @@
-import mapPorts from '../src/port-mapper'
+import mapPorts from '../src/map-ports'
 
 test('map ports for empty string', () => {
   expect(mapPorts('')).toEqual([])
