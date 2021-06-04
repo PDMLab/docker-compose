@@ -139,7 +139,7 @@ const composeOptionsToArgs = (composeOptions): string[] => {
 /**
  * Executes docker-compose command with common options
  */
-const execCompose = (
+export const execCompose = (
   command,
   args,
   options: IDockerComposeOptions = {}
