@@ -122,7 +122,7 @@ const configToArgs = (config): string[] => {
  * Converts docker-compose commandline options to cli arguments
  */
 const composeOptionsToArgs = (composeOptions): string[] => {
-  let composeArgs: string[] = []
+  let composeArgs: string[] = ['compose']
 
   composeOptions.forEach((option: string[] | string): void => {
     if (option instanceof Array) {
@@ -134,6 +134,24 @@ const composeOptionsToArgs = (composeOptions): string[] => {
   })
 
   return composeArgs
+}
+
+/**
+ * Converts docker-compose commandline options to cli arguments
+ */
+const commandOptionsToArgs = (commandOptions): string[] => {
+  let commandArgs: string[] = []
+
+  commandOptions.forEach((option: string[] | string): void => {
+    if (option instanceof Array) {
+      commandArgs = commandArgs.concat(option)
+    }
+    if (typeof option === 'string') {
+      commandArgs = commandArgs.concat([option])
+    }
+  })
+
+  return commandArgs
 }
 
 /**
@@ -156,13 +174,14 @@ export const execCompose = (
 
     composeArgs = composeArgs.concat(
       configArgs.concat(
-        [command].concat(composeOptionsToArgs(commandOptions), args)
+        [command].concat(commandOptionsToArgs(commandOptions), args)
       )
     )
 
     const cwd = options.cwd
     const env = options.env || undefined
-    const executablePath = options.executablePath || 'docker-compose'
+    const executablePath =
+      'docker' || options.executablePath || 'docker-compose'
 
     const childProc = childProcess.spawn(executablePath, composeArgs, {
       cwd,
