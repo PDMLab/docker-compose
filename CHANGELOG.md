@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.23.11](https://github.com/PDMLab/docker-compose/compare/v0.23.10...v0.23.11) (2021-06-04)
+
 ### [0.23.10](https://github.com/PDMLab/docker-compose/compare/v0.23.9...v0.23.10) (2021-05-11)
 
 
