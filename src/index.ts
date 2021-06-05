@@ -489,3 +489,33 @@ export const version = async function (
     return Promise.reject(error)
   }
 }
+
+export default {
+  upAll,
+  upMany,
+  upOne,
+  down,
+  stop,
+  stopOne,
+  kill,
+  rm,
+  exec,
+  run,
+  buildAll,
+  buildMany,
+  buildOne,
+  pullAll,
+  pullMany,
+  pullOne,
+  config,
+  configServices,
+  configVolumes,
+  ps,
+  push,
+  restartAll,
+  restartMany,
+  restartOne,
+  logs,
+  port,
+  version
+}
