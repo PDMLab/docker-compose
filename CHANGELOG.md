@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.23.12](https://github.com/PDMLab/docker-compose/compare/v0.23.11...v0.23.12) (2021-06-06)
+
+
+### Features
+
+* **dx:** add default export ([c4b6087](https://github.com/PDMLab/docker-compose/commit/c4b60872aecfdc6610e9b2141a45ea7785820af7))
+
 ### [0.23.11](https://github.com/PDMLab/docker-compose/compare/v0.23.10...v0.23.11) (2021-06-04)
 
 ### [0.23.10](https://github.com/PDMLab/docker-compose/compare/v0.23.9...v0.23.10) (2021-05-11)
