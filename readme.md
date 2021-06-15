@@ -1,4 +1,4 @@
-[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org) [![Join the chat at https://gitter.im/pdmlab/docker-compose](https://badges.gitter.im/pdmlab/docker-compose.svg)](https://gitter.im/pdmlab/docker-compose?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) <img src="https://img.shields.io/circleci/project/github/PDMLab/docker-compose.svg" /> <img src="https://img.shields.io/npm/dm/docker-compose.svg" />
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org) [![Join the chat at https://gitter.im/pdmlab/docker-compose](https://badges.gitter.im/pdmlab/docker-compose.svg)](https://gitter.im/pdmlab/docker-compose?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) <img src="https://img.shields.io/github/workflow/status/pdmlab/docker-compose/Node.js%20CI/master" /> <img src="https://img.shields.io/npm/dm/docker-compose.svg" />
 
 # Manage Docker-Compose via Node.js
 
