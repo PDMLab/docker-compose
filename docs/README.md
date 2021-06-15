@@ -103,9 +103,9 @@ We're using [conventional commits](https://www.conventionalcommits.org), so plea
 
 Also please add tests and make sure to run `yarn lint`.
 
-### Slack
+### Discussions
 
-If you want to discuss an `docker-compose` issue or PR in more detail, feel free to [join our Slack workspace](https://join.slack.com/t/pdmlab-oss/shared_invite/enQtNjEyMjQ0MDY3NTczLTg1ZDc0YjQxMGE3MTcyYTdkODU1YjFmMTBiODE2ZTZiNDFkNjc1MWE4OTE4NWY0Y2YyMWYzYmNhZGY0NDAyYWY).
+If you want to discuss an `docker-compose` issue or PR in more detail, feel free to [join start a discussion](https://github.com/PDMLab/docker-compose/discussions).
 
 ## License
 
