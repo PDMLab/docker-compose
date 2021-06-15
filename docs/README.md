@@ -105,7 +105,7 @@ Also please add tests and make sure to run `yarn lint`.
 
 ### Discussions
 
-If you want to discuss an `docker-compose` issue or PR in more detail, feel free to [join start a discussion](https://github.com/PDMLab/docker-compose/discussions).
+If you want to discuss an `docker-compose` issue or PR in more detail, feel free to [start a discussion](https://github.com/PDMLab/docker-compose/discussions).
 
 ## License
 
