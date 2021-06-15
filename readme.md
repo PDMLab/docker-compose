@@ -1,4 +1,4 @@
-[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org) [![Join the chat at https://gitter.im/pdmlab/docker-compose](https://badges.gitter.im/pdmlab/docker-compose.svg)](https://gitter.im/pdmlab/docker-compose?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) <img src="https://img.shields.io/circleci/project/github/PDMLab/docker-compose.svg" /> <a href="https://join.slack.com/t/pdmlab-oss/shared_invite/enQtNjEyMjQ0MDY3NTczLTg1ZDc0YjQxMGE3MTcyYTdkODU1YjFmMTBiODE2ZTZiNDFkNjc1MWE4OTE4NWY0Y2YyMWYzYmNhZGY0NDAyYWY"><img src="https://img.shields.io/npm/dm/docker-compose.svg" /> <img src="https://img.shields.io/badge/Slack-join-green.svg?logo=slack" /></a>
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org) [![Join the chat at https://gitter.im/pdmlab/docker-compose](https://badges.gitter.im/pdmlab/docker-compose.svg)](https://gitter.im/pdmlab/docker-compose?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) <img src="https://img.shields.io/circleci/project/github/PDMLab/docker-compose.svg" /> <img src="https://img.shields.io/npm/dm/docker-compose.svg" />
 
 # Manage Docker-Compose via Node.js
 
@@ -57,9 +57,9 @@ We're using [conventional commits](https://www.conventionalcommits.org), so plea
 
 Also please add tests and make sure to run `yarn lint`.
 
-### Slack
+### Discussions
 
-If you want to discuss an `docker-compose` issue or PR in more detail, feel free to [join our Slack workspace](https://join.slack.com/t/pdmlab-oss/shared_invite/enQtNjEyMjQ0MDY3NTczLTg1ZDc0YjQxMGE3MTcyYTdkODU1YjFmMTBiODE2ZTZiNDFkNjc1MWE4OTE4NWY0Y2YyMWYzYmNhZGY0NDAyYWY).
+If you want to discuss an `docker-compose` issue or PR in more detail, feel free to [join start a discussion](https://github.com/PDMLab/docker-compose/discussions).
 
 ## License
 
