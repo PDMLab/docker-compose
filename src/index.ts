@@ -273,6 +273,20 @@ export const stopOne = function (
   return execCompose('stop', [service], options)
 }
 
+export const pauseOne = function (
+  service: string,
+  options?: IDockerComposeOptions
+): Promise<IDockerComposeResult> {
+  return execCompose('pause', [service], options)
+}
+
+export const unpauseOne = function (
+  service: string,
+  options?: IDockerComposeOptions
+): Promise<IDockerComposeResult> {
+  return execCompose('unpause', [service], options)
+}
+
 export const kill = function (
   options?: IDockerComposeOptions
 ): Promise<IDockerComposeResult> {
@@ -497,6 +511,8 @@ export default {
   down,
   stop,
   stopOne,
+  pauseOne,
+  unpauseOne,
   kill,
   rm,
   exec,
