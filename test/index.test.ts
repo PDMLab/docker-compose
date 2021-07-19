@@ -223,6 +223,29 @@ test('ensure only single container gets stopped', async (): Promise<void> => {
   await compose.down({ cwd: path.join(__dirname), log: logOutput })
 })
 
+test('ensure only single container gets paused then resumed', async (): Promise<void> => {
+  const opts = { cwd: path.join(__dirname), log: logOutput }
+  await compose.upAll(opts)
+  expect(await isContainerRunning('/compose_test_web')).toBeTruthy()
+  expect(await isContainerRunning('/compose_test_proxy')).toBeTruthy()
+
+  await compose.pauseOne('proxy', opts)
+  expect(await isContainerRunning('/compose_test_web')).toBeTruthy()
+  expect(await isContainerRunning('/compose_test_proxy')).toBeTruthy()
+  try {
+    await compose.exec('proxy', 'cat /etc/os-release', opts)
+    fail('Container was not paused')
+  } catch(err) {
+    expect(err.err).toContain('is paused')
+  }
+  await compose.unpauseOne('proxy', opts)
+  expect(await isContainerRunning('/compose_test_web')).toBeTruthy()
+  expect(await isContainerRunning('/compose_test_proxy')).toBeTruthy()
+  const std = await compose.exec('proxy', 'cat /etc/os-release', opts)
+  expect(std.out).toContain('Alpine Linux')
+  await compose.down(opts)
+})
+
 test('ensure container gets started with --abort-on-container-exit option', async (): Promise<void> => {
   const result = await compose.upAll({
     cwd: path.join(__dirname),
