@@ -1,15 +1,26 @@
-# ignore all files in the test/ directory
-test/
+# ignore docs
+docs/
+community-samples/readme.md
+readme.md
 
-# ignore ESLint and EditorConfig
+# ignore all files in the test/ directory and test settings
+test/
+jest.config.js
+
+# ignore EditorConfig, ESLint, Prettier config
 .editorconfig
 .eslintrc.json
+.eslintrc.js
+.prettierrc.js
 
 # JetBrains IDE settings
 .idea
 
 # VS Code settings
 .vscode
+
+# GitHub actions
+.github
 
 # VuePress
 .cache
