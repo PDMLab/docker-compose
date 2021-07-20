@@ -232,12 +232,13 @@ test('ensure only single container gets paused then resumed', async (): Promise<
   await compose.pauseOne('proxy', opts)
   expect(await isContainerRunning('/compose_test_web')).toBeTruthy()
   expect(await isContainerRunning('/compose_test_proxy')).toBeTruthy()
+  let errMsg
   try {
     await compose.exec('proxy', 'cat /etc/os-release', opts)
-    fail('Container was not paused')
-  } catch(err) {
-    expect(err.err).toContain('is paused')
+  } catch (err) {
+    errMsg = err.err
   }
+  expect(errMsg).toContain('is paused')
   await compose.unpauseOne('proxy', opts)
   expect(await isContainerRunning('/compose_test_web')).toBeTruthy()
   expect(await isContainerRunning('/compose_test_proxy')).toBeTruthy()
