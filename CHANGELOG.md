@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.23.13](https://github.com/PDMLab/docker-compose/compare/v0.23.12...v0.23.13) (2021-07-20)
+
+
+### Features
+
+* single container pause and unpause added ([5921b51](https://github.com/PDMLab/docker-compose/commit/5921b51977cbd51ffcb1def458738ccfccbe1dd9))
+
+
+### Bug Fixes
+
+* now lints correctly ([74b4d6e](https://github.com/PDMLab/docker-compose/commit/74b4d6ea22d7e1b9ebbbbe9874e5314b7adfa31a))
+
 ### [0.23.12](https://github.com/PDMLab/docker-compose/compare/v0.23.11...v0.23.12) (2021-06-06)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "docker-compose",
-  "version": "0.23.12",
+  "version": "0.23.13",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "types": "dist/index.d.ts",
