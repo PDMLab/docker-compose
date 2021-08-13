@@ -17,31 +17,34 @@ npm install --save-dev docker-compose
 
 `docker-compose` current supports these commands:
 
-* `upAll(options)` - Builds, (re)creates, starts, and attaches to containers for all services - always uses the `-d` flag due to non interactive mode
-* `upMany(services, options)` - Builds, (re)creates, starts, and attaches to containers for the services specified in `services` - always uses the `-d` flag due to non interactive mode
-* `upOne(service, options)` - Builds, (re)creates, starts, and attaches to containers for a service specified in `service` - always uses the `-d` flag due to non interactive mode
-* `down(options)` - Stops containers and removes containers, networks, volumes, and images created by `up`
-* `kill(options)` - Force stop service containers
-* `stop(options)` - Stop running containers without removing them
-* `stopOne(service, options)` - Stops one container without removing it
-* `rm(options)` - Remove stopped service containers - always uses the `-f` flag due to non interactive mode
-* `exec(container, command, options)` - Exec `command` inside `container`, uses `-T` to properly handle stdin & stdout
-* `logs(services, options)` - Show logs of service(s). Use `options.follow` `true|false` to turn on `--follow` flag.
-* `run(service, command, options)` - Run a one-off `command` on a service, uses `-T` to properly handle stdin & stdout
 * `buildAll(options)` - Build or rebuild services
 * `buildMany(services, options)` - Build or rebuild services
 * `buildOne(service, options)` - Build or rebuild service
-* `pullMany(services, options)` - Pull service images specified
-* `pullOne(service, options)` - Pull a service image
-* `pullAll(options)` - Pull all service images
-* `restartAll(options)` - Restart all services
-* `restartMany(services, options)` - Restart services
-* `restartOne(service, options)` - Restart service
-* `ps(options)` - Lists containers information
 * `config(options)` - Validates configuration files and returns configuration yaml
 * `configServices(options)` - Returns list of services defined in configuration files
 * `configVolumes(options)` - Returns list of volumes defined in configuration files
-* `port(options)` - Returns the public port of the given service and internal port. 
+* `down(options)` - Stops containers and removes containers, networks, volumes, and images created by `up`
+* `exec(container, command, options)` - Exec `command` inside `container` - uses `-T` to properly handle stdin & stdout
+* `kill(options)` - Force stop service containers
+* `logs(services, options)` - Show logs of service(s) - use `options.follow` `true|false` to turn on `--follow` flag
+* `pauseOne(service, options)` - Pause the specified service
+* `port(service, containerPort, options)` - Returns the public port of the given service and internal port. 
+* `ps(options)` - Lists containers information
+* `pullAll(options)` - Pull all service images
+* `pullMany(services, options)` - Pull service images specified
+* `pullOne(service, options)` - Pull a service image
+* `restartAll(options)` - Restart all services
+* `restartMany(services, options)` - Restart services
+* `restartOne(service, options)` - Restart service
+* `rm(options, services)` - Remove stopped service containers - always uses the `-f` flag due to non interactive mode - `services` can optionally be used to select the containers to remove
+* `run(service, command, options)` - Run a one-off `command` on a service - uses `-T` to properly handle stdin & stdout
+* `stop(options)` - Stop running containers without removing them
+* `stopOne(service, options)` - Stops one container without removing it
+* `unpauseOne(service, options)` - Resume the specified service
+* `upAll(options)` - Builds, (re)creates, starts, and attaches to containers for all services - always uses the `-d` flag due to non interactive mode
+* `upMany(services, options)` - Builds, (re)creates, starts, and attaches to containers for the services specified in `services` - always uses the `-d` flag due to non interactive mode
+* `upOne(service, options)` - Builds, (re)creates, starts, and attaches to containers for a service specified in `service` - always uses the `-d` flag due to non interactive mode
+* `version(options)` - Show `docker-compose` version strings
 
 All commands return a `Promise({object})` with stdout and stderr strings and an exit code:
 ```javascript
