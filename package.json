@@ -72,7 +72,10 @@
     {
       "name": "Gabriel Fürstenheim",
       "url": "https://github.com/furstenheim"
-    }
+    },
+    {
+      "name": "gautaz"
+    } 
   ],
   "license": "MIT",
   "description": "Manage docker-compose from Node.js",
