@@ -11,7 +11,7 @@ export interface IDockerComposeOptions {
   composeOptions?: string[] | (string | string[])[]
   commandOptions?: string[] | (string | string[])[]
   env?: NodeJS.ProcessEnv
-  callback?: (chunk: Buffer, streamSource?: 'stdout'|'stderr') => void
+  callback?: (chunk: Buffer, streamSource?: 'stdout' | 'stderr') => void
 }
 
 export type DockerComposePortResult = {
@@ -184,7 +184,7 @@ export const execCompose = (
       result.out += chunk.toString()
       options.callback?.(chunk, 'stdout')
     })
-    
+
     childProc.stderr.on('data', (chunk): void => {
       result.err += chunk.toString()
       options.callback?.(chunk, 'stderr')
