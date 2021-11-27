@@ -724,23 +724,17 @@ test('parse ps output', () => {
   })
 })
 
-test('returns progres of command before promise resolves', async (): Promise<void> => {
+test('ensure progress callback is called', async (): Promise<void> => {
   
-  let firstCallbackFire
-
   const config = {
     cwd: path.join(__dirname),
     config: './docker-compose.yml',
-    callback: (chunk) => {
-      if (!firstCallbackFire && chunk.toString().includes('proxy')){
-        firstCallbackFire = Date.now()
-      } 
+    callback: jest.fn()
     }
-  }
-
-  const resolveTime = await compose.upAll(config).then( () => Date.now() )
- 
-  expect(resolveTime > firstCallbackFire).toBeTruthy()
+    
+  await compose.upAll(config)
+  expect(config.callback).toBeCalled()
   await compose.down(config)
+
 })
 
