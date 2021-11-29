@@ -723,3 +723,14 @@ test('parse ps output', () => {
     ]
   })
 })
+
+test('ensure progress callback is called', async (): Promise<void> => {
+  const config = {
+    cwd: path.join(__dirname),
+    config: './docker-compose.yml',
+    callback: jest.fn()
+  }
+  await compose.upAll(config)
+  expect(config.callback).toBeCalled()
+  await compose.down(config)
+})

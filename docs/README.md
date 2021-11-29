@@ -54,6 +54,7 @@ All commands return a `Promise({object})` with stdout and stderr strings and an 
   exitCode: 0, // !== 0 in case of an error
 }
 ```
+Although the return type is a `Promise`, it is still possible to get the process progres before the `Promise` resolves, by passing a callback function to the optional `callback` parameter. 
 
 ### Example
 
@@ -63,6 +64,19 @@ To start service containers based on the `docker-compose.yml` file in your curre
 compose.upAll({ cwd: path.join(__dirname), log: true })
   .then(
     () => { console.log('done')},
+    err => { console.log('something went wrong:', err.message)}
+  );
+```
+To get process progres
+```typescript
+compose.upAll({
+   cwd: path.join(__dirname),
+   callback: (chunk: Buffer) => {
+     console.log('job in progres: ', chunk.ToString())
+      }
+   })
+  .then(
+    () => { console.log('job done')},
     err => { console.log('something went wrong:', err.message)}
   );
 ```
@@ -82,6 +96,7 @@ compose.exec('node', 'npm install', { cwd: path.join(__dirname) })
 * `configAsString {string}`: configuration can be provided as is, instead of relying on a file. In case `configAsString` is provided `config` will be ignored.
 * `[log] {boolean}`:  optional setting to enable console logging (output of `docker-compose` `stdout`/`stderr` output)
 * `[composeOptions] string[]|Array<string|string[]`: pass optional compose options like `"--verbose"` or `[["--verbose"], ["--log-level", "DEBUG"]]` or `["--verbose", ["--loglevel", "DEBUG"]]` for *all* commands.
+* `[callback] (chunk: Buffer, sourceStream?: 'stdout' | 'stderr') => void`: optional callback function, that provides infromation about the process while it is still runing.  
 * `[commandOptions] string[]|Array<string|string[]`: pass optional command options like `"--build"` or `[["--build"], ["--timeout", "5"]]` or `["--build", ["--timeout", "5"]]` for the `up` command. Viable `commandOptions` depend on the command (`up`, `down` etc.) itself
 
 ## Running the tests
