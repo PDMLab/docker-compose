@@ -82,7 +82,7 @@ export const mapPsOutput = (output: string): DockerComposePsResult => {
   const services = output
     .split(`\n`)
     .filter(nonEmptyString)
-    .filter((_, index) => index > 1)
+    .filter((_, index) => index > 0)
     .map((line) => {
       const [
         nameFragment,
