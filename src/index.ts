@@ -78,19 +78,33 @@ export type DockerComposePsResult = {
   }>
 }
 
-export const mapPsOutput = (output: string): DockerComposePsResult => {
+export const mapPsOutput = (
+  output: string,
+  options?: IDockerComposeOptions
+): DockerComposePsResult => {
+  let isQuiet = false
+  if (options?.commandOptions) {
+    isQuiet =
+      options.commandOptions.includes('-q') ||
+      options.commandOptions.includes('--quiet')
+  }
   const services = output
     .split(`\n`)
     .filter(nonEmptyString)
-    .filter((_, index) => index > 1)
+    .filter((_, index) => isQuiet || index > 1)
     .map((line) => {
-      const [
-        nameFragment,
-        commandFragment,
-        stateFragment,
-        untypedPortsFragment
-      ] = line.split(/\s{3,}/)
-
+      let nameFragment = line
+      let commandFragment = ''
+      let stateFragment = ''
+      let untypedPortsFragment = ''
+      if (!isQuiet) {
+        ;[
+          nameFragment,
+          commandFragment,
+          stateFragment,
+          untypedPortsFragment
+        ] = line.split(/\s{3,}/)
+      }
       return {
         name: nameFragment.trim(),
         command: commandFragment.trim(),
@@ -417,7 +431,7 @@ export const ps = async function (
 ): Promise<TypedDockerComposeResult<DockerComposePsResult>> {
   try {
     const result = await execCompose('ps', [], options)
-    const data = mapPsOutput(result.out)
+    const data = mapPsOutput(result.out, options)
     return {
       ...result,
       data
@@ -497,7 +511,7 @@ export const version = async function (
 ): Promise<TypedDockerComposeResult<DockerComposeVersionResult>> {
   try {
     const result = await execCompose('version', ['--short'], options)
-    const version = result.out.replace('\n', '')
+    const version = result.out.replace('\n', '').trim()
     return {
       ...result,
       data: { version }
