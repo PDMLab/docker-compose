@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.23.15](https://github.com/PDMLab/docker-compose/compare/v0.23.14...v0.23.15) (2022-01-14)
+
+
+### Bug Fixes
+
+* **#178:** fix quiet trim issue, add tests ([#197](https://github.com/PDMLab/docker-compose/issues/197)) ([2016bc7](https://github.com/PDMLab/docker-compose/commit/2016bc75db9996155d61f3d7f93c98c5fb960df1))
+
 ### [0.23.14](https://github.com/PDMLab/docker-compose/compare/v0.23.13...v0.23.14) (2021-11-29)
 
 
