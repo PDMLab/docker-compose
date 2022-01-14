@@ -511,7 +511,7 @@ export const version = async function (
 ): Promise<TypedDockerComposeResult<DockerComposeVersionResult>> {
   try {
     const result = await execCompose('version', ['--short'], options)
-    const version = result.out.replace('\n', '')
+    const version = result.out.replace('\n', '').trim()
     return {
       ...result,
       data: { version }

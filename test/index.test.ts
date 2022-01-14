@@ -684,7 +684,7 @@ test('removes container', async (): Promise<void> => {
 })
 
 test('returns version information', async (): Promise<void> => {
-  const version = await (await compose.version()).data.version
+  const version = (await compose.version()).data.version
 
   expect(version).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)$/)
 })
@@ -724,7 +724,7 @@ test('parse ps output', () => {
   })
 })
 
-test('ps output when quiet', () => {
+test('ps returns container ids when quiet', () => {
   const output = `64848fc721dfeff435edc7d4bb42e2f0e0a10d0c7602b73729a7fd7b09b7586f
 aed60ce17575e69c56cc4cb07eeba89b5d7b7b2b307c8b87f3363db6af850719
 f49548fa0b1f88846b78c65c6ea7f802bcbdfb2cf10204497eb89ba622d7715b
