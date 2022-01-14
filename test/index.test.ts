@@ -554,7 +554,7 @@ test('config show data for docker-compose files (services)', async (): Promise<v
   })
 
   expect(std.data.services.length).toBe(5)
-  expect(std.data.services[0]).toBe('build_test_1')
+  expect(std.data.services[0]).toContain('build_test_1')
   expect(std.err).toBeFalsy()
 })
 
@@ -566,7 +566,7 @@ test('config show data for docker-compose files (volumes)', async (): Promise<vo
   })
 
   expect(std.data.volumes.length).toBe(1)
-  expect(std.data.volumes[0]).toBe('db-data')
+  expect(std.data.volumes[0]).toContain('db-data')
   expect(std.err).toBeFalsy()
 })
 
@@ -722,6 +722,32 @@ test('parse ps output', () => {
       }
     ]
   })
+})
+
+test('ps output when quiet', () => {
+  const output = `64848fc721dfeff435edc7d4bb42e2f0e0a10d0c7602b73729a7fd7b09b7586f
+aed60ce17575e69c56cc4cb07eeba89b5d7b7b2b307c8b87f3363db6af850719
+f49548fa0b1f88846b78c65c6ea7f802bcbdfb2cf10204497eb89ba622d7715b
+`
+  const psOut = mapPsOutput(output, { commandOptions: ['-q'] })
+
+  expect(psOut.services[0]).toEqual(
+    expect.objectContaining({
+      name: '64848fc721dfeff435edc7d4bb42e2f0e0a10d0c7602b73729a7fd7b09b7586f'
+    })
+  )
+
+  expect(psOut.services[1]).toEqual(
+    expect.objectContaining({
+      name: 'aed60ce17575e69c56cc4cb07eeba89b5d7b7b2b307c8b87f3363db6af850719'
+    })
+  )
+
+  expect(psOut.services[2]).toEqual(
+    expect.objectContaining({
+      name: 'f49548fa0b1f88846b78c65c6ea7f802bcbdfb2cf10204497eb89ba622d7715b'
+    })
+  )
 })
 
 test('ensure progress callback is called', async (): Promise<void> => {
