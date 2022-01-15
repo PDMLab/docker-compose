@@ -321,7 +321,7 @@ export const rm = function (
   options?: IDockerComposeOptions,
   ...services: string[]
 ): Promise<IDockerComposeResult> {
-  return execCompose('rm',  ['-f', ...services], options)
+  return execCompose('rm', ['-f', ...services], options)
 }
 
 export const exec = function (
