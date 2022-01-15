@@ -36,11 +36,11 @@ npm install --save-dev docker-compose
 * `restartAll(options)` - Restart all services
 * `restartMany(services, options)` - Restart services
 * `restartOne(service, options)` - Restart service
-* `rm(services, options)` - Remove stopped service containers - always uses the `-f` flag due to non interactive mode - `services` can optionally be used to select the containers to remove
+* `rm(options, services)` - Remove stopped service containers - always uses the `-f` flag due to non interactive mode - `services` can optionally be used to select the containers to remove
 * `run(service, command, options)` - Run a one-off `command` on a service - uses `-T` to properly handle stdin & stdout
 * `stop(options)` - Stop running containers without removing them
 * `stopOne(service, options)` - Stops one container without removing it
-* `stopMany(services, options)` - Stops containers without removing them
+* `stopMany(options,services)` - Stops containers without removing them
 * `unpauseOne(service, options)` - Resume the specified service
 * `upAll(options)` - Builds, (re)creates, starts, and attaches to containers for all services - always uses the `-d` flag due to non interactive mode
 * `upMany(services, options)` - Builds, (re)creates, starts, and attaches to containers for the services specified in `services` - always uses the `-d` flag due to non interactive mode
