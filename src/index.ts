@@ -290,6 +290,13 @@ export const stopOne = function (
   return execCompose('stop', [service], options)
 }
 
+export const stopMany = function (
+  options?: IDockerComposeOptions,
+  ...services: string[]
+): Promise<IDockerComposeResult> {
+  return execCompose('stop', [...services], options)
+}
+
 export const pauseOne = function (
   service: string,
   options?: IDockerComposeOptions

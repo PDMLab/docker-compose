@@ -223,6 +223,21 @@ test('ensure only single container gets stopped', async (): Promise<void> => {
   await compose.down({ cwd: path.join(__dirname), log: logOutput })
 })
 
+test('ensure multiple containers gets stopped', async (): Promise<void> => {
+  await compose.upAll({ cwd: path.join(__dirname), log: logOutput })
+  expect(await isContainerRunning('/compose_test_web')).toBeTruthy()
+  expect(await isContainerRunning('/compose_test_proxy')).toBeTruthy()
+
+  await compose.stopMany(
+    { cwd: path.join(__dirname), log: logOutput },
+    'proxy',
+    'web'
+  )
+  expect(await isContainerRunning('/compose_test_web')).toBeFalsy()
+  expect(await isContainerRunning('/compose_test_proxy')).toBeFalsy()
+  await compose.down({ cwd: path.join(__dirname), log: logOutput })
+})
+
 test('ensure only single container gets paused then resumed', async (): Promise<void> => {
   const opts = { cwd: path.join(__dirname), log: logOutput }
   await compose.upAll(opts)
