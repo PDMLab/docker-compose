@@ -228,7 +228,11 @@ test('ensure multiple containers gets stopped', async (): Promise<void> => {
   expect(await isContainerRunning('/compose_test_web')).toBeTruthy()
   expect(await isContainerRunning('/compose_test_proxy')).toBeTruthy()
 
-  await compose.stopMany({ cwd: path.join(__dirname), log: logOutput }, 'proxy', 'web')
+  await compose.stopMany(
+    { cwd: path.join(__dirname), log: logOutput },
+    'proxy',
+    'web'
+  )
   expect(await isContainerRunning('/compose_test_web')).toBeFalsy()
   expect(await isContainerRunning('/compose_test_proxy')).toBeFalsy()
   await compose.down({ cwd: path.join(__dirname), log: logOutput })
