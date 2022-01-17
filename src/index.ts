@@ -86,7 +86,8 @@ export const mapPsOutput = (
   if (options?.commandOptions) {
     isQuiet =
       options.commandOptions.includes('-q') ||
-      options.commandOptions.includes('--quiet')
+      options.commandOptions.includes('--quiet') ||
+      options.commandOptions.includes('--services')
   }
   const services = output
     .split(`\n`)
