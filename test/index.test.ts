@@ -765,6 +765,31 @@ f49548fa0b1f88846b78c65c6ea7f802bcbdfb2cf10204497eb89ba622d7715b
   )
 })
 
+test('ps returns container names when --services is passed in options', () => {
+  const output = `web
+proxy
+hello
+`
+  const psOut = mapPsOutput(output, { commandOptions: ['--services'] })
+  expect(psOut.services[0]).toEqual(
+    expect.objectContaining({
+      name: 'web'
+    })
+  )
+
+  expect(psOut.services[1]).toEqual(
+    expect.objectContaining({
+      name: 'proxy'
+    })
+  )
+
+  expect(psOut.services[2]).toEqual(
+    expect.objectContaining({
+      name: 'hello'
+    })
+  )
+})
+
 test('ensure progress callback is called', async (): Promise<void> => {
   const config = {
     cwd: path.join(__dirname),
