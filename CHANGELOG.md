@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.23.17](https://github.com/PDMLab/docker-compose/compare/v0.23.16...v0.23.17) (2022-01-18)
+
+
+### Bug Fixes
+
+* ps --services trim on undefined ([#201](https://github.com/PDMLab/docker-compose/issues/201)) ([5df547e](https://github.com/PDMLab/docker-compose/commit/5df547e0af97bc6ba2ac96aab26eb5bf4b60e2b8))
+
 ### [0.23.16](https://github.com/PDMLab/docker-compose/compare/v0.23.15...v0.23.16) (2022-01-16)
 
 
