@@ -80,7 +80,23 @@
   ],
   "license": "MIT",
   "description": "Manage docker-compose from Node.js",
-  "devDependencies": {
+  "engines": {
+    "node": ">= 6.0.0"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "dependencies": {
+    "typescript": "^4.2.4",
+    "ts-node": "^10.8.0",
+    "yaml": "^1.10.2",
     "@commitlint/cli": "^13.1.0",
     "@commitlint/config-conventional": "13.1.0",
     "@types/dockerode": "^2.5.27",
@@ -101,23 +117,5 @@
     "standard-version": "9.3.1",
     "ts-jest": "^26.5.4",
     "vuepress": "^2.0.0-beta.7"
-  },
-  "engines": {
-    "node": ">= 6.0.0"
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
-  },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
-  },
-  "dependencies": {
-    "typescript": "^4.2.4",
-    "ts-node": "^10.8.0",
-    "yaml": "^1.10.2"
   }
 }
