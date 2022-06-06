@@ -181,12 +181,16 @@ export const execCompose = (
 
     const cwd = options.cwd
     const env = options.env || undefined
-    const executablePath = options.executablePath || 'docker-compose'
+    const executablePath = options.executablePath || 'docker'
 
-    const childProc = childProcess.spawn(executablePath, composeArgs, {
-      cwd,
-      env
-    })
+    const childProc = childProcess.spawn(
+      executablePath,
+      ['compose', ...composeArgs],
+      {
+        cwd,
+        env
+      }
+    )
 
     childProc.on('error', (err): void => {
       reject(err)
