@@ -92,16 +92,18 @@ export const mapPsOutput = (
   const services = output
     .split(`\n`)
     .filter(nonEmptyString)
-    .filter((_, index) => isQuiet || index > 1)
+    .filter((_, index) => isQuiet || index > 0)
     .map((line) => {
       let nameFragment = line
       let commandFragment = ''
       let stateFragment = ''
+      let serviceFragment = ''
       let untypedPortsFragment = ''
       if (!isQuiet) {
         ;[
           nameFragment,
           commandFragment,
+          serviceFragment,
           stateFragment,
           untypedPortsFragment
         ] = line.split(/\s{3,}/)
@@ -109,6 +111,7 @@ export const mapPsOutput = (
       return {
         name: nameFragment.trim(),
         command: commandFragment.trim(),
+        service: serviceFragment.trim(),
         state: stateFragment.trim(),
         ports: mapPorts(untypedPortsFragment.trim())
       }
