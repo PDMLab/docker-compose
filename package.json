@@ -11,7 +11,8 @@
     "prepublishOnly": "tsc",
     "release": "yarn build && standard-version",
     "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs"
+    "docs:build": "vuepress build docs",
+    "postinstall": "tsc"
   },
   "repository": {
     "url": "git@github.com:PDMLab/docker-compose.git"
