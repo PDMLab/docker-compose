@@ -1,0 +1,66 @@
+name: Release Packages
+
+on:
+  release:
+    types:
+      - published
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Docker tag'
+        required: true
+
+jobs:
+  release-npm:
+    name: Release NPM packages
+    runs-on: ubuntu-20.04
+    if: github.event_name != 'workflow_dispatch'
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v2
+
+      - name: Check package version matches tag
+        uses: geritol/match-tag-to-package-version@0.2.0
+        env:
+          TAG_PREFIX: v
+
+      - name: Setup Node.JS
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - name: Disable NPM audit
+        run: npm config set audit false
+
+      - name: Enable Yarn unplugged modules cache
+        uses: actions/cache@v2
+        with:
+          path: '.yarn/unplugged'
+          key: ${{ runner.os }}-yarn-unplugged-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-unplugged-
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build packages
+        run: yarn build
+
+      - name: Set NPM release tag
+        uses: actions/github-script@v5
+        id: tag
+        with:
+          result-encoding: string
+          script: |
+            const tag = context.payload.release.tag_name;
+            const [, major, minor] = tag.match(/^v([0-9]+)\.([0-9]+)/);
+            return (tag.includes('dev') ? `${major}.${minor}-dev` : 'latest');
+
+      - name: Configure NPM auth token
+        run: yarn config set npmAuthToken ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish NPM packages
+        run: yarn npm publish --access public --tag ${{ steps.tag.outputs.result }}
