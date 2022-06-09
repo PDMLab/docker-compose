@@ -12,7 +12,7 @@
     "release": "yarn build && standard-version",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
-    "postinstall": "tsc"
+    "postinstall": "tsc -b tsconfig.json"
   },
   "repository": {
     "url": "git@github.com:PDMLab/docker-compose.git"
