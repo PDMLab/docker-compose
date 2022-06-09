@@ -63,4 +63,4 @@ jobs:
         run: yarn config set npmAuthToken ${{ secrets.NPM_TOKEN }}
 
       - name: Publish NPM packages
-        run: yarn npm publish --access public --tag ${{ steps.tag.outputs.result }}
+        run: yarn publish --access public --tag ${{ steps.tag.outputs.result }}
