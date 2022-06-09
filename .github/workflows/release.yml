@@ -29,19 +29,8 @@ jobs:
         with:
           node-version: '16'
 
-      - name: Enable corepack
-        run: corepack enable
-
       - name: Disable NPM audit
         run: npm config set audit false
-
-      - name: Enable Yarn unplugged modules cache
-        uses: actions/cache@v2
-        with:
-          path: '.yarn/unplugged'
-          key: ${{ runner.os }}-yarn-unplugged-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-unplugged-
 
       - name: Install dependencies
         run: yarn install
@@ -59,8 +48,7 @@ jobs:
             const [, major, minor] = tag.match(/^v([0-9]+)\.([0-9]+)/);
             return (tag.includes('dev') ? `${major}.${minor}-dev` : 'latest');
 
-      - name: Configure NPM auth token
-        run: yarn config set npmAuthToken ${{ secrets.NPM_TOKEN }}
-
       - name: Publish NPM packages
         run: yarn publish --access public --tag ${{ steps.tag.outputs.result }}
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
