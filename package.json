@@ -94,10 +94,10 @@
     ]
   },
   "dependencies": {
-    "yaml": "^1.10.2",
-    "typescript": "^3.9.5"
+    "yaml": "^1.10.2"
   },
   "devDependencies": {
+    "typescript": "^3.9.5",
     "ts-node": "^10.8.0",
     "@commitlint/cli": "^13.1.0",
     "@commitlint/config-conventional": "13.1.0",
