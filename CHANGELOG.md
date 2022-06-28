@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [0.24.1](https://github.com/dashevo/docker-compose/releases/tag/v0.24.1) (2022-06-28)
 
-* Moved out developement dependencies to the dev section which reduced amount dependencies required when required in project
+* Moved out development dependencies to the dev section which reduced amount dependencies required when required in project
 * Lowered typescript to 3.9.5 to match dashevo/platform monorepo
 
 ### [0.24.0](https://github.com/dashevo/docker-compose/releases/tag/v0.24.0) (2022-06-09)
