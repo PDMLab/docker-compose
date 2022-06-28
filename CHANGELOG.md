@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.24.1](https://github.com/dashevo/docker-compose/releases/tag/v0.24.1) (2022-06-28)
+
+* Moved out developement dependencies to the dev section which reduced amount dependencies required when required in project
+* Lowered typescript to 3.9.5 to match dashevo/platform monorepo
+
+### [0.24.0](https://github.com/dashevo/docker-compose/releases/tag/v0.24.0) (2022-06-09)
+
+Switch to Docker Compose v2 syntax. This package is not compatible with docker-compose (v1) commands anymore
+
 ### [0.23.17](https://github.com/PDMLab/docker-compose/compare/v0.23.16...v0.23.17) (2022-01-18)
 
 
