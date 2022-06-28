@@ -7,7 +7,7 @@
   "scripts": {
     "test": "jest test --verbose",
     "lint": "eslint src/**/*.ts test/**/*.ts",
-    "build": "tsc",
+    "build": "tsc -b tsconfig.json",
     "prepublishOnly": "tsc",
     "release": "yarn build && standard-version",
     "docs:dev": "vuepress dev docs",
