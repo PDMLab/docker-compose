@@ -4,6 +4,11 @@
 
 `docker-compose` is a small library that allows you to run [docker-compose](https://docs.docker.com/compose/)(which is still required) via Node.js. This is useful to bootstrap test environments.
 
+### This package only works with Docker Compose v2 syntax. 
+
+Legacy `docker-compose` syntax is not supported in this repo.
+
+
 ## Installation
 
 ```bash
