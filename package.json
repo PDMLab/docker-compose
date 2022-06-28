@@ -94,9 +94,11 @@
     ]
   },
   "dependencies": {
-    "typescript": "^4.2.4",
-    "ts-node": "^10.8.0",
     "yaml": "^1.10.2",
+    "typescript": "^4.2.4"
+  },
+  "devDependencies": {
+    "ts-node": "^10.8.0",
     "@commitlint/cli": "^13.1.0",
     "@commitlint/config-conventional": "13.1.0",
     "@types/dockerode": "^2.5.27",
