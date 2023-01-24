@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.23.18](https://github.com/PDMLab/docker-compose/compare/v0.23.17...v0.23.18) (2023-01-24)
+
+
+### Bug Fixes
+
+* add stopMany to default exports ([ff914e9](https://github.com/PDMLab/docker-compose/commit/ff914e910cb963b8fa7f283a1f51cb66fae0f52b))
+
 ### [0.23.17](https://github.com/PDMLab/docker-compose/compare/v0.23.16...v0.23.17) (2022-01-18)
 
 
