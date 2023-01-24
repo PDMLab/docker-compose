@@ -536,6 +536,7 @@ export default {
   down,
   stop,
   stopOne,
+  stopMany,
   pauseOne,
   unpauseOne,
   kill,
