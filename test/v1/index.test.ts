@@ -1,8 +1,8 @@
 import Docker from 'dockerode'
-import * as compose from '../src/index'
+import * as compose from '../../src/index'
 import * as path from 'path'
 import { readFile } from 'fs'
-import { mapPsOutput } from '../src/index'
+import { mapPsOutput } from '../../src/index'
 const docker = new Docker()
 
 // Docker commands, especially builds, can take some time. This makes sure that they can take the time they need.
