@@ -8,6 +8,16 @@ on:
     branches:
       - master
 jobs:
+  info:
+    runs-on: ubuntu-22.04
+    name: info
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12'
+      - run: docker-compose --version
+      - run: node --version
   lint:
     runs-on: ubuntu-22.04
     name: Lint
@@ -19,7 +29,7 @@ jobs:
     - run: yarn
     - run: yarn lint
   build:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     name: Build + Test
     steps:
     - uses: actions/checkout@v2
