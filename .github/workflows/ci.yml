@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
-          node-version: '12'
+          node-version: '18'
       - run: docker-compose --version
       - run: node --version
   lint:
@@ -25,7 +25,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v1
       with:
-        node-version: '12'
+        node-version: '18'
     - run: yarn
     - run: yarn lint
   build:
@@ -35,7 +35,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v1
       with:
-        node-version: '12'
+        node-version: '18'
     - run: yarn
     - run: yarn build
     - run: yarn test
