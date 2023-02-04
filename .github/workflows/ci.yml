@@ -1,8 +1,8 @@
 name: Node.js CI
 
-on: 
+on:
   push:
-    branches: 
+    branches:
       - '*'
   pull_request:
     branches:
@@ -13,7 +13,7 @@ jobs:
     name: info
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v3
         with:
           node-version: '18'
       - run: docker-compose --version
@@ -22,20 +22,20 @@ jobs:
     runs-on: ubuntu-22.04
     name: Lint
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v1
-      with:
-        node-version: '18'
-    - run: yarn
-    - run: yarn lint
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: yarn
+      - run: yarn lint
   build:
     runs-on: ubuntu-22.04
     name: Build + Test
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v1
-      with:
-        node-version: '18'
-    - run: yarn
-    - run: yarn build
-    - run: yarn test
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: yarn
+      - run: yarn build
+      - run: yarn test
