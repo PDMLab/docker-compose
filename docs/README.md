@@ -9,11 +9,23 @@ home: false
 
 ## Installation
 
-```
+```bash
 npm install --save-dev docker-compose
 ```
 
 ## Usage
+
+You can either import particular functions like `upAll`:
+
+```typescript
+import { upAll, down, exec, stopOne, logs } from "docker-compose";
+```
+
+or you can just import the complete library:
+
+```typescript
+import * as compose from "docker-compose";
+```
 
 `docker-compose` current supports these commands:
 
@@ -28,7 +40,7 @@ npm install --save-dev docker-compose
 * `kill(options)` - Force stop service containers
 * `logs(services, options)` - Show logs of service(s) - use `options.follow` `true|false` to turn on `--follow` flag
 * `pauseOne(service, options)` - Pause the specified service
-* `port(service, containerPort, options)` - Returns the public port of the given service and internal port. 
+* `port(service, containerPort, options)` - Returns the public port of the given service and internal port.
 * `ps(options)` - Lists containers information
 * `pullAll(options)` - Pull all service images
 * `pullMany(services, options)` - Pull service images specified
@@ -48,6 +60,7 @@ npm install --save-dev docker-compose
 * `version(options)` - Show `docker-compose` version strings
 
 All commands return a `Promise({object})` with stdout and stderr strings and an exit code:
+
 ```javascript
 {
   out: 'stdout contents',
@@ -55,7 +68,8 @@ All commands return a `Promise({object})` with stdout and stderr strings and an 
   exitCode: 0, // !== 0 in case of an error
 }
 ```
-Although the return type is a `Promise`, it is still possible to get the process progres before the `Promise` resolves, by passing a callback function to the optional `callback` parameter. 
+
+Although the return type is a `Promise`, it is still possible to get the process progres before the `Promise` resolves, by passing a callback function to the optional `callback` parameter.
 
 ### Example
 
@@ -67,7 +81,7 @@ compose.upAll({ cwd: path.join(__dirname), log: true })
     () => { console.log('done')},
     err => { console.log('something went wrong:', err.message)}
   );
-```
+```typescript
 To get process progres
 ```typescript
 compose.upAll({
@@ -82,7 +96,8 @@ compose.upAll({
   );
 ```
 
-To execute command inside a running container
+To execute command inside a running container:
+
 ```javascript
 compose.exec('node', 'npm install', { cwd: path.join(__dirname) })
 ```
@@ -104,7 +119,7 @@ compose.exec('node', 'npm install', { cwd: path.join(__dirname) })
 
 While `docker-compose` runs on Node.js 6+, running the tests requires you to use Node.js 8 as they make use of `async/await`.
 
-```
+```bash
 yarn test
 ```
 
@@ -130,7 +145,7 @@ If you want to discuss an `docker-compose` issue or PR in more detail, feel free
 
 MIT License
 
-Copyright (c) 2017 - 2021 PDMLab
+Copyright (c) 2017 - 2023 PDMLab
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -149,4 +164,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
