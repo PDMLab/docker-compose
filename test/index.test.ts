@@ -523,29 +523,28 @@ test('pull all services', async (): Promise<void> => {
   expect(await imageExists('nginx:1.19.9-alpine')).toBeTruthy()
 })
 
-test('teardown', async (): Promise<void> => {
-  interface Container {
-    Names: string[]
-    Id: string
-  }
-
-  docker.listContainers((err, containers: Container[]): void => {
-    if (err) {
-      throw err
+afterEach(
+  async (): Promise<void> => {
+    interface Container {
+      Names: string[]
+      Id: string
     }
 
-    containers.forEach((container): void => {
-      container.Names.forEach((name: string): void => {
-        if (name.startsWith('/compose_test_')) {
-          console.log(`stopping ${container.Id} ${container.Names}`)
-          docker.getContainer(container.Id).stop()
-        }
+    docker.listContainers((err, containers: Container[]): void => {
+      if (err) {
+        throw err
+      }
+
+      containers.forEach((container): void => {
+        console.log(`stopping ${container.Id} ${container.Names}`)
+        docker.getContainer(container.Id).stop()
+        docker.getContainer(container.Id).remove()
       })
     })
-  })
 
-  await removeImagesStartingWith('compose-test-build-image')
-})
+    await removeImagesStartingWith('compose-test-build-image')
+  }
+)
 
 test('config show data for docker-compose files', async (): Promise<void> => {
   const std = await compose.config({
