@@ -85,7 +85,7 @@ test('ensure exit code is returned correctly', async (): Promise<void> => {
     await compose.logs('non_existent_service', {
       cwd: path.join(__dirname)
     })
-  } catch (error) {
+  } catch (error: any) {
     failedResult = error.exitCode
   }
   expect(failedResult).toBe(1)
@@ -250,7 +250,7 @@ test('ensure only single container gets paused then resumed', async (): Promise<
   let errMsg
   try {
     await compose.exec('proxy', 'cat /etc/os-release', opts)
-  } catch (err) {
+  } catch (err: any) {
     errMsg = err.err
   }
   expect(errMsg).toContain('is paused')
