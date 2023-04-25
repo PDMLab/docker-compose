@@ -1,6 +1,6 @@
 {
   "name": "@dashevo/docker-compose",
-  "version": "0.24.1",
+  "version": "0.24.2",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "types": "dist/index.d.ts",
