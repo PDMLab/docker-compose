@@ -814,7 +814,7 @@ describe('version command', (): void => {
   it('returns version information', async (): Promise<void> => {
     const version = (await compose.version()).data.version
 
-    expect(version).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)$/)
+    expect(version).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)?(\+.*)*$/)
   })
 })
 
