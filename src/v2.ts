@@ -92,16 +92,22 @@ export const mapPsOutput = (
   const services = output
     .split(`\n`)
     .filter(nonEmptyString)
-    .filter((_, index) => isQuiet || index > 1)
+    .filter((_, index) => isQuiet || index >= 1)
     .map((line) => {
       let nameFragment = line
       let commandFragment = ''
+      let imageFragment = ''
+      let serviceFragment = ''
+      let createdFragment = ''
       let stateFragment = ''
       let untypedPortsFragment = ''
       if (!isQuiet) {
         ;[
           nameFragment,
+          imageFragment,
           commandFragment,
+          serviceFragment,
+          createdFragment,
           stateFragment,
           untypedPortsFragment
         ] = line.split(/\s{3,}/)
@@ -211,11 +217,14 @@ export const execCompose = (
 
     childProc.on('exit', (exitCode): void => {
       result.exitCode = exitCode
-      if (exitCode === 0) {
-        resolve(result)
-      } else {
-        reject(result)
-      }
+      console.log(`exiting command ${command}`)
+      setTimeout(() => {
+        if (exitCode === 0) {
+          resolve(result)
+        } else {
+          reject(result)
+        }
+      }, 500)
     })
 
     if (isConfigProvidedAsString) {
