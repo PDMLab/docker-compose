@@ -820,6 +820,7 @@ describe('version command', (): void => {
 
 describe('parsePsOutput', (): void => {
   it('parses ps output', () => {
+    // eslint-disable-next-line no-useless-escape
     const output = `NAME                 IMAGE                 COMMAND                  SERVICE             CREATED             STATUS                              PORTS\ncompose_test_hello   hello-world           \"/hello\"                 hello               2 seconds ago       Exited (0) Less than a second ago   \ncompose_test_proxy   nginx:1.19.9-alpine   \"/docker-entrypoint.…\"   proxy               2 seconds ago       Up Less than a second               80/tcp\ncompose_test_web     nginx:1.16.0          \"nginx -g 'daemon of…\"   web                 2 seconds ago       Up 1 second                         0.0.0.0:80->80/tcp, 0.0.0.0:443->443/tcp\n`
 
     const psOut = mapPsOutput(output)
