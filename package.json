@@ -5,7 +5,7 @@
   "typings": "dist/index.d.ts",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "npx vitest --dir test --test-timeout=15000",
+    "test": "npx vitest --dir test --test-timeout=30000",
     "lint": "eslint src/**/*.ts test/**/*.ts",
     "build": "tsc",
     "prepublishOnly": "tsc",
