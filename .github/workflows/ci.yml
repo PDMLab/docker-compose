@@ -38,4 +38,5 @@ jobs:
           node-version: '18'
       - run: yarn
       - run: yarn build
-      - run: yarn test
+      - run: yarn test-v1
+      - run: yarn test-v2
