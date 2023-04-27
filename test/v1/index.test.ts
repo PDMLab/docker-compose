@@ -3,10 +3,10 @@ import * as compose from '../../src/index'
 import * as path from 'path'
 import { readFile } from 'fs'
 import { mapPsOutput } from '../../src/index'
+import { test, afterEach, beforeEach, describe, expect, vi } from 'vitest'
 const docker = new Docker()
 
 // Docker commands, especially builds, can take some time. This makes sure that they can take the time they need.
-jest.setTimeout(25000)
 
 // Set to true if you need to diagnose using output
 const logOutput = false
@@ -794,7 +794,7 @@ test('ensure progress callback is called', async (): Promise<void> => {
   const config = {
     cwd: path.join(__dirname),
     config: './docker-compose.yml',
-    callback: jest.fn()
+    callback: vi.fn()
   }
   await compose.upAll(config)
   expect(config.callback).toBeCalled()

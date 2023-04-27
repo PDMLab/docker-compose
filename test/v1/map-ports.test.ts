@@ -1,4 +1,5 @@
 import mapPorts from '../../src/map-ports'
+import { expect, test } from 'vitest'
 
 test('map ports for empty string', () => {
   expect(mapPorts('')).toEqual([])
