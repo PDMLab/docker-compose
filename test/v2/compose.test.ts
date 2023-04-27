@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import Docker, { ContainerInfo } from 'dockerode'
-import * as compose from '../src/v2'
+import * as compose from '../../src/v2'
 import * as path from 'path'
 import { readFile } from 'fs'
-import { mapPsOutput } from '../src/v2'
+import { mapPsOutput } from '../../src/v2'
 const docker = new Docker()
 
 const isContainerRunning = async (name: string): Promise<boolean> =>

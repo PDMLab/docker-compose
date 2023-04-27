@@ -1,4 +1,4 @@
-import mapPorts from '../src/v2-map-ports'
+import mapPorts from '../../src/v2-map-ports'
 import { describe, expect, it } from 'vitest'
 
 describe('when no ports are exposed', (): void => {
