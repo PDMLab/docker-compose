@@ -645,7 +645,7 @@ describe('when calling config command', (): void => {
     expect(std.data.config.services['some-service']['image']).toBe(
       'nginx:1.19.9-alpine'
     )
-    expect(std.data.config.volumes['db-data']).toEqual({ name: 'test_db-data' })
+    expect(std.data.config.volumes['db-data']).toEqual({ name: 'v2_db-data' })
   })
 })
 
