@@ -13,7 +13,7 @@ home: false
 npm install --save-dev docker-compose
 ```
 
-## Import for docker-compose (v1)
+## Import for `docker-compose` (v1)
 
 To import commands for the v1 version, please use this import statement:
 
@@ -27,7 +27,7 @@ You can also import only the required commands:
 import { run, upAll } from 'docker-compose'
 ```
 
-### Import for docker-compose (v2)
+### Import for `docker compose` (v2)
 
 To import commands for the v2 version, please use this import statement:
 
