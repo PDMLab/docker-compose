@@ -51,7 +51,7 @@ import { run, upAll } from 'docker-compose/dist/v2'
 
 ### Usage
 
-To start service containers based on the `docker-compose.yml` file in your current directory, just call `compose.up` like this:
+To start service containers based on the `docker-compose.yml` file in your current directory, just call `compose.upAll` like this:
 
 ```javascript
 compose.upAll({ cwd: path.join(__dirname), log: true }).then(
@@ -62,6 +62,20 @@ compose.upAll({ cwd: path.join(__dirname), log: true }).then(
     console.log('something went wrong:', err.message)
   }
 )
+```
+
+Start specific services using `compose.upMany`:
+
+```javascript
+const services = ['serviceA', 'serviceB']
+compose.upMany(services, { cwd: path.join(__dirname), log: true })
+```
+
+Or start a single service with `compose.upOne`:
+
+```javascript
+const service = 'serviceA'
+compose.upOne(service, { cwd: path.join(__dirname), log: true })
 ```
 
 To execute command inside a running container
