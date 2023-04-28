@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.24.0](https://github.com/PDMLab/docker-compose/compare/v0.23.19...v0.24.0) (2023-04-28)
+
+
+### Features
+
+* support docker compose v2 plugin version ([#228](https://github.com/PDMLab/docker-compose/issues/228)) ([95250be](https://github.com/PDMLab/docker-compose/commit/95250beeee1b5a1f9433138870392b611a3eec93))
+
 ### [0.23.20-preview.0](https://github.com/PDMLab/docker-compose/compare/v0.23.19...v0.23.20-preview.0) (2023-04-27)
 
 
