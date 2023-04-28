@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.23.20-preview.0](https://github.com/PDMLab/docker-compose/compare/v0.23.19...v0.23.20-preview.0) (2023-04-27)
+
+
+### Features
+
+* support docker compose v2 plugin version ([81e72e9](https://github.com/PDMLab/docker-compose/commit/81e72e9985aba05474463306852501287ad32680))
+
+
+### Bug Fixes
+
+* expect volume name to match changed folder name ([85c4c15](https://github.com/PDMLab/docker-compose/commit/85c4c150ce5191c95116e98145e2d3c75604a4a4))
+* **build:** exclude old tests temporarily ([36d543d](https://github.com/PDMLab/docker-compose/commit/36d543db56822be95c9cd31eaa890a4c46e789a4))
+* **lint:** no-useless-escape for \" characters ([fcabbc2](https://github.com/PDMLab/docker-compose/commit/fcabbc2ea7c7d42f15f45a26badab9fe73030a6c))
+* **lint:** remove jest plugin reference ([892e6db](https://github.com/PDMLab/docker-compose/commit/892e6db60302ef734e5b42b74da6f583c1fb9e52))
+
 ### [0.23.19](https://github.com/PDMLab/docker-compose/compare/v0.23.18...v0.23.19) (2023-02-05)
 
 ### [0.23.18](https://github.com/PDMLab/docker-compose/compare/v0.23.17...v0.23.18) (2023-01-24)
