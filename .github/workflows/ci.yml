@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-22.04
     name: info
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: '18'
@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-22.04
     name: Lint
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: '18'
@@ -32,10 +32,11 @@ jobs:
     runs-on: ubuntu-22.04
     name: Build + Test
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: '18'
       - run: yarn
       - run: yarn build
-      - run: yarn test
+      - run: yarn test-v1
+      - run: yarn test-v2

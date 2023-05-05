@@ -1,6 +1,6 @@
 import childProcess from 'child_process'
 import yaml from 'yaml'
-import mapPorts from './map-ports'
+import mapPorts from './v2-map-ports'
 
 export interface IDockerComposeOptions {
   cwd?: string
@@ -92,16 +92,22 @@ export const mapPsOutput = (
   const services = output
     .split(`\n`)
     .filter(nonEmptyString)
-    .filter((_, index) => isQuiet || index > 1)
+    .filter((_, index) => isQuiet || index >= 1)
     .map((line) => {
       let nameFragment = line
       let commandFragment = ''
+      let imageFragment = ''
+      let serviceFragment = ''
+      let createdFragment = ''
       let stateFragment = ''
       let untypedPortsFragment = ''
       if (!isQuiet) {
         ;[
           nameFragment,
+          imageFragment,
           commandFragment,
+          serviceFragment,
+          createdFragment,
           stateFragment,
           untypedPortsFragment
         ] = line.split(/\s{3,}/)
@@ -135,7 +141,7 @@ const configToArgs = (config): string[] => {
 }
 
 /**
- * Converts docker-compose commandline options to cli arguments
+ * Converts docker compose commandline options to cli arguments
  */
 const composeOptionsToArgs = (composeOptions): string[] => {
   let composeArgs: string[] = []
@@ -153,7 +159,7 @@ const composeOptionsToArgs = (composeOptions): string[] => {
 }
 
 /**
- * Executes docker-compose command with common options
+ * Executes docker compose command with common options
  */
 export const execCompose = (
   command,
@@ -178,12 +184,16 @@ export const execCompose = (
 
     const cwd = options.cwd
     const env = options.env || undefined
-    const executablePath = options.executablePath || 'docker-compose'
+    const executablePath = options.executablePath || 'docker'
 
-    const childProc = childProcess.spawn(executablePath, composeArgs, {
-      cwd,
-      env
-    })
+    const childProc = childProcess.spawn(
+      executablePath,
+      ['compose', ...composeArgs],
+      {
+        cwd,
+        env
+      }
+    )
 
     childProc.on('error', (err): void => {
       reject(err)
@@ -207,11 +217,14 @@ export const execCompose = (
 
     childProc.on('exit', (exitCode): void => {
       result.exitCode = exitCode
-      if (exitCode === 0) {
-        resolve(result)
-      } else {
-        reject(result)
-      }
+      console.log(`exiting command ${command}`)
+      setTimeout(() => {
+        if (exitCode === 0) {
+          resolve(result)
+        } else {
+          reject(result)
+        }
+      }, 500)
     })
 
     if (isConfigProvidedAsString) {
@@ -561,5 +574,3 @@ export default {
   port,
   version
 }
-
-export * as v2 from './v2'

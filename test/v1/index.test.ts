@@ -1,12 +1,12 @@
 import Docker from 'dockerode'
-import * as compose from '../src/index'
+import * as compose from '../../src/index'
 import * as path from 'path'
 import { readFile } from 'fs'
-import { mapPsOutput } from '../src/index'
+import { mapPsOutput } from '../../src/index'
+import { test, afterEach, beforeEach, describe, expect, vi } from 'vitest'
 const docker = new Docker()
 
 // Docker commands, especially builds, can take some time. This makes sure that they can take the time they need.
-jest.setTimeout(25000)
 
 // Set to true if you need to diagnose using output
 const logOutput = false
@@ -85,7 +85,7 @@ test('ensure exit code is returned correctly', async (): Promise<void> => {
     await compose.logs('non_existent_service', {
       cwd: path.join(__dirname)
     })
-  } catch (error: any) {
+  } catch (error) {
     failedResult = error.exitCode
   }
   expect(failedResult).toBe(1)
@@ -250,7 +250,7 @@ test('ensure only single container gets paused then resumed', async (): Promise<
   let errMsg
   try {
     await compose.exec('proxy', 'cat /etc/os-release', opts)
-  } catch (err: any) {
+  } catch (err) {
     errMsg = err.err
   }
   expect(errMsg).toContain('is paused')
@@ -523,28 +523,29 @@ test('pull all services', async (): Promise<void> => {
   expect(await imageExists('nginx:1.19.9-alpine')).toBeTruthy()
 })
 
-afterEach(
-  async (): Promise<void> => {
-    interface Container {
-      Names: string[]
-      Id: string
+test('teardown', async (): Promise<void> => {
+  interface Container {
+    Names: string[]
+    Id: string
+  }
+
+  docker.listContainers((err, containers: Container[]): void => {
+    if (err) {
+      throw err
     }
 
-    docker.listContainers((err, containers: Container[]): void => {
-      if (err) {
-        throw err
-      }
-
-      containers.forEach((container): void => {
-        console.log(`stopping ${container.Id} ${container.Names}`)
-        docker.getContainer(container.Id).stop()
-        docker.getContainer(container.Id).remove()
+    containers.forEach((container): void => {
+      container.Names.forEach((name: string): void => {
+        if (name.startsWith('/compose_test_')) {
+          console.log(`stopping ${container.Id} ${container.Names}`)
+          docker.getContainer(container.Id).stop()
+        }
       })
     })
+  })
 
-    await removeImagesStartingWith('compose-test-build-image')
-  }
-)
+  await removeImagesStartingWith('compose-test-build-image')
+})
 
 test('config show data for docker-compose files', async (): Promise<void> => {
   const std = await compose.config({
@@ -793,7 +794,7 @@ test('ensure progress callback is called', async (): Promise<void> => {
   const config = {
     cwd: path.join(__dirname),
     config: './docker-compose.yml',
-    callback: jest.fn()
+    callback: vi.fn()
   }
   await compose.upAll(config)
   expect(config.callback).toBeCalled()
