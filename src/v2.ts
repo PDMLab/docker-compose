@@ -217,7 +217,6 @@ export const execCompose = (
 
     childProc.on('exit', (exitCode): void => {
       result.exitCode = exitCode
-      console.log(`exiting command ${command}`)
       setTimeout(() => {
         if (exitCode === 0) {
           resolve(result)
