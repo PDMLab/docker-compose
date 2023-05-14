@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.24.1](https://github.com/PDMLab/docker-compose/compare/v0.24.0...v0.24.1) (2023-05-14)
+
+
+### Bug Fixes
+
+* Remove unnecessary console.log in v2 api ([#241](https://github.com/PDMLab/docker-compose/issues/241)) ([75ab935](https://github.com/PDMLab/docker-compose/commit/75ab935dcdf5c32cf44643d4d74ba6b30620a31a))
+
 ## [0.24.0](https://github.com/PDMLab/docker-compose/compare/v0.23.19...v0.24.0) (2023-04-28)
 
 
