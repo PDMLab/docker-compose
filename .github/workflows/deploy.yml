@@ -1,4 +1,4 @@
-name: Depoy docs
+name: Deploy docs
 on:
   workflow_dispatch: {}
   push:
@@ -20,10 +20,10 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: npm
-      - run: npm ci
+          cache: yarn
+      - run: yarn ci
       - name: Build
-        run: npm run docs:build
+        run: yarn docs:build
       - uses: actions/configure-pages@v2
       - uses: actions/upload-pages-artifact@v1
         with:
