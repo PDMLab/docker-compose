@@ -23,7 +23,8 @@ export default defineConfig({
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/pdmlab/docker-compose' }
+      { icon: 'github', link: 'https://github.com/pdmlab/docker-compose' },
+      { icon: 'discord', link: 'https://discord.gg/pR6duvNHtV' }
     ]
   }
 })
