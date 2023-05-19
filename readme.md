@@ -1,5 +1,5 @@
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
-[![Discord](https://img.shields.io/discord/1070453198000767076)](https://discord.gg/dKWyyv6M)
+[![Discord](https://img.shields.io/discord/1070453198000767076)](https://discord.gg/pR6duvNHtV)
 <img src="https://img.shields.io/github/actions/workflow/status/pdmlab/docker-compose/ci.yml?branch=master" />
 <img src="https://img.shields.io/npm/dm/docker-compose.svg" />
 
