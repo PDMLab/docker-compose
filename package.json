@@ -19,6 +19,7 @@
   "repository": {
     "url": "git@github.com:PDMLab/docker-compose.git"
   },
+  "homepage": "https://pdmlab.github.io/docker-compose/",
   "keywords": [
     "devops",
     "devops-tools",
