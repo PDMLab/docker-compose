@@ -11,8 +11,9 @@
     "build": "tsc",
     "prepublishOnly": "tsc",
     "release": "yarn build && standard-version",
-    "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs"
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "repository": {
     "url": "git@github.com:PDMLab/docker-compose.git"
@@ -98,8 +99,8 @@
     "prettier": "^2.2.1",
     "standard-version": "9.3.1",
     "typescript": "^4.9.5",
-    "vitest": "^0.30.1",
-    "vuepress": "^2.0.0-beta.7"
+    "vitepress": "^1.0.0-alpha.76",
+    "vitest": "^0.30.1"
   },
   "engines": {
     "node": ">= 6.0.0"
