@@ -62,8 +62,10 @@ compose.upAll({ cwd: path.join(__dirname), log: true })
     () => { console.log('done')},
     err => { console.log('something went wrong:', err.message)}
   );
-```typescript
+```
+
 To get process progres
+
 ```typescript
 compose.upAll({
    cwd: path.join(__dirname),
