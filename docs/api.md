@@ -64,7 +64,7 @@ compose.upAll({ cwd: path.join(__dirname), log: true })
   );
 ```
 
-To get process progres
+To get process progress
 
 ```typescript
 compose.upAll({
