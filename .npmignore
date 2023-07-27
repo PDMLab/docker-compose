@@ -25,3 +25,6 @@ jest.config.js
 # VuePress
 .cache
 .temp
+
+# Typescript source
+src
