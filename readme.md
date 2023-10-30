@@ -84,6 +84,26 @@ To execute command inside a running container
 compose.exec('node', 'npm install', { cwd: path.join(__dirname) })
 ```
 
+To list the containers for a compose project
+
+```javascript
+const result = await compose.ps({ cwd: path.join(__dirname) })
+result.data.services.forEach((service) => {
+  console.log(service.name, service.command, service.state, service.ports)
+  // state is e.g. 'Up 2 hours'
+})
+```
+
+The docker-compose v2 version also support the `--format json` command option to get a better state support:
+
+```javascript
+const result = await compose.ps({ cwd: path.join(__dirname), commandOptions: [["--format", "json"]] })
+result.data.services.forEach((service) => {
+  console.log(service.name, service.command, service.state, service.ports)
+  // state is one of the defined states: paused | restarting | removing | running | dead | created | exited
+})
+```
+
 ## Known issues with v2 support
 
 * During testing we noticed that `docker compose` seems to send it's exit code also commands don't seem to have finished. This doesn't occur for all commands, but for example with `stop` or `down`. We had the option to wait for stopped / removed containers using third party libraries but this would make bootstrapping `docker-compose` much more complicated for the users. So we decided to use a `setTimeout(500)` workaround. We're aware this is not perfect but it seems to be the most appropriate solution for now. Details can be found in the [v2 PR discussion](https://github.com/PDMLab/docker-compose/pull/228#issuecomment-1422895821) (we're happy to get help here).
