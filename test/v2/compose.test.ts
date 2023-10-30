@@ -691,7 +691,35 @@ describe('when calling ps command', (): void => {
     const web = std.data.services.find(
       (service) => service.name === 'compose_test_web'
     )
+    expect(web?.command).toContain('nginx') // Note: actually it contains "nginx -g 'daemon off;'"
+    expect(web?.state).toContain('Up')
+    expect(web?.ports.length).toBe(2)
+    expect(web?.ports[1].exposed.port).toBe(443)
+    expect(web?.ports[1].exposed.protocol).toBe('tcp')
+    expect(web?.ports[1].mapped?.port).toBe(443)
+    expect(web?.ports[1].mapped?.address).toBe('0.0.0.0')
+    await compose.down({ cwd: path.join(__dirname), log: logOutput })
+  })
+
+  it('ps shows status data for started containers using json format', async (): Promise<void> => {
+    await compose.upAll({ cwd: path.join(__dirname), log: logOutput })
+    // await new Promise((resolve) => setTimeout(resolve, 2000))
+
+    const std = await compose.ps({
+      cwd: path.join(__dirname),
+      log: logOutput,
+      commandOptions: [['--format', 'json']]
+    })
+
+    const running = await getRunningContainers()
+
+    expect(std.err).toBeFalsy()
     expect(std.data.services.length).toBe(2)
+    const web = std.data.services.find(
+      (service) => service.name === 'compose_test_web'
+    )
+    expect(web?.command).toContain('nginx') // Note: actually it contains "nginx -g 'daemon off;'"
+    expect(web?.state).toBe('running')
     expect(web?.ports.length).toBe(2)
     expect(web?.ports[1].exposed.port).toBe(443)
     expect(web?.ports[1].exposed.protocol).toBe('tcp')
