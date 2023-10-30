@@ -66,16 +66,30 @@ export type TypedDockerComposeResult<T> = {
 
 const nonEmptyString = (v: string) => v !== ''
 
-export type DockerComposePsResult = {
-  services: Array<{
-    name: string
-    command: string
-    state: string
-    ports: Array<{
-      mapped?: { address: string; port: number }
-      exposed: { port: number; protocol: string }
-    }>
+export type DockerComposePsResultService = {
+  name: string
+  command: string
+  state: string
+  ports: Array<{
+    mapped?: { address: string; port: number }
+    exposed: { port: number; protocol: string }
   }>
+}
+
+export type DockerComposePsResult = {
+  services: Array<DockerComposePsResultService>
+}
+
+const arrayIncludesTuple = (
+  arr: string[] | (string | string[])[],
+  tuple: string[]
+) => {
+  return arr.some(
+    (subArray) =>
+      Array.isArray(subArray) &&
+      subArray.length === tuple.length &&
+      subArray.every((value, index) => value === tuple[index])
+  )
 }
 
 export const mapPsOutput = (
@@ -83,34 +97,41 @@ export const mapPsOutput = (
   options?: IDockerComposeOptions
 ): DockerComposePsResult => {
   let isQuiet = false
+  let isJson = false
   if (options?.commandOptions) {
     isQuiet =
       options.commandOptions.includes('-q') ||
       options.commandOptions.includes('--quiet') ||
       options.commandOptions.includes('--services')
+
+    isJson = arrayIncludesTuple(options.commandOptions, ['--format', 'json'])
   }
   const services = output
     .split(`\n`)
     .filter(nonEmptyString)
-    .filter((_, index) => isQuiet || index >= 1)
+    .filter((_, index) => isQuiet || isJson || index >= 1)
     .map((line) => {
       let nameFragment = line
       let commandFragment = ''
-      let imageFragment = ''
-      let serviceFragment = ''
-      let createdFragment = ''
       let stateFragment = ''
       let untypedPortsFragment = ''
       if (!isQuiet) {
-        ;[
-          nameFragment,
-          imageFragment,
-          commandFragment,
-          serviceFragment,
-          createdFragment,
-          stateFragment,
-          untypedPortsFragment
-        ] = line.split(/\s{3,}/)
+        if (isJson) {
+          const serviceLine = JSON.parse(line)
+          nameFragment = serviceLine.Name
+          commandFragment = serviceLine.Command
+          stateFragment = serviceLine.State
+          untypedPortsFragment = serviceLine.Ports
+        } else {
+          const lineColumns = line.split(/\s{3,}/)
+          // the line has the columns in the following order:
+          // NAME   IMAGE   COMMAND   SERVICE   CREATED   STATUS   PORTS
+          // @see https://docs.docker.com/engine/reference/commandline/compose_ps/#description
+          nameFragment = lineColumns[0]
+          commandFragment = lineColumns[2]
+          stateFragment = lineColumns[5]
+          untypedPortsFragment = lineColumns[6]
+        }
       }
       return {
         name: nameFragment.trim(),
