@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.24.3](https://github.com/PDMLab/docker-compose/compare/v0.24.2...v0.24.3) (2023-10-30)
+
+
+### Features
+
+* ps supports json format ([4498eb4](https://github.com/PDMLab/docker-compose/commit/4498eb481c52f852247342b495ff66c5b465f895))
+
 ### [0.24.2](https://github.com/PDMLab/docker-compose/compare/v0.24.1...v0.24.2) (2023-07-27)
 
 
