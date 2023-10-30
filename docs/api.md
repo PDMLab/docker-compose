@@ -97,3 +97,67 @@ compose.exec('node', 'npm install', { cwd: path.join(__dirname) })
 * `[composeOptions] string[]|Array<string|string[]`: pass optional compose options like `"--verbose"` or `[["--verbose"], ["--log-level", "DEBUG"]]` or `["--verbose", ["--loglevel", "DEBUG"]]` for *all* commands.
 * `[callback] (chunk: Buffer, sourceStream?: 'stdout' | 'stderr') => void`: optional callback function, that provides infromation about the process while it is still runing.  
 * `[commandOptions] string[]|Array<string|string[]`: pass optional command options like `"--build"` or `[["--build"], ["--timeout", "5"]]` or `["--build", ["--timeout", "5"]]` for the `up` command. Viable `commandOptions` depend on the command (`up`, `down` etc.) itself
+
+### `ps`
+
+`ps(options)` - Lists containers for a Compose project, with current status and exposed ports.
+
+`ps` returns a `Promise` of `TypedDockerComposeResult<DockerComposePsResult>`.
+
+A basic example looks like this:
+
+```javascript
+const result = await compose.ps({ cwd: path.join(__dirname) })
+result.data.services.forEach((service) => {
+  console.log(service.name, service.command, service.state, service.ports)
+  // state is e.g. 'Up 2 hours'
+})
+```
+
+The resolved `result` might look like this (for v2):
+
+```javascript
+{
+    exitCode: 0,
+    err: '',
+    out: 'NAME                 IMAGE                 COMMAND                                          SERVICE   CREATED        STATUS                  PORTS\n' +
+    `compose_test_proxy   nginx:1.19.9-alpine   "/docker-entrypoint.sh nginx -g 'daemon off;'"   proxy     1 second ago   Up Less than a second   80/tcp\n` +
+    `compose_test_web     nginx:1.16.0          "nginx -g 'daemon off;'"                         web       1 second ago   Up Less than a second   0.0.0.0:80->80/tcp, 0.0.0.0:443->443/tcp\n`,
+    data: {
+        services: [
+            {
+                name: 'compose_test_proxy',
+                command: `"/docker-entrypoint.sh nginx -g 'daemon off;'"`,
+                state: 'Up Less than a second',
+                ports: [ { exposed: { port: 80, protocol: 'tcp' } } ]
+            },
+            {
+                name: 'compose_test_web',
+                command: `"nginx -g 'daemon off;'"`,
+                state: 'Up Less than a second',
+                ports: [
+                    {
+                        exposed: { port: 80, protocol: 'tcp' },
+                        mapped: { port: 80, address: '0.0.0.0' }
+                    },
+                    {
+                        exposed: { port: 443, protocol: 'tcp' },
+                        mapped: { port: 443, address: '0.0.0.0' }
+                    }
+                ]
+            }
+        ]
+    }
+}
+```
+
+**Only v2**: If you need a defined state, you can use the `--format json` command option.
+This will return one of the defined states `paused | restarting | removing | running | dead | created | exited` as the state of a service. 
+
+```javascript
+const result = await compose.ps({ cwd: path.join(__dirname), commandOptions: [["--format", "json"]] })
+result.data.services.forEach((service) => {
+  console.log(service.name, service.command, service.state, service.ports)
+  // state is one of the defined states: paused | restarting | removing | running | dead | created | exited
+})
+```
