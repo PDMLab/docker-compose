@@ -103,18 +103,42 @@ const logOutput = true
 
 describe('when upAll is called', () => {
   it('container get started', async () => {
-    await compose.down({ cwd: path.join(__dirname), log: logOutput })
+    await compose.downAll({ cwd: path.join(__dirname), log: logOutput })
     await compose.upAll({ cwd: path.join(__dirname), log: logOutput })
 
     expect(await isContainerRunning('/compose_test_web')).toBeTruthy()
     expect(await isContainerRunning('/compose_test_proxy')).toBeTruthy()
-    await compose.down({ cwd: path.join(__dirname), log: logOutput })
+    await compose.downAll({ cwd: path.join(__dirname), log: logOutput })
+  })
+})
+
+describe('when downOne is called', () => {
+  it('only one container should stop', async () => {
+    await compose.downAll({ cwd: path.join(__dirname), log: logOutput })
+    await compose.upAll({ cwd: path.join(__dirname), log: logOutput })
+    await compose.downOne('web', { cwd: path.join(__dirname), log: logOutput })
+
+    expect(await isContainerRunning('/compose_test_web')).toBeFalsy()
+    expect(await isContainerRunning('/compose_test_proxy')).toBeTruthy()
+    await compose.downAll({ cwd: path.join(__dirname), log: logOutput })
+  })
+})
+
+describe('when downMany is called', () => {
+  it('only specified container(s) should stop', async () => {
+    await compose.downAll({ cwd: path.join(__dirname), log: logOutput })
+    await compose.upAll({ cwd: path.join(__dirname), log: logOutput })
+    await compose.downMany('web', { cwd: path.join(__dirname), log: logOutput })
+
+    expect(await isContainerRunning('/compose_test_web')).toBeFalsy()
+    expect(await isContainerRunning('/compose_test_proxy')).toBeTruthy()
+    await compose.downAll({ cwd: path.join(__dirname), log: logOutput })
   })
 })
 
 describe('when running a compose command', () => {
   it('should return correct status code', async () => {
-    let result = await compose.down({
+    let result = await compose.downAll({
       cwd: path.join(__dirname),
       log: logOutput
     })
@@ -138,7 +162,7 @@ describe('when running a compose command', () => {
     }
     expect(failedResult).toBe(1)
 
-    await compose.down({ cwd: path.join(__dirname), log: logOutput })
+    await compose.downAll({ cwd: path.join(__dirname), log: logOutput })
   })
 })
 
@@ -146,7 +170,7 @@ describe('when starting container  with --build option', () => {
   describe('starts containers properly', (): void => {
     beforeEach(
       async (): Promise<void> => {
-        await compose.down({
+        await compose.downAll({
           cwd: path.join(__dirname),
           log: logOutput,
           config: 'docker-compose-build.yml'
@@ -156,7 +180,7 @@ describe('when starting container  with --build option', () => {
 
     afterEach(
       async (): Promise<void> => {
-        await compose.down({
+        await compose.downAll({
           cwd: path.join(__dirname),
           log: logOutput,
           config: 'docker-compose-build.yml'
@@ -173,7 +197,7 @@ describe('when starting container  with --build option', () => {
       })
 
       expect(await isContainerRunning('/compose_test_nginx')).toBeTruthy()
-      await compose.down({
+      await compose.downAll({
         cwd: path.join(__dirname),
         log: logOutput,
         config: 'docker-compose-build.yml'
@@ -189,7 +213,7 @@ describe('when starting container  with --build option', () => {
       })
 
       expect(await isContainerRunning('/compose_test_nginx')).toBeTruthy()
-      await compose.down({
+      await compose.downAll({
         cwd: path.join(__dirname),
         log: logOutput,
         config: 'docker-compose-build.yml'
@@ -200,7 +224,7 @@ describe('when starting container  with --build option', () => {
 
 describe('when container command executed with --workdir command option', () => {
   it('should work', async () => {
-    await compose.down({
+    await compose.downAll({
       cwd: path.join(__dirname),
       log: logOutput,
       config: 'docker-compose-42.yml'
@@ -227,23 +251,23 @@ describe('when container command executed with --workdir command option', () => 
 
 describe('when starting a single container', () => {
   it('container gets started', async (): Promise<void> => {
-    await compose.down({ cwd: path.join(__dirname), log: logOutput })
+    await compose.downAll({ cwd: path.join(__dirname), log: logOutput })
     await compose.upOne('web', { cwd: path.join(__dirname), log: logOutput })
 
     expect(await isContainerRunning('/compose_test_web')).toBeTruthy()
     expect(await isContainerRunning('/compose_test_proxy')).toBeFalsy()
-    await compose.down({ cwd: path.join(__dirname), log: logOutput })
+    await compose.downAll({ cwd: path.join(__dirname), log: logOutput })
   })
 })
 
 describe('when starting multiple containers', () => {
   it('all containers get started', async (): Promise<void> => {
-    await compose.down({ cwd: path.join(__dirname), log: logOutput })
+    await compose.downAll({ cwd: path.join(__dirname), log: logOutput })
     await compose.upMany(['web'], { cwd: path.join(__dirname), log: logOutput })
 
     expect(await isContainerRunning('/compose_test_web')).toBeTruthy()
     expect(await isContainerRunning('/compose_test_proxy')).toBeFalsy()
-    await compose.down({ cwd: path.join(__dirname), log: logOutput })
+    await compose.downAll({ cwd: path.join(__dirname), log: logOutput })
   })
 })
 
@@ -253,7 +277,7 @@ describe('when calling down on compose file', () => {
     expect(await isContainerRunning('/compose_test_web')).toBeTruthy()
     expect(await isContainerRunning('/compose_test_proxy')).toBeTruthy()
 
-    await compose.down({ cwd: path.join(__dirname), log: logOutput })
+    await compose.downAll({ cwd: path.join(__dirname), log: logOutput })
     expect(await isContainerRunning('/compose_test_web')).toBeFalsy()
     expect(await isContainerRunning('/compose_test_proxy')).toBeFalsy()
 
@@ -275,7 +299,7 @@ describe('when calling stop on compose file', () => {
     const containers = await getAllContainers()
     expect(containers.length).toBe(3)
 
-    await compose.down({ cwd: path.join(__dirname), log: logOutput })
+    await compose.downAll({ cwd: path.join(__dirname), log: logOutput })
   })
 })
 
@@ -291,7 +315,7 @@ describe('when stopping only one container', () => {
     })
     expect(await isContainerRunning('/compose_test_web')).toBeTruthy()
     expect(await isContainerRunning('/compose_test_proxy')).toBeFalsy()
-    await compose.down({ cwd: path.join(__dirname), log: logOutput })
+    await compose.downAll({ cwd: path.join(__dirname), log: logOutput })
   })
 })
 
@@ -308,7 +332,7 @@ describe('when stopping multiple containers', () => {
     )
     expect(await isContainerRunning('/compose_test_web')).toBeFalsy()
     expect(await isContainerRunning('/compose_test_proxy')).toBeFalsy()
-    await compose.down({ cwd: path.join(__dirname), log: logOutput })
+    await compose.downAll({ cwd: path.join(__dirname), log: logOutput })
   })
 })
 
@@ -334,7 +358,7 @@ describe('when pausing and resuming a single container', () => {
     expect(await isContainerRunning('/compose_test_proxy')).toBeTruthy()
     const std = await compose.exec('proxy', 'cat /etc/os-release', opts)
     expect(std.out).toContain('Alpine Linux')
-    await compose.down(opts)
+    await compose.downAll(opts)
   })
 })
 
@@ -352,7 +376,7 @@ describe('when container gets started with --abort-on-container-exit option', ()
 
     expect(await isContainerRunning('/compose_test_web')).toBeFalsy()
     expect(await isContainerRunning('/compose_test_proxy')).toBeFalsy()
-    await compose.down({ cwd: path.join(__dirname), log: logOutput })
+    await compose.downAll({ cwd: path.join(__dirname), log: logOutput })
   })
 })
 
@@ -368,7 +392,7 @@ describe('when container gets started with --abort-on-container-exit option', ()
 
     expect(await isContainerRunning('/compose_test_web')).toBeFalsy()
     expect(await isContainerRunning('/compose_test_proxy')).toBeFalsy()
-    await compose.down({ cwd: path.join(__dirname), log: logOutput })
+    await compose.downAll({ cwd: path.join(__dirname), log: logOutput })
   })
 })
 
@@ -384,7 +408,7 @@ describe('when killing a container', () => {
     expect(await isContainerRunning('/compose_test_web')).toBeFalsy()
     expect(await isContainerRunning('/compose_test_proxy')).toBeFalsy()
 
-    await compose.down({ cwd: path.join(__dirname), log: logOutput })
+    await compose.downAll({ cwd: path.join(__dirname), log: logOutput })
   })
 })
 
@@ -400,7 +424,7 @@ describe('when using custom yml file name', () => {
     await compose.kill({ cwd, log: logOutput, config: config })
     expect(await isContainerRunning('/compose_test_web_2')).toBeFalsy()
 
-    await compose.down({ cwd, log: logOutput, config })
+    await compose.downAll({ cwd, log: logOutput, config })
   })
 })
 
@@ -433,7 +457,7 @@ describe('when using run and exec', () => {
 
     checkOSID(std.out, 'alpine')
 
-    await compose.down({ cwd: path.join(__dirname), log: logOutput })
+    await compose.downAll({ cwd: path.join(__dirname), log: logOutput })
 
     const ids = await getAllContainers()
     await removeContainers(ids)
@@ -477,7 +501,7 @@ describe('when using and exec using in an array', (): void => {
     )
     checkOSID(std.out, 'alpine')
 
-    await compose.down({ cwd: path.join(__dirname), log: logOutput })
+    await compose.downAll({ cwd: path.join(__dirname), log: logOutput })
 
     const ids = await getAllContainers()
     await removeContainers(ids)
@@ -511,7 +535,7 @@ describe('when using build config as string', (): void => {
 
     expect(result.data.address).toBe('0.0.0.0')
     expect(result.data.port).toBe(8888)
-    await compose.down(config)
+    await compose.downAll(config)
   })
 })
 
@@ -698,7 +722,7 @@ describe('when calling ps command', (): void => {
     expect(web?.ports[1].exposed.protocol).toBe('tcp')
     expect(web?.ports[1].mapped?.port).toBe(443)
     expect(web?.ports[1].mapped?.address).toBe('0.0.0.0')
-    await compose.down({ cwd: path.join(__dirname), log: logOutput })
+    await compose.downAll({ cwd: path.join(__dirname), log: logOutput })
   })
 
   it('ps shows status data for started containers using json format', async (): Promise<void> => {
@@ -725,11 +749,11 @@ describe('when calling ps command', (): void => {
     expect(web?.ports[1].exposed.protocol).toBe('tcp')
     expect(web?.ports[1].mapped?.port).toBe(443)
     expect(web?.ports[1].mapped?.address).toBe('0.0.0.0')
-    await compose.down({ cwd: path.join(__dirname), log: logOutput })
+    await compose.downAll({ cwd: path.join(__dirname), log: logOutput })
   })
 
   it('ps does not show status data for stopped containers', async (): Promise<void> => {
-    await compose.down({ cwd: path.join(__dirname), log: logOutput })
+    await compose.downAll({ cwd: path.join(__dirname), log: logOutput })
     // await new Promise((resolve) => setTimeout(resolve, 1000))
     await compose.upOne('web', { cwd: path.join(__dirname), log: logOutput })
     await new Promise((resolve) => setTimeout(resolve, 2000))
@@ -746,7 +770,7 @@ describe('when calling ps command', (): void => {
     )
     expect(web?.name).toBe('compose_test_web')
     expect(proxy).toBeFalsy()
-    await compose.down({ cwd: path.join(__dirname), log: logOutput })
+    await compose.downAll({ cwd: path.join(__dirname), log: logOutput })
   }, 15000)
 })
 
@@ -757,7 +781,7 @@ describe('when restarting all containers', (): void => {
 
     expect(await isContainerRunning('/compose_test_web')).toBeTruthy()
     expect(await isContainerRunning('/compose_test_proxy')).toBeTruthy()
-    await compose.down({ cwd: path.join(__dirname), log: logOutput })
+    await compose.downAll({ cwd: path.join(__dirname), log: logOutput })
   })
 })
 
@@ -770,7 +794,7 @@ describe('when restarting many containers', (): void => {
     })
 
     expect(await isContainerRunning('/compose_test_web')).toBeTruthy()
-    await compose.down({ cwd: path.join(__dirname), log: logOutput })
+    await compose.downAll({ cwd: path.join(__dirname), log: logOutput })
   })
 })
 
@@ -783,7 +807,7 @@ describe('when restarting one container', (): void => {
     })
 
     expect(await isContainerRunning('/compose_test_proxy')).toBeTruthy()
-    await compose.down({ cwd: path.join(__dirname), log: logOutput })
+    await compose.downAll({ cwd: path.join(__dirname), log: logOutput })
   })
 })
 
@@ -796,7 +820,7 @@ describe('logs command', (): void => {
     })
 
     expect(std.out.includes('compose_test_proxy')).toBeTruthy()
-    await compose.down({ cwd: path.join(__dirname), log: logOutput })
+    await compose.downAll({ cwd: path.join(__dirname), log: logOutput })
   })
 })
 
@@ -812,7 +836,7 @@ describe('port command', (): void => {
     const port = await compose.port('web', 8888, config)
 
     expect(port.out).toMatch(/.*:[0-9]{1,5}/)
-    await compose.down(config)
+    await compose.downAll(config)
   })
 })
 
@@ -951,6 +975,6 @@ describe('passed callback fn', (): void => {
     }
     await compose.upAll(config)
     expect(config.callback).toBeCalled()
-    await compose.down(config)
+    await compose.downAll(config)
   })
 })
