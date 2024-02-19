@@ -3,7 +3,7 @@ import yaml from 'yaml'
 import mapPorts from './map-ports'
 
 export interface IDockerComposeExecutableOptions {
-  executablePath: string,
+  executablePath: string
   options?: string[] | (string | string[])[]
 }
 
@@ -183,15 +183,21 @@ export const execCompose = (
 
     const cwd = options.cwd
     const env = options.env || undefined
-    const executable = options.executable || {executablePath: 'docker-compose'}
+    const executable = options.executable || {
+      executablePath: 'docker-compose'
+    }
 
-    const executableOptions executable.options || []
+    const executableOptions = executable.options || []
     const executableArgs = composeOptionsToArgs(executableOptions)
 
-    const childProc = childProcess.spawn(executable.executablePath, executableArgs.concat(composeArgs), {
-      cwd,
-      env
-    })
+    const childProc = childProcess.spawn(
+      executable.executablePath,
+      executableArgs.concat(composeArgs),
+      {
+        cwd,
+        env
+      }
+    )
 
     childProc.on('error', (err): void => {
       reject(err)
