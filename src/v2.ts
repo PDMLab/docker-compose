@@ -305,10 +305,26 @@ export const upOne = function (
   return execCompose('up', args, options)
 }
 
-export const down = function (
+export const downAll = function (
   options?: IDockerComposeOptions
 ): Promise<IDockerComposeResult> {
   return execCompose('down', [], options)
+}
+
+export const downMany = function (
+  services: string[],
+  options?: IDockerComposeOptions
+): Promise<IDockerComposeResult> {
+  const args = services;
+  return execCompose('down', args, options);
+}
+
+export const downOne = function (
+  service: string,
+  options?: IDockerComposeOptions
+): Promise<IDockerComposeResult> {
+  const args = [service];
+  return execCompose('down', args, options);
 }
 
 export const stop = function (
@@ -566,7 +582,9 @@ export default {
   upAll,
   upMany,
   upOne,
-  down,
+  downAll,
+  downOne,
+  downMany,
   stop,
   stopOne,
   stopMany,
