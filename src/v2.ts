@@ -315,16 +315,16 @@ export const downMany = function (
   services: string[],
   options?: IDockerComposeOptions
 ): Promise<IDockerComposeResult> {
-  const args = services;
-  return execCompose('down', args, options);
+  const args = services
+  return execCompose('down', args, options)
 }
 
 export const downOne = function (
   service: string,
   options?: IDockerComposeOptions
 ): Promise<IDockerComposeResult> {
-  const args = [service];
-  return execCompose('down', args, options);
+  const args = [service]
+  return execCompose('down', args, options)
 }
 
 export const stop = function (
