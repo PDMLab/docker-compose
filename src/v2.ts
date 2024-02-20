@@ -592,7 +592,7 @@ export default {
   upAll,
   upMany,
   upOne,
-  down: downAll,
+  down,
   downAll,
   downOne,
   downMany,
