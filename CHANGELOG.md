@@ -2,6 +2,50 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.24.6 (2024-02-20)
+
+
+### Features
+
+* add ability to pass --abort-on-container-exit flag to up methods ([e85af8c](https://github.com/PDMLab/docker-compose/commit/e85af8c092a54a3fb48519bb39956324bbef4fc2))
+* Add execPath option to set path to docker-compose executable ([58f09f4](https://github.com/PDMLab/docker-compose/commit/58f09f4c7414df5a6ee7af7f77d2af297d84d6c1))
+* allow passing service names to `rm` function ([3a68db7](https://github.com/PDMLab/docker-compose/commit/3a68db75e3b879f12fe3c6cedbc9ad09a52914a5))
+* allow to pass docker compose configuration as string ([e8c14d3](https://github.com/PDMLab/docker-compose/commit/e8c14d318ce440ab02c858b1ca1dbeeb2985dc00))
+* make result for `config --services` command type safe ([6f105ca](https://github.com/PDMLab/docker-compose/commit/6f105ca16098ba8de11f85ec0d092130b65293e4))
+* make result for `config --volumes` command type safe ([51b20b4](https://github.com/PDMLab/docker-compose/commit/51b20b43d6eccac45653553437a546e4ccee51a6))
+* make result for `config` command type safe ([a2f5a4e](https://github.com/PDMLab/docker-compose/commit/a2f5a4ec0eee8fcbd60fa12f969b8eb83a4730fb))
+* make result for `port` command type safe ([70a98f4](https://github.com/PDMLab/docker-compose/commit/70a98f473b7bd46f0aa03c1a4334fa2abf6c3455))
+* make result for `ps` command type safe ([880d252](https://github.com/PDMLab/docker-compose/commit/880d2522b5777db30c48569a41dd09fb7e46a4b3))
+* make result for `version` command type safe ([a7da038](https://github.com/PDMLab/docker-compose/commit/a7da0380a8464bbd2efc2c16b70b67d4fdf77c24))
+* passing callback to report progress ([#191](https://github.com/PDMLab/docker-compose/issues/191)) ([f60e4d5](https://github.com/PDMLab/docker-compose/commit/f60e4d5a186ea3ca0b99e8443e1c4006d75be5a7))
+* ps supports json format ([4498eb4](https://github.com/PDMLab/docker-compose/commit/4498eb481c52f852247342b495ff66c5b465f895))
+* single container pause and unpause added ([5921b51](https://github.com/PDMLab/docker-compose/commit/5921b51977cbd51ffcb1def458738ccfccbe1dd9))
+* stop many ([#200](https://github.com/PDMLab/docker-compose/issues/200)) ([f10a9b6](https://github.com/PDMLab/docker-compose/commit/f10a9b610160c4ac06d0d38cbd9db4a6fe7761c9))
+* support docker compose v2 plugin version ([#228](https://github.com/PDMLab/docker-compose/issues/228)) ([95250be](https://github.com/PDMLab/docker-compose/commit/95250beeee1b5a1f9433138870392b611a3eec93))
+* **dx:** add default export ([c4b6087](https://github.com/PDMLab/docker-compose/commit/c4b60872aecfdc6610e9b2141a45ea7785820af7))
+
+
+### Bug Fixes
+
+* **ci:** shadow ci command using yarn ([bf0d1b6](https://github.com/PDMLab/docker-compose/commit/bf0d1b6a7ebc80b0ac158bbffc277b3c118545df))
+* add stopMany to default exports ([ff914e9](https://github.com/PDMLab/docker-compose/commit/ff914e910cb963b8fa7f283a1f51cb66fae0f52b))
+* filter empty entries from `config --services` command ([ed91eba](https://github.com/PDMLab/docker-compose/commit/ed91eba770d3a32d82dda4e927d31ed4b6d01db4))
+* fix mapping ipv6-based port mappings ([53fb971](https://github.com/PDMLab/docker-compose/commit/53fb97196f3cf0ebb229d127e9b630c863eaf8fc))
+* fix mapping ipv6-based port mappings ([6dec0c6](https://github.com/PDMLab/docker-compose/commit/6dec0c6bb6220b06eff188a26220b405d632bed3))
+* fix mapping ipv6-based port mappings ([dbdb900](https://github.com/PDMLab/docker-compose/commit/dbdb9008f25d237254312d79382e342d03f4c5bb))
+* fix mapping ipv6-based port mappings ([8aa8465](https://github.com/PDMLab/docker-compose/commit/8aa846553c2d045f610392bf38569fb3579b9aa6))
+* fix mapping ipv6-based port mappings ([21b63cb](https://github.com/PDMLab/docker-compose/commit/21b63cbc53635ee8532c388e57f4552f1b3ae6e3))
+* fix mapping ipv6-based port mappings ([48c9f08](https://github.com/PDMLab/docker-compose/commit/48c9f0841af2bbcb8ec666a38eee3ab8236304d0))
+* fix mapping ipv6-based port mappings ([e7013df](https://github.com/PDMLab/docker-compose/commit/e7013dfab10e4e369ee076b465c40a5bcb50802b))
+* ignore vuepress cache + temp files on release ([#148](https://github.com/PDMLab/docker-compose/issues/148)) ([e58387d](https://github.com/PDMLab/docker-compose/commit/e58387d82e4586f7a8156446f12c999c9a6f9f42))
+* now lints correctly ([74b4d6e](https://github.com/PDMLab/docker-compose/commit/74b4d6ea22d7e1b9ebbbbe9874e5314b7adfa31a))
+* ps --services trim on undefined ([#201](https://github.com/PDMLab/docker-compose/issues/201)) ([5df547e](https://github.com/PDMLab/docker-compose/commit/5df547e0af97bc6ba2ac96aab26eb5bf4b60e2b8))
+* Remove unnecessary console.log in v2 api ([#241](https://github.com/PDMLab/docker-compose/issues/241)) ([75ab935](https://github.com/PDMLab/docker-compose/commit/75ab935dcdf5c32cf44643d4d74ba6b30620a31a))
+* **#178:** fix quiet trim issue, add tests ([#197](https://github.com/PDMLab/docker-compose/issues/197)) ([2016bc7](https://github.com/PDMLab/docker-compose/commit/2016bc75db9996155d61f3d7f93c98c5fb960df1))
+* **test:** fix broken tests ([afb2b11](https://github.com/PDMLab/docker-compose/commit/afb2b1116b12c4800563e85adb15ebd39e030516))
+* reset jest set timeout to original value ([c4ed7ed](https://github.com/PDMLab/docker-compose/commit/c4ed7ed2de9c4c161518ab1d1fc50877df4c7fa2))
+* update flags incompatible with detached mode ([c808fa2](https://github.com/PDMLab/docker-compose/commit/c808fa2b90b2fd5db239685d101ccaa554ad98cf))
+
 ### [0.24.5](https://github.com/PDMLab/docker-compose/compare/v0.24.4...v0.24.5) (2024-02-19)
 
 ### [0.24.4](https://github.com/PDMLab/docker-compose/compare/v0.24.3...v0.24.4) (2024-02-19)
