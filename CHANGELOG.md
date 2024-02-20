@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### Bug Fixes
+
+* Adds `down()` as alias for `downAll()` to support compatbility with existing packages which use this project
+
 ### [0.24.5](https://github.com/PDMLab/docker-compose/compare/v0.24.4...v0.24.5) (2024-02-19)
 
 ### [0.24.4](https://github.com/PDMLab/docker-compose/compare/v0.24.3...v0.24.4) (2024-02-19)

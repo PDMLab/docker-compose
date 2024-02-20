@@ -319,6 +319,8 @@ export const downAll = function (
   return execCompose('down', [], options)
 }
 
+export const down = downAll
+
 export const downMany = function (
   services: string[],
   options?: IDockerComposeOptions
@@ -590,6 +592,7 @@ export default {
   upAll,
   upMany,
   upOne,
+  down,
   downAll,
   downOne,
   downMany,
