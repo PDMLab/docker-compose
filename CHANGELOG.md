@@ -2,10 +2,6 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### 0.24.6 (2024-02-20)
-
-- add `down()` as alias for the `downAll()` method for compatibility reasons to other packages
-
 ### Features
 
 - add ability to pass --abort-on-container-exit flag to up methods ([e85af8c](https://github.com/PDMLab/docker-compose/commit/e85af8c092a54a3fb48519bb39956324bbef4fc2))
@@ -27,6 +23,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Bug Fixes
 
+- add `down()` as alias for the `downAll()` method for compatibility reasons to other packages
 - **ci:** shadow ci command using yarn ([bf0d1b6](https://github.com/PDMLab/docker-compose/commit/bf0d1b6a7ebc80b0ac158bbffc277b3c118545df))
 - add stopMany to default exports ([ff914e9](https://github.com/PDMLab/docker-compose/commit/ff914e910cb963b8fa7f283a1f51cb66fae0f52b))
 - filter empty entries from `config --services` command ([ed91eba](https://github.com/PDMLab/docker-compose/commit/ed91eba770d3a32d82dda4e927d31ed4b6d01db4))
