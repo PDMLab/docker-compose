@@ -701,7 +701,7 @@ test('removes container', async (): Promise<void> => {
 test('returns version information', async (): Promise<void> => {
   const version = (await compose.version()).data.version
 
-  expect(version).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)$/)
+  expect(version).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)?(\+.*)*(-\w+(\.\d+))?$/)
 })
 
 test('parse ps output', () => {

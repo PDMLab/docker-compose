@@ -3,7 +3,7 @@ import Docker, { ContainerInfo } from 'dockerode'
 import * as compose from '../../src/v2'
 import * as path from 'path'
 import { readFile } from 'fs'
-import { mapPsOutput } from '../../src/v2'
+import { mapPsOutput, mapImListOutput } from '../../src/v2'
 const docker = new Docker()
 
 const isContainerRunning = async (name: string): Promise<boolean> =>
@@ -774,6 +774,66 @@ describe('when calling ps command', (): void => {
   }, 15000)
 })
 
+describe('when calling image list command', (): void => {
+  it('image list shows image data', async (): Promise<void> => {
+    await compose.createAll({ cwd: path.join(__dirname), log: logOutput })
+
+    const std = await compose.images({
+      cwd: path.join(__dirname),
+      log: logOutput
+    })
+    console.log(std.out)
+
+    expect(std.err).toBeFalsy()
+    expect(std.data.services.length).toBe(3)
+    const web = std.data.services.find(
+      (service) => service.container === 'compose_test_web'
+    )
+    expect(web).toBeDefined()
+    expect(web?.repository).toBe('nginx')
+    expect(web?.tag).toBe('1.16.0')
+    expect(web?.id).toBeTruthy()
+    expect(web?.id).toMatch(/^\w{12}$/)
+
+    const hello = std.data.services.find(
+      (service) => service.container === 'compose_test_hello'
+    )
+    expect(hello).toBeDefined()
+    expect(hello?.repository).toBe('hello-world')
+    expect(hello?.tag).toBe('latest')
+    expect(hello?.id).toMatch(/^\w{12}$/)
+  })
+
+  it('image list shows image data using json format', async (): Promise<void> => {
+    await compose.createAll({ cwd: path.join(__dirname), log: logOutput })
+
+    const std = await compose.images({
+      cwd: path.join(__dirname),
+      log: logOutput,
+      commandOptions: [['--format', 'json']]
+    })
+
+    expect(std.err).toBeFalsy()
+    expect(std.data.services.length).toBe(3)
+
+    const web = std.data.services.find(
+      (service) => service.container === 'compose_test_web'
+    )
+    expect(web).toBeDefined()
+    expect(web?.repository).toBe('nginx')
+    expect(web?.tag).toBe('1.16.0')
+    expect(web?.id).toMatch(/^\w{12}$/)
+
+    const hello = std.data.services.find(
+      (service) => service.container === 'compose_test_hello'
+    )
+    expect(hello).toBeDefined()
+    expect(hello?.repository).toBe('hello-world')
+    expect(hello?.tag).toBe('latest')
+    expect(hello?.id).toMatch(/^\w{12}$/)
+  })
+})
+
 describe('when restarting all containers', (): void => {
   it('all containers restart', async (): Promise<void> => {
     await compose.upAll({ cwd: path.join(__dirname), log: logOutput })
@@ -866,7 +926,7 @@ describe('version command', (): void => {
   it('returns version information', async (): Promise<void> => {
     const version = (await compose.version()).data.version
 
-    expect(version).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)?(\+.*)*$/)
+    expect(version).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)?(\+.*)*(-\w+(\.\d+))?$/)
   })
 })
 
@@ -961,6 +1021,69 @@ hello
     expect(psOut.services[2]).toEqual(
       expect.objectContaining({
         name: 'hello'
+      })
+    )
+  })
+})
+
+describe('parseImListOutput', (): void => {
+  it('parses image list output', () => {
+    // eslint-disable-next-line no-useless-escape
+    const output =
+      'CONTAINER            REPOSITORY          TAG                 IMAGE ID            SIZE\ncompose_test_hello   hello-world         latest              d2c94e258dcb        13.3kB\ncompose_test_proxy   nginx               1.19.9-alpine       72ab4137bd85        22.6MB\ncompose_test_web     nginx               1.16.0              ae893c58d83f        109MB\n'
+
+    const psOut = mapImListOutput(output)
+
+    // prettier-ignore
+    expect(psOut.services[0]).toEqual({
+      container: 'compose_test_hello',
+      repository: 'hello-world',
+      tag: 'latest',
+      id: 'd2c94e258dcb'
+    })
+
+    // prettier-ignore
+    expect(psOut.services[1]).toEqual({
+      container: 'compose_test_proxy',
+      repository: 'nginx',
+      tag: '1.19.9-alpine',
+      id: '72ab4137bd85'
+    })
+
+    expect(psOut.services[2]).toEqual({
+      container: 'compose_test_web',
+      repository: 'nginx',
+      tag: '1.16.0',
+      id: 'ae893c58d83f'
+    })
+  })
+})
+
+describe('image list command in quiet mode', (): void => {
+  it('image list returns container ids when quiet', () => {
+    const output =
+      '72ab4137bd85aae7970407cbf4ba98ec0a7cb9d302e93a38bb665ba5fddf6f5d\nae893c58d83fe2bd391fbec97f5576c9a34fea55b4ee9daf15feb9620b14b226\nd2c94e258dcb3c5ac2798d32e1249e42ef01cba4841c2234249495f87264ac5a\n'
+
+    const psOut = mapImListOutput(output, { commandOptions: ['-q'] })
+
+    expect(psOut.services[0]).toEqual(
+      expect.objectContaining({
+        container:
+          '72ab4137bd85aae7970407cbf4ba98ec0a7cb9d302e93a38bb665ba5fddf6f5d'
+      })
+    )
+
+    expect(psOut.services[1]).toEqual(
+      expect.objectContaining({
+        container:
+          'ae893c58d83fe2bd391fbec97f5576c9a34fea55b4ee9daf15feb9620b14b226'
+      })
+    )
+
+    expect(psOut.services[2]).toEqual(
+      expect.objectContaining({
+        container:
+          'd2c94e258dcb3c5ac2798d32e1249e42ef01cba4841c2234249495f87264ac5a'
       })
     )
   })
