@@ -16,9 +16,13 @@ This page demonstrates the usage of `docker-compose` for Node.js.
 * `config(options)` - Validates configuration files and returns configuration yaml
 * `configServices(options)` - Returns list of services defined in configuration files
 * `configVolumes(options)` - Returns list of volumes defined in configuration files
+* `createAll(options)` - Create or recreate services
+* `createMany(services, options)` - Create or recreate services
+* `createOne(service, options)` - Create or recreate service
 * `down(options)` - Stops containers and removes containers, networks, volumes, and images created by `up`
 * `exec(container, command, options)` - Exec `command` inside `container` - uses `-T` to properly handle stdin & stdout
 * `kill(options)` - Force stop service containers
+* `images(options)` - Show all created images
 * `logs(services, options)` - Show logs of service(s) - use `options.follow` `true|false` to turn on `--follow` flag
 * `pauseOne(service, options)` - Pause the specified service
 * `port(service, containerPort, options)` - Returns the public port of the given service and internal port.
