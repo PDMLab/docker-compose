@@ -496,6 +496,26 @@ export const buildOne = function (
   return execCompose('build', [service], options)
 }
 
+export const createAll = function (
+  options: IDockerComposeOptions = {}
+): Promise<IDockerComposeResult> {
+  return execCompose('create', [], options)
+}
+
+export const createMany = function (
+  services: string[],
+  options: IDockerComposeOptions = {}
+): Promise<IDockerComposeResult> {
+  return execCompose('create', services, options)
+}
+
+export const createOne = function (
+  service: string,
+  options?: IDockerComposeOptions
+): Promise<IDockerComposeResult> {
+  return execCompose('create', [service], options)
+}
+
 export const pullAll = function (
   options: IDockerComposeOptions = {}
 ): Promise<IDockerComposeResult> {

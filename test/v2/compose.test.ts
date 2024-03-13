@@ -776,7 +776,7 @@ describe('when calling ps command', (): void => {
 
 describe('when calling image list command', (): void => {
   it('image list shows image data', async (): Promise<void> => {
-    await compose.buildAll({ cwd: path.join(__dirname), log: logOutput })
+    await compose.createAll({ cwd: path.join(__dirname), log: logOutput })
 
     const std = await compose.image.list({
       cwd: path.join(__dirname),
@@ -805,7 +805,7 @@ describe('when calling image list command', (): void => {
   })
 
   it('image list shows image data using json format', async (): Promise<void> => {
-    await compose.buildAll({ cwd: path.join(__dirname), log: logOutput })
+    await compose.createAll({ cwd: path.join(__dirname), log: logOutput })
 
     const std = await compose.image.list({
       cwd: path.join(__dirname),
