@@ -81,8 +81,19 @@ export type DockerComposePsResultService = {
   }>
 }
 
+export type DockerComposeImListResultService = {
+  container: string
+  repository: string
+  tag: string
+  id: string // 12 Byte id
+}
+
 export type DockerComposePsResult = {
   services: Array<DockerComposePsResultService>
+}
+
+export type DockerComposeImListResult = {
+  services: Array<DockerComposeImListResultService>
 }
 
 const arrayIncludesTuple = (
@@ -144,6 +155,63 @@ export const mapPsOutput = (
         state: stateFragment.trim(),
         ports: mapPorts(untypedPortsFragment.trim())
       }
+    })
+  return { services }
+}
+
+export const mapImListOutput = (
+  output: string,
+  options?: IDockerComposeOptions
+): DockerComposeImListResult => {
+  let isQuiet = false
+  let isJson = false
+  if (options?.commandOptions) {
+    isQuiet =
+      options.commandOptions.includes('-q') ||
+      options.commandOptions.includes('--quiet')
+
+    isJson = arrayIncludesTuple(options.commandOptions, ['--format', 'json'])
+  }
+
+  if (isJson) {
+    const data = JSON.parse(output)
+    const services = data.map((serviceLine) => {
+      let idFragment = serviceLine.ID
+      // trim json 64B id format "type:id" to 12B id
+      const idTypeIndex = idFragment.indexOf(':')
+      if (idTypeIndex > 0)
+        idFragment = idFragment.slice(idTypeIndex + 1, idTypeIndex + 13)
+
+      return {
+        container: serviceLine.ContainerName,
+        repository: serviceLine.Repository,
+        tag: serviceLine.Tag,
+        id: idFragment
+      }
+    })
+    return { services }
+  }
+
+  const services = output
+    .split(`\n`)
+    .filter(nonEmptyString)
+    .filter((_, index) => isQuiet || isJson || index >= 1)
+    .map((line) => {
+      // the line has the columns in the following order:
+      // CONTAINER   REPOSITORY   TAG   IMAGE ID   SIZE
+      const lineColumns = line.split(/\s{3,}/)
+
+      let containerFragment = lineColumns[0] || line
+      let repositoryFragment = lineColumns[1] || ''
+      let tagFragment = lineColumns[2] || ''
+      let idFragment = lineColumns[3] || ''
+
+      return {
+        container: containerFragment.trim(),
+        repository: repositoryFragment.trim(),
+        tag: tagFragment.trim(),
+        id: idFragment.trim()
+      } as DockerComposeImListResultService
     })
   return { services }
 }
@@ -505,6 +573,23 @@ export const ps = async function (
     }
   } catch (error) {
     return Promise.reject(error)
+  }
+}
+
+export const image = {
+  list: async function (
+    options?: IDockerComposeOptions
+  ): Promise<TypedDockerComposeResult<DockerComposeImListResult>> {
+    try {
+      const result = await execCompose('images', [], options)
+      const data = mapImListOutput(result.out, options)
+      return {
+        ...result,
+        data
+      }
+    } catch (error) {
+      return Promise.reject(error)
+    }
   }
 }
 
