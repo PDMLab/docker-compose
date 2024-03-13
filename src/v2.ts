@@ -201,10 +201,10 @@ export const mapImListOutput = (
       // CONTAINER   REPOSITORY   TAG   IMAGE ID   SIZE
       const lineColumns = line.split(/\s{3,}/)
 
-      let containerFragment = lineColumns[0] || line
-      let repositoryFragment = lineColumns[1] || ''
-      let tagFragment = lineColumns[2] || ''
-      let idFragment = lineColumns[3] || ''
+      const containerFragment = lineColumns[0] || line
+      const repositoryFragment = lineColumns[1] || ''
+      const tagFragment = lineColumns[2] || ''
+      const idFragment = lineColumns[3] || ''
 
       return {
         container: containerFragment.trim(),
