@@ -74,7 +74,7 @@ To get process progress
 compose.upAll({
    cwd: path.join(__dirname),
    callback: (chunk: Buffer) => {
-     console.log('job in progres: ', chunk.ToString())
+     console.log('job in progres: ', chunk.toString())
       }
    })
   .then(
