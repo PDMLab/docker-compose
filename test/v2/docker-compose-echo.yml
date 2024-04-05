@@ -1,0 +1,8 @@
+version: '2'
+
+services:
+  echo:
+    image: bash:devel-alpine3.19@sha256:cf3e4f54a774e9a896512766aa94934f9898444fa50827370767d461e6e7a41b
+    container_name: compose_test_web_2_hello_world
+    command: bash -c 'for i in {1..10}; do sleep 0.5 && echo "hello from a container tst msg"; done'
+

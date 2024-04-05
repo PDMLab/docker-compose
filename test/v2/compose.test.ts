@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, vi, beforeAll } from 'vitest'
 import Docker, { ContainerInfo } from 'dockerode'
 import * as compose from '../../src/v2'
 import * as path from 'path'
@@ -1099,5 +1099,82 @@ describe('passed callback fn', (): void => {
     await compose.upAll(config)
     expect(config.callback).toBeCalled()
     await compose.downAll(config)
+  })
+})
+
+describe('when upAll is called', () => {
+  // relying on bash echo to know when a container is up and has its stdout forwarded to this process (aka, not --detach)
+  const ECHO_MSG = 'hello from a container tst msg'
+  const options2test = [
+    ['--attach', 'echo', true],
+    ['--exit-code-from', 'echo', true],
+    ['--abort-on-container-exit', 'echo', true],
+    ['--wait', 'echo', false]
+  ]
+
+  beforeAll(async () => {
+    await compose.downAll({
+      cwd: path.join(__dirname),
+      log: logOutput,
+      config: 'docker-compose-echo.yml'
+    })
+  })
+
+  afterEach(async () => {
+    await compose.kill({
+      cwd: path.join(__dirname),
+      log: logOutput,
+      config: 'docker-compose-echo.yml'
+    })
+  })
+
+  options2test.forEach((optPair) => {
+    it(`with ${optPair[0]}, a container gets started ${
+      optPair[2] ? 'not' : ''
+    } in the detached mode`, () => {
+      return new Promise((resolve, reject) => {
+        let doneFlag = false
+        compose
+          .upAll({
+            cwd: path.join(__dirname),
+            log: logOutput,
+            config: 'docker-compose-echo.yml',
+            commandOptions: [[optPair[0], optPair[1]]],
+            callback: (chunk, streamType) => {
+              if (
+                streamType === 'stdout' &&
+                !doneFlag &&
+                chunk.toString().includes('|') // else these are set-up messages, not echos from a container
+              ) {
+                doneFlag = true
+                expect(chunk.toString().includes(ECHO_MSG)).toBe(optPair[2])
+                optPair[2]
+                  ? resolve('all ok')
+                  : reject(
+                      `Container was run ${
+                        optPair[2] ? '' : 'not'
+                      } in the detached mode.`
+                    )
+              }
+            }
+          })
+          .then(() => {
+            optPair[2]
+              ? reject(
+                  `Container was run ${
+                    optPair[2] ? 'not' : ''
+                  } in the detached mode.`
+                )
+              : resolve('all ok')
+          })
+          .catch((e) => {
+            if (e.exitCode === 137) {
+              // swallowing this reject -- so it doesn't complain about being SIGKILLed
+              return
+            }
+            throw e // else re-throwing
+          })
+      })
+    })
   })
 })
