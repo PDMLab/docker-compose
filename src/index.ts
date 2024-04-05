@@ -246,13 +246,16 @@ const shouldUseDefaultNonInteractiveFlag = function (
   options: IDockerComposeOptions = {}
 ): boolean {
   const commandOptions = options.commandOptions || []
+  const noDetachModeFlags = [
+    '--abort-on-container-exit',
+    '--no-start',
+    '--attach',
+    '--attach-dependencies',
+    '--exit-code-from'
+  ]
   const containsOtherNonInteractiveFlag = commandOptions.reduce(
     (memo: boolean, item: string | string[]) => {
-      return (
-        memo &&
-        !item.includes('--abort-on-container-exit') &&
-        !item.includes('--no-start')
-      )
+      return memo && noDetachModeFlags.every((flag) => !item.includes(flag))
     },
     true
   )
