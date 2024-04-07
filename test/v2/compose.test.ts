@@ -1,4 +1,12 @@
-import { describe, it, expect, beforeEach, afterEach, vi, beforeAll } from 'vitest'
+import {
+  describe,
+  it,
+  expect,
+  beforeEach,
+  afterEach,
+  vi,
+  beforeAll
+} from 'vitest'
 import Docker, { ContainerInfo } from 'dockerode'
 import * as compose from '../../src/v2'
 import * as path from 'path'
