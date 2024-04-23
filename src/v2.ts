@@ -462,7 +462,7 @@ export const exec = function (
 ): Promise<IDockerComposeResult> {
   const args = Array.isArray(command) ? command : command.split(/\s+/)
 
-  return execCompose('exec', ['-T', container].concat(args), options)
+  return execCompose('exec', [container].concat(args), options)
 }
 
 export const run = function (
@@ -472,7 +472,7 @@ export const run = function (
 ): Promise<IDockerComposeResult> {
   const args = Array.isArray(command) ? command : command.split(/\s+/)
 
-  return execCompose('run', ['-T', container].concat(args), options)
+  return execCompose('run', [container].concat(args), options)
 }
 
 export const buildAll = function (
