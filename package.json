@@ -2,6 +2,16 @@
   "name": "docker-compose",
   "version": "0.24.9-alpha.0",
   "main": "dist/index.js",
+  "exports": {
+    "index": {
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/esm/index.js"
+    },
+    "v2": {
+      "require": "./dist/cjs/v2/index.js",
+      "import": "./dist/esm/v2/index.js"
+    }
+  },
   "type": "module",
   "typings": "dist/index.d.ts",
   "types": "dist/index.d.ts",
