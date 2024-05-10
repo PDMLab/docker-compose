@@ -1,6 +1,6 @@
 {
   "name": "docker-compose",
-  "version": "0.24.9-alpha.1",
+  "version": "0.24.9-alpha.2",
   "main": "dist/index.js",
   "exports": {
     "index": {
