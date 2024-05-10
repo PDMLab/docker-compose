@@ -8,8 +8,8 @@
       "import": "./dist/esm/index.js"
     },
     "v2": {
-      "require": "./dist/cjs/v2/index.js",
-      "import": "./dist/esm/v2/index.js"
+      "require": "./dist/cjs/v2.js",
+      "import": "./dist/esm/v2.js"
     }
   },
   "type": "module",
