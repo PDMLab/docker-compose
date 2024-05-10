@@ -13,8 +13,6 @@
     }
   },
   "type": "module",
-  "typings": "dist/index.d.ts",
-  "types": "dist/index.d.ts",
   "scripts": {
     "ci": "yarn install --frozen-lockfile",
     "test-v1": "npx vitest --dir test/v1 --test-timeout=30000",
