@@ -1,26 +1,32 @@
 {
   "name": "docker-compose",
   "version": "0.24.9-alpha.4",
-  "main": "dist/index.js",
+  "module": "dist/esm/index.js",
+  "main": "dist/cjs/index.js",
+  "types": "dist/cjs/index.d.cts",
   "exports": {
-    "index": {
+    ".": {
+      "types": "./dist/cjs/index.d.cts",
       "require": "./dist/cjs/index.js",
-      "import": "./dist/esm/index.js"
+      "import": "./dist/esm/index.mjs"
     },
-    "v2": {
+    "./v2": {
+      "types": "./dist/cjs/v2.d.cts",
       "require": "./dist/cjs/v2.js",
-      "import": "./dist/esm/v2.js"
+      "import": "./dist/esm/v2.mjs"
     }
   },
-  "type": "module",
+  "files": [
+    "dist",
+    "src"
+  ],
   "scripts": {
     "ci": "yarn install --frozen-lockfile",
+    "test": "yarn test-v1 && yarn test-v2",
     "test-v1": "npx vitest --dir test/v1 --test-timeout=30000",
     "test-v2": "npx vitest --dir test/v2 --test-timeout=30000",
     "lint": "eslint src/**/*.ts test/**/*.ts",
-    "build": "npm run build:cjs && npm run build:esm",
-    "build:cjs": "tsc -p tsconfig.cjs.json",
-    "build:esm": "tsc -p tsconfig.esm.json",
+    "build": "tsup",
     "prepublishOnly": "tsc",
     "release": "yarn build && standard-version",
     "docs:dev": "vitepress dev docs",
@@ -110,6 +116,7 @@
     "eslint-watch": "^7.0.0",
     "husky": "^6.0.0",
     "prettier": "^2.2.1",
+    "tsup": "^8.0.2",
     "standard-version": "9.3.1",
     "typescript": "^4.9.5",
     "vitepress": "^1.0.0-alpha.76",

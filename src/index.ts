@@ -1,6 +1,6 @@
 import childProcess from 'child_process'
 import yaml from 'yaml'
-import mapPorts from './map-ports'
+import mapPorts from './map-ports.js'
 
 export interface IDockerComposeExecutableOptions {
   executablePath: string
@@ -161,8 +161,8 @@ const composeOptionsToArgs = (composeOptions): string[] => {
  * Executes docker-compose command with common options
  */
 export const execCompose = (
-  command,
-  args,
+  command: string,
+  args: string[] = [],
   options: IDockerComposeOptions = {}
 ): Promise<IDockerComposeResult> =>
   new Promise((resolve, reject): void => {
@@ -511,7 +511,7 @@ export const logs = function (
 
 export const port = async function (
   service: string,
-  containerPort: string | number,
+  containerPort: string,
   options?: IDockerComposeOptions
 ): Promise<TypedDockerComposeResult<DockerComposePortResult>> {
   const args = [service, containerPort]

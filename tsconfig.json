@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "lib": ["es2015", "dom"],
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": "./dist/esm",
+
+    /* Strict Type-Checking Options */
+    "strict": true,
+    "noImplicitAny": false,
+
+    /* Module Resolution Options */
+    "moduleResolution": "node",
+    "esModuleInterop": true
+  },
+  "include": ["src", "test"],
+  "exclude": ["node_modules", "dist"]
+}
