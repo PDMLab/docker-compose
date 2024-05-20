@@ -46,7 +46,7 @@ import { v2 as compose } from 'docker-compose'
 You can also import only the required commands:
 
 ```ts
-import { run, upAll } from 'docker-compose/dist/v2'
+import { run, upAll } from 'docker-compose/v2'
 ```
 
 ### Usage

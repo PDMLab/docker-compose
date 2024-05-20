@@ -136,7 +136,10 @@ describe('when downMany is called', () => {
   it('only specified container(s) should stop', async () => {
     await compose.downAll({ cwd: path.join(__dirname), log: logOutput })
     await compose.upAll({ cwd: path.join(__dirname), log: logOutput })
-    await compose.downMany('web', { cwd: path.join(__dirname), log: logOutput })
+    await compose.downMany(['web'], {
+      cwd: path.join(__dirname),
+      log: logOutput
+    })
 
     expect(await isContainerRunning('/compose_test_web')).toBeFalsy()
     expect(await isContainerRunning('/compose_test_proxy')).toBeTruthy()
@@ -165,8 +168,10 @@ describe('when running a compose command', () => {
       await compose.logs('non_existent_service', {
         cwd: path.join(__dirname)
       })
-    } catch (error: any) {
-      failedResult = error.exitCode
+    } catch (error) {
+      if (error && typeof error === 'object' && 'exitCode' in error) {
+        failedResult = Number(error.exitCode)
+      }
     }
     expect(failedResult).toBe(1)
 
@@ -357,8 +362,10 @@ describe('when pausing and resuming a single container', () => {
     let errMsg
     try {
       await compose.exec('proxy', 'cat /etc/os-release', opts)
-    } catch (err: any) {
-      errMsg = err.err
+    } catch (error) {
+      if (error && typeof error === 'object' && 'err' in error) {
+        errMsg = String(error.err)
+      }
     }
     expect(errMsg).toContain('is paused')
     await compose.unpauseOne('proxy', opts)
@@ -539,7 +546,7 @@ describe('when using build config as string', (): void => {
     }
 
     await compose.upAll(config)
-    const result = await compose.port('web', 8888, config)
+    const result = await compose.port('web', '8888', config)
 
     expect(result.data.address).toBe('0.0.0.0')
     expect(result.data.port).toBe(8888)
@@ -716,7 +723,7 @@ describe('when calling ps command', (): void => {
 
     const std = await compose.ps({ cwd: path.join(__dirname), log: logOutput })
 
-    const running = await getRunningContainers()
+    await getRunningContainers()
 
     expect(std.err).toBeFalsy()
     expect(std.data.services.length).toBe(2)
@@ -743,7 +750,7 @@ describe('when calling ps command', (): void => {
       commandOptions: [['--format', 'json']]
     })
 
-    const running = await getRunningContainers()
+    await getRunningContainers()
 
     expect(std.err).toBeFalsy()
     expect(std.data.services.length).toBe(2)
@@ -901,7 +908,7 @@ describe('port command', (): void => {
     }
 
     await compose.upAll(config)
-    const port = await compose.port('web', 8888, config)
+    const port = await compose.port('web', '8888', config)
 
     expect(port.out).toMatch(/.*:[0-9]{1,5}/)
     await compose.downAll(config)
@@ -1114,10 +1121,10 @@ describe('when upAll is called', () => {
   // relying on bash echo to know when a container is up and has its stdout forwarded to this process (aka, not --detach)
   const ECHO_MSG = 'hello from a container tst msg'
   const options2test = [
-    ['--attach', 'echo', true],
-    ['--exit-code-from', 'echo', true],
-    ['--abort-on-container-exit', 'echo', true],
-    ['--wait', 'echo', false]
+    ['--attach', 'echo', 'true'],
+    ['--exit-code-from', 'echo', 'true'],
+    ['--abort-on-container-exit', 'echo', 'true'],
+    ['--wait', 'echo', 'false']
   ]
 
   beforeAll(async () => {
@@ -1155,7 +1162,9 @@ describe('when upAll is called', () => {
                 chunk.toString().includes('|') // else these are set-up messages, not echos from a container
               ) {
                 doneFlag = true
-                expect(chunk.toString().includes(ECHO_MSG)).toBe(optPair[2])
+                expect(chunk.toString().includes(ECHO_MSG)).toBe(
+                  Boolean(optPair[2])
+                )
                 optPair[2]
                   ? resolve('all ok')
                   : reject(

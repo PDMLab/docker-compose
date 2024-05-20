@@ -86,7 +86,9 @@ test('ensure exit code is returned correctly', async (): Promise<void> => {
       cwd: path.join(__dirname)
     })
   } catch (error) {
-    failedResult = error.exitCode
+    if (error && typeof error === 'object' && 'exitCode' in error) {
+      failedResult = Number(error.exitCode)
+    }
   }
   expect(failedResult).toBe(1)
 
@@ -250,8 +252,10 @@ test('ensure only single container gets paused then resumed', async (): Promise<
   let errMsg
   try {
     await compose.exec('proxy', 'cat /etc/os-release', opts)
-  } catch (err) {
-    errMsg = err.err
+  } catch (error) {
+    if (error && typeof error === 'object' && 'err' in error) {
+      errMsg = String(error.err)
+    }
   }
   expect(errMsg).toContain('is paused')
   await compose.unpauseOne('proxy', opts)
@@ -410,7 +414,7 @@ test('build accepts config as string', async (): Promise<void> => {
   }
 
   await compose.upAll(config)
-  const result = await compose.port('web', 8888, config)
+  const result = await compose.port('web', '8888', config)
 
   expect(result.data.address).toBe('0.0.0.0')
   expect(result.data.port).toBe(8888)
@@ -672,7 +676,7 @@ test('returns the port for a started service', async (): Promise<void> => {
   }
 
   await compose.upAll(config)
-  const port = await compose.port('web', 8888, config)
+  const port = await compose.port('web', '8888', config)
 
   expect(port.out).toMatch(/.*:[0-9]{1,5}/)
   await compose.down(config)
