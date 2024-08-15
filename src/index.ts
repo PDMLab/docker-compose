@@ -1,6 +1,6 @@
 import childProcess from 'child_process'
 import yaml from 'yaml'
-import mapPorts from './v2-map-ports'
+import mapPorts from './map-ports'
 
 export interface IDockerComposeExecutableOptions {
   executablePath: string
