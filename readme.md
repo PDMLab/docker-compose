@@ -7,7 +7,7 @@
 
 `docker-compose` is a small library that allows you to run [docker-compose](https://docs.docker.com/compose/) (which is still required) via Node.js. This is useful to bootstrap test environments.
 
-This library supports `docker-compose` (v1 standalone) and as of this version `docker compose` (v2, the docker "compose" plugin).
+As of version 1.0, this library only supports `docker compose` (v2, the docker "compose" plugin). The `docker-compose` (v1) has been removed from recent releases of Docker Desktop and is no longer supported. Use the `0.x` versions of this library if you still need to use the old `docker-compose` (v1). 
 
 ## Installation
 
@@ -21,9 +21,7 @@ The documentation can be found [here](https://pdmlab.github.io/docker-compose/).
 
 ## Example
 
-### Import for `docker-compose` (v1)
-
-To import commands for the v1 version, please use this import statement:
+### Import for `docker-compose`
 
 ```ts
 import * as compose from 'docker-compose'
@@ -33,20 +31,6 @@ You can also import only the required commands:
 
 ```ts
 import { run, upAll } from 'docker-compose'
-```
-
-### Import for `docker compose` (v2)
-
-To import commands for the v2 version, please use this import statement:
-
-```ts
-import { v2 as compose } from 'docker-compose'
-```
-
-You can also import only the required commands:
-
-```ts
-import { run, upAll } from 'docker-compose/dist/v2'
 ```
 
 ### Usage
@@ -94,7 +78,7 @@ result.data.services.forEach((service) => {
 })
 ```
 
-The docker-compose v2 version also support the `--format json` command option to get a better state support:
+The `--format json` command option can be used to get a better state support:
 
 ```javascript
 const result = await compose.ps({ cwd: path.join(__dirname), commandOptions: [["--format", "json"]] })
@@ -104,9 +88,9 @@ result.data.services.forEach((service) => {
 })
 ```
 
-## Known issues with v2 support
+## Known issues
 
-* During testing we noticed that `docker compose` seems to send it's exit code also commands don't seem to have finished. This doesn't occur for all commands, but for example with `stop` or `down`. We had the option to wait for stopped / removed containers using third party libraries but this would make bootstrapping `docker-compose` much more complicated for the users. So we decided to use a `setTimeout(500)` workaround. We're aware this is not perfect but it seems to be the most appropriate solution for now. Details can be found in the [v2 PR discussion](https://github.com/PDMLab/docker-compose/pull/228#issuecomment-1422895821) (we're happy to get help here).
+* During testing we noticed that `docker compose` seems to send its exit code also commands don't seem to have finished. This doesn't occur for all commands, but for example with `stop` or `down`. We had the option to wait for stopped / removed containers using third party libraries but this would make bootstrapping `docker-compose` much more complicated for the users. So we decided to use a `setTimeout(500)` workaround. We're aware this is not perfect, but it seems to be the most appropriate solution for now. Details can be found in the [v2 PR discussion](https://github.com/PDMLab/docker-compose/pull/228#issuecomment-1422895821) (we're happy to get help here).
 
 ## Running the tests
 
