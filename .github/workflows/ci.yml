@@ -16,7 +16,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '18'
-      - run: docker-compose --version
       - run: docker compose version
       - run: node --version
   lint:
