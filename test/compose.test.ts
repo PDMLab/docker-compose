@@ -8,10 +8,10 @@ import {
   beforeAll
 } from 'vitest'
 import Docker, { ContainerInfo } from 'dockerode'
-import * as compose from '../../src/v2'
+import * as compose from '../src'
 import * as path from 'path'
 import { readFile } from 'fs'
-import { mapPsOutput, mapImListOutput } from '../../src/v2'
+import { mapPsOutput, mapImListOutput } from '../src'
 const docker = new Docker()
 
 const isContainerRunning = async (name: string): Promise<boolean> =>
