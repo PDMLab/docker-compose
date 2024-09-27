@@ -16,7 +16,6 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '18'
-      - run: docker-compose --version
       - run: docker compose version
       - run: node --version
   lint:
@@ -39,5 +38,4 @@ jobs:
           node-version: '18'
       - run: yarn
       - run: yarn build
-      - run: yarn test-v1
       - run: yarn test-v2
