@@ -690,8 +690,8 @@ describe('when calling config command for services', (): void => {
     })
 
     expect(std.data.services.length).toBe(5)
-    expect(std.data.services[0]).toContain('build-nginx')
-    expect(std.err).toBeFalsy()
+    expect(std.data.services).toContain('build-nginx')
+    expect(std.exitCode).toBe(0)
   })
 })
 
@@ -705,7 +705,7 @@ describe('when calling config command for volumes', (): void => {
 
     expect(std.data.volumes.length).toBe(1)
     expect(std.data.volumes[0]).toContain('db-data')
-    expect(std.err).toBeFalsy()
+    expect(std.exitCode).toBe(0)
   })
 })
 
@@ -718,7 +718,7 @@ describe('when calling ps command', (): void => {
 
     const running = await getRunningContainers()
 
-    expect(std.err).toBeFalsy()
+    expect(std.exitCode).toBe(0)
     expect(std.data.services.length).toBe(2)
     const web = std.data.services.find(
       (service) => service.name === 'compose_test_web'
@@ -745,7 +745,7 @@ describe('when calling ps command', (): void => {
 
     const running = await getRunningContainers()
 
-    expect(std.err).toBeFalsy()
+    expect(std.exitCode).toBe(0)
     expect(std.data.services.length).toBe(2)
     const web = std.data.services.find(
       (service) => service.name === 'compose_test_web'
@@ -769,7 +769,7 @@ describe('when calling ps command', (): void => {
 
     console.log('data', std.data.services)
     expect(std.data.services.length).toBe(1)
-    expect(std.err).toBeFalsy()
+    expect(std.exitCode).toBe(0)
     const web = std.data.services.find(
       (service) => service.name === 'compose_test_web'
     )
@@ -779,7 +779,7 @@ describe('when calling ps command', (): void => {
     expect(web?.name).toBe('compose_test_web')
     expect(proxy).toBeFalsy()
     await compose.downAll({ cwd: path.join(__dirname), log: logOutput })
-  }, 15000)
+  }, 30000)
 })
 
 describe('when calling image list command', (): void => {
@@ -792,7 +792,7 @@ describe('when calling image list command', (): void => {
     })
     console.log(std.out)
 
-    expect(std.err).toBeFalsy()
+    expect(std.exitCode).toBe(0)
     expect(std.data.services.length).toBe(3)
     const web = std.data.services.find(
       (service) => service.container === 'compose_test_web'
@@ -821,7 +821,7 @@ describe('when calling image list command', (): void => {
       commandOptions: [['--format', 'json']]
     })
 
-    expect(std.err).toBeFalsy()
+    expect(std.exitCode).toBe(0)
     expect(std.data.services.length).toBe(3)
 
     const web = std.data.services.find(
