@@ -15,8 +15,6 @@ hero:
       link: /api
 
 features:
-  - title: docker-compose (v1) standalone support
-    details: supports existing environments
   - title: docker compose plugin (v2) support
     details: ready for the latest docker compose version
 ---
