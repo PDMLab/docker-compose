@@ -10,9 +10,9 @@
 npm install --save-dev docker-compose
 ```
 
-### Import for `docker-compose` (v1)
+### Import for `docker-compose`
 
-To import commands for the v1 version, please use this import statement:
+To import commands, please use this import statement:
 
 ```ts
 import * as compose from 'docker-compose'
@@ -22,20 +22,6 @@ You can also import only the required commands:
 
 ```ts
 import { run, upAll } from 'docker-compose'
-```
-
-### Import for `docker compose` (v2)
-
-To import commands for the v2 version, please use this import statement:
-
-```ts
-import { v2 as compose } from 'docker-compose'
-```
-
-You can also import only the required commands:
-
-```ts
-import { run, upAll } from 'docker-compose/dist/v2'
 ```
 
 ### Known issues with v2 support
