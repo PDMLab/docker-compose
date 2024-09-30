@@ -43,6 +43,7 @@ This page demonstrates the usage of `docker-compose` for Node.js.
 * `upMany(services, options)` - Builds, (re)creates, starts, and attaches to containers for the services specified in `services` - always uses the `-d` flag due to non interactive mode
 * `upOne(service, options)` - Builds, (re)creates, starts, and attaches to containers for a service specified in `service` - always uses the `-d` flag due to non interactive mode
 * `version(options)` - Show `docker-compose` version strings
+* `stats(service)` - Show service container stats
 
 All commands return a `Promise({object})` with stdout and stderr strings and an exit code:
 
