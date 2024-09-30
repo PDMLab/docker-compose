@@ -28,6 +28,18 @@ export type DockerComposeVersionResult = {
   version: string
 }
 
+export type DockerComposeStatsResult = {
+  BlockIO: string
+  CPUPerc: string
+  Container: string
+  ID: string
+  MemPerc: string
+  MemUsage: string
+  Name: string
+  NetIO: string
+  PIDs: string
+}
+
 export type DockerComposeConfigResult = {
   config: {
     version: Record<string, string>
@@ -694,6 +706,21 @@ export const version = async function (
   }
 }
 
+export const stats = async function (
+  service: string
+): Promise<DockerComposeStatsResult> {
+  const args = ['--no-stream', '--format', '"{{ json . }}"', service]
+
+  try {
+    const result = await execCompose('stats', args)
+    // Remove first and last quote from output, as well as newline.
+    const output = result.out.replace('\n', '').trim().slice(1, -1)
+    return JSON.parse(output)
+  } catch (error) {
+    return Promise.reject(error)
+  }
+}
+
 export default {
   upAll,
   upMany,
@@ -727,5 +754,6 @@ export default {
   restartOne,
   logs,
   port,
-  version
+  version,
+  stats
 }
