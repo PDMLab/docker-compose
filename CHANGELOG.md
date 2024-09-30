@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/PDMLab/docker-compose/compare/v1.0.0...v1.1.0) (2024-09-30)
+
+
+### Features
+
+* Add service `stats` support ([7ec994c](https://github.com/PDMLab/docker-compose/commit/7ec994c03acba893236b8f903e7b6d35950db376))
+
 ## [1.0.0](https://github.com/PDMLab/docker-compose/compare/v0.24.8...v1.0.0) (2024-09-27)
 
 ### [0.24.8](https://github.com/PDMLab/docker-compose/compare/v0.24.7...v0.24.8) (2024-04-07)
