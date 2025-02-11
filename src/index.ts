@@ -707,12 +707,13 @@ export const version = async function (
 }
 
 export const stats = async function (
-  service: string
+  service: string,
+  options?: IDockerComposeOptions
 ): Promise<DockerComposeStatsResult> {
   const args = ['--no-stream', '--format', '"{{ json . }}"', service]
 
   try {
-    const result = await execCompose('stats', args)
+    const result = await execCompose('stats', args, options)
     // Remove first and last quote from output, as well as newline.
     const output = result.out.replace('\n', '').trim().slice(1, -1)
     return JSON.parse(output)
