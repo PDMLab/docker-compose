@@ -2,10 +2,17 @@ import childProcess from 'child_process'
 import yaml from 'yaml'
 import mapPorts from './map-ports'
 
-export interface IDockerComposeExecutableOptions {
-  executablePath: string
-  options?: string[] | (string | string[])[]
-}
+export type IDockerComposeExecutableOptions =
+  | {
+      executablePath: string
+      options?: string[] | (string | string[])[]
+      standalone?: never
+    }
+  | {
+      executablePath?: string
+      options?: never
+      standalone: true
+    }
 
 export interface IDockerComposeOptions {
   cwd?: string
@@ -290,14 +297,22 @@ export const execCompose = (
 
     const cwd = options.cwd
     const env = options.env || undefined
-    const executable = options.executable || { executablePath: 'docker' }
+    const executable = options.executable
 
-    const executableOptions = executable.options || []
-    const executableArgs = composeOptionsToArgs(executableOptions)
+    let executablePath: string
+    let executableArgs: string[] = []
+
+    if (executable?.standalone && !executable.executablePath) {
+      executablePath = 'docker-compose'
+    } else {
+      executablePath = executable?.executablePath || 'docker'
+      const executableOptions = executable?.options || []
+      executableArgs = [...composeOptionsToArgs(executableOptions), 'compose']
+    }
 
     const childProc = childProcess.spawn(
-      executable.executablePath,
-      [...executableArgs, 'compose', ...composeArgs],
+      executablePath,
+      [...executableArgs, ...composeArgs],
       {
         cwd,
         env

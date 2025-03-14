@@ -7,7 +7,7 @@
 
 `docker-compose` is a small library that allows you to run [docker-compose](https://docs.docker.com/compose/) (which is still required) via Node.js. This is useful to bootstrap test environments.
 
-As of version 1.0, this library only supports `docker compose` (v2, the docker "compose" plugin). The `docker-compose` (v1) has been removed from recent releases of Docker Desktop and is no longer supported. Use the `0.x` versions of this library if you still need to use the old `docker-compose` (v1). 
+As of version 1.0, this library supports `docker compose` (v2, the docker "compose" plugin) by default. The `docker-compose` (v1) has been removed from recent releases of Docker Desktop and is no longer supported. However, you can still force the use of `docker-compose` by using the [standanlone mode](#standalone-mode).
 
 ## Installation
 
@@ -85,6 +85,21 @@ const result = await compose.ps({ cwd: path.join(__dirname), commandOptions: [["
 result.data.services.forEach((service) => {
   console.log(service.name, service.command, service.state, service.ports)
   // state is one of the defined states: paused | restarting | removing | running | dead | created | exited
+})
+```
+
+### Standalone mode
+
+While the `docker-compose` executable is no longer part of a default docker installation, it is still possible to download its binary [standalone](https://docs.docker.com/compose/install/standalone/). This is useful for example when building docker images, avoiding the need to install the whole docker stack.
+
+To use a standalone binary, you can set the `executable.standalone` option to `true`. You can also set the `executablePath` option to the path of the `docker-compose` binary.
+
+```js
+compose.upAll({
+   executable: {
+      standalone: true,
+      executablePath: '/path/to/docker-compose' // optional
+   }
 })
 ```
 
