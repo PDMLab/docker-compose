@@ -65,6 +65,7 @@ export type DockerComposeConfigVolumesResult = {
 
 export interface IDockerComposeLogOptions extends IDockerComposeOptions {
   follow?: boolean
+  timestamps?: boolean
 }
 
 export interface IDockerComposeBuildOptions extends IDockerComposeOptions {
@@ -675,10 +676,13 @@ export const logs = function (
   services: string | string[],
   options: IDockerComposeLogOptions = {}
 ): Promise<IDockerComposeResult> {
-  let args = Array.isArray(services) ? services : [services]
+  const args = Array.isArray(services) ? services : [services]
 
   if (options.follow) {
-    args = ['--follow', ...args]
+    args.unshift('--follow')
+  }
+  if (options.timestamps) {
+    args.unshift('--timestamps')
   }
 
   return execCompose('logs', args, options)
