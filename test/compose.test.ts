@@ -899,7 +899,8 @@ describe('logs command', (): void => {
       timestamps: true
     })
 
-    expect(std.out.includes('compose_test_proxy')).toBeTruthy()
+    const currentDate = new Date().toISOString().slice(0, 10)
+    expect(std.out.includes(currentDate)).toBeTruthy()
     await compose.downAll({ cwd: path.join(__dirname), log: logOutput })
   })
 })
