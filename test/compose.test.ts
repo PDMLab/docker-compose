@@ -890,6 +890,18 @@ describe('logs command', (): void => {
     expect(std.out.includes('compose_test_proxy')).toBeTruthy()
     await compose.downAll({ cwd: path.join(__dirname), log: logOutput })
   })
+
+  it('does include timestamps', async (): Promise<void> => {
+    await compose.upAll({ cwd: path.join(__dirname), log: logOutput })
+    const std = await compose.logs('proxy', {
+      cwd: path.join(__dirname),
+      log: logOutput,
+      timestamps: true
+    })
+
+    expect(std.out.includes('compose_test_proxy')).toBeTruthy()
+    await compose.downAll({ cwd: path.join(__dirname), log: logOutput })
+  })
 })
 
 describe('port command', (): void => {
