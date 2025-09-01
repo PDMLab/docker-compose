@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/PDMLab/docker-compose/compare/v1.2.0...v1.3.0) (2025-09-01)
+
+
+### Features
+
+* add timestamps option to log output ([bb25ee5](https://github.com/PDMLab/docker-compose/commit/bb25ee5948b81526858e013bd37a58b36a5c3013))
+
 ## [1.2.0](https://github.com/PDMLab/docker-compose/compare/v1.1.1...v1.2.0) (2025-03-14)
 
 
