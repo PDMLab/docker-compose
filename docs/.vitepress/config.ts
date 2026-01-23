@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress'
+import { buildEndGenerateOpenGraphImages } from '@nolebase/vitepress-plugin-og-image/vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -52,5 +53,15 @@ export default defineConfig({
       { icon: 'github', link: 'https://github.com/pdmlab/docker-compose' },
       { icon: 'discord', link: 'https://discord.gg/pR6duvNHtV' }
     ]
+  },
+
+  async buildEnd(siteConfig) {
+    await buildEndGenerateOpenGraphImages({
+      baseUrl: 'https://pdmlab.github.io/docker-compose/',
+      category: {
+        byLevel: 2,
+        fallbackWithFrontmatter: true
+      }
+    })(siteConfig)
   }
 })
