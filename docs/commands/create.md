@@ -1,3 +1,7 @@
+---
+category: Commands
+---
+
 # create
 
 Create containers for services without starting them.

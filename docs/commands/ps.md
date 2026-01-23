@@ -1,3 +1,7 @@
+---
+category: Commands
+---
+
 # ps
 
 Lists containers for a Compose project, with current status and exposed ports.

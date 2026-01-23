@@ -1,3 +1,7 @@
+---
+category: Commands
+---
+
 # exec
 
 Execute a command in a running container.

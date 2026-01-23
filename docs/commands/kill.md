@@ -1,3 +1,7 @@
+---
+category: Commands
+---
+
 # kill
 
 Force stop service containers.

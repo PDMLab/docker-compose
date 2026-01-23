@@ -1,5 +1,6 @@
 ---
 outline: deep
+category: Reference
 ---
 
 # API Docs

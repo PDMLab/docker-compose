@@ -1,3 +1,7 @@
+---
+category: Commands
+---
+
 # pull
 
 Pull service images.

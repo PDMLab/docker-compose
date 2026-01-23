@@ -1,3 +1,7 @@
+---
+category: Commands
+---
+
 # logs
 
 View output from containers.

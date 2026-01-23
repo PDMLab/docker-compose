@@ -1,3 +1,7 @@
+---
+category: Commands
+---
+
 # run
 
 Run a one-off command on a service.

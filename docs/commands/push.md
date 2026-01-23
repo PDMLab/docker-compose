@@ -1,3 +1,7 @@
+---
+category: Commands
+---
+
 # push
 
 Push service images to their registries.

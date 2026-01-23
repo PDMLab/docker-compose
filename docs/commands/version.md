@@ -1,3 +1,7 @@
+---
+category: Commands
+---
+
 # version
 
 Show the Docker Compose version information.

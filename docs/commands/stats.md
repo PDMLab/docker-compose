@@ -1,3 +1,7 @@
+---
+category: Commands
+---
+
 # stats
 
 Display a live stream of container resource usage statistics.

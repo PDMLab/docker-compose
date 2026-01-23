@@ -1,3 +1,7 @@
+---
+category: Commands
+---
+
 # port
 
 Print the public port for a port binding.

@@ -1,3 +1,7 @@
+---
+category: Commands
+---
+
 # pause / unpause
 
 Pause and unpause services.
