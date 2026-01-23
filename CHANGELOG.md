@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.1](https://github.com/PDMLab/docker-compose/compare/v1.3.0...v1.3.1) (2026-01-23)
+
+
+### Bug Fixes
+
+* add platform field and use JSON format for images parsing ([6fb0d18](https://github.com/PDMLab/docker-compose/commit/6fb0d18ee80865444777770062a16a4892178482))
+
 ## [1.3.0](https://github.com/PDMLab/docker-compose/compare/v1.2.0...v1.3.0) (2025-09-01)
 
 
