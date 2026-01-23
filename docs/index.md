@@ -1,7 +1,18 @@
 ---
 category: Home
+title: docker-compose
 # https://vitepress.dev/reference/default-theme-home-page
 layout: home
+head:
+  - - meta
+    - property: og:image
+      content: https://pdmlab.github.io/docker-compose/og-home.png
+  - - meta
+    - property: og:image:width
+      content: '1200'
+  - - meta
+    - property: og:image:height
+      content: '630'
 
 hero:
   name: "docker-compose"

@@ -1,0 +1,22 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="1200" height="630" fill="#F5F5F5"/>
+<g clip-path="url(#clip0_0_1)">
+<rect width="1200" height="610" fill="white"/>
+<text fill="#35495E" fill-opacity="0.7" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="32" letter-spacing="0em"><tspan x="50" y="200.136">Home</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="64" letter-spacing="0em"><tspan x="50" y="279.772">docker-compose</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="64" letter-spacing="0em"><tspan x="50" y="356.772">Manage docker</tspan></text>
+<text fill="black" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="64" letter-spacing="0em"><tspan x="50" y="433.772">compose using Node.js</tspan></text>
+<text fill="#35495E" fill-opacity="0.5" xml:space="preserve" style="white-space: pre" font-family="Inter" font-size="26" letter-spacing="0em"><tspan x="50" y="557.518">docker-compose</tspan></text>
+<text fill="#35495E" fill-opacity="0.5" xml:space="preserve" style="white-space: pre; text-anchor: end;" font-family="Inter" font-size="26" letter-spacing="0em"><tspan x="920" y="557.518">Manage docker compose using Node.js</tspan></text>
+<rect y="610" width="1200" height="20" fill="url(#paint0_linear_0_1)"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_1" x1="0" y1="620" x2="1200" y2="620" gradientUnits="userSpaceOnUse">
+<stop stop-color="#0066cc"/>
+<stop offset="1" stop-color="#00cc99"/>
+</linearGradient>
+<clipPath id="clip0_0_1">
+<rect width="1200" height="630" fill="white"/>
+</clipPath>
+</defs>
+</svg>
