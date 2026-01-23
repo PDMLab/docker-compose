@@ -10,10 +10,7 @@
     "lint": "eslint src/**/*.ts test/**/*.ts",
     "build": "tsc",
     "prepublishOnly": "tsc",
-    "release": "yarn build && standard-version",
-    "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "release": "yarn build && standard-version"
   },
   "repository": {
     "url": "git@github.com:PDMLab/docker-compose.git"
@@ -100,7 +97,6 @@
     "prettier": "^2.2.1",
     "standard-version": "9.5.0",
     "typescript": "^5.0.0",
-    "vitepress": "^1.0.0-alpha.76",
     "vitest": "^4.0.18"
   },
   "engines": {
