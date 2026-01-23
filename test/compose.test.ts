@@ -1060,6 +1060,7 @@ describe('parseImListOutput', (): void => {
       container: 'compose_test_hello',
       repository: 'hello-world',
       tag: 'latest',
+      platform: '',
       id: 'd2c94e258dcb'
     })
 
@@ -1068,6 +1069,7 @@ describe('parseImListOutput', (): void => {
       container: 'compose_test_proxy',
       repository: 'nginx',
       tag: '1.19.9-alpine',
+      platform: '',
       id: '72ab4137bd85'
     })
 
@@ -1075,6 +1077,7 @@ describe('parseImListOutput', (): void => {
       container: 'compose_test_web',
       repository: 'nginx',
       tag: '1.16.0',
+      platform: '',
       id: 'ae893c58d83f'
     })
   })

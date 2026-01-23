@@ -105,6 +105,7 @@ export type DockerComposeImListResultService = {
   container: string
   repository: string
   tag: string
+  platform: string
   id: string // 12 Byte id
 }
 
@@ -206,6 +207,7 @@ export const mapImListOutput = (
         container: serviceLine.ContainerName,
         repository: serviceLine.Repository,
         tag: serviceLine.Tag,
+        platform: serviceLine.Platform || '',
         id: idFragment
       }
     })
@@ -219,6 +221,7 @@ export const mapImListOutput = (
     .map((line) => {
       // the line has the columns in the following order:
       // CONTAINER   REPOSITORY   TAG   IMAGE ID   SIZE
+      // Note: newer docker compose versions may include PLATFORM column
       const lineColumns = line.split(/\s{3,}/)
 
       const containerFragment = lineColumns[0] || line
@@ -230,6 +233,7 @@ export const mapImListOutput = (
         container: containerFragment.trim(),
         repository: repositoryFragment.trim(),
         tag: tagFragment.trim(),
+        platform: '',
         id: idFragment.trim()
       } as DockerComposeImListResultService
     })
@@ -631,8 +635,13 @@ export const images = async function (
   options?: IDockerComposeOptions
 ): Promise<TypedDockerComposeResult<DockerComposeImListResult>> {
   try {
-    const result = await execCompose('images', [], options)
-    const data = mapImListOutput(result.out, options)
+    // Always use JSON format for robust parsing across docker compose versions
+    const jsonOptions: IDockerComposeOptions = {
+      ...options,
+      commandOptions: [...(options?.commandOptions || []), ['--format', 'json']]
+    }
+    const result = await execCompose('images', [], jsonOptions)
+    const data = mapImListOutput(result.out, jsonOptions)
     return {
       ...result,
       data
