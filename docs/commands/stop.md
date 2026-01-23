@@ -1,3 +1,7 @@
+---
+category: Commands
+---
+
 # stop
 
 Stops running containers without removing them.

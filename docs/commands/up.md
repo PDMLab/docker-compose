@@ -1,3 +1,7 @@
+---
+category: Commands
+---
+
 # up
 
 Builds, (re)creates, starts, and attaches to containers for services.

@@ -1,3 +1,7 @@
+---
+category: Commands
+---
+
 # build
 
 Build or rebuild services.

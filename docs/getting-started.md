@@ -1,3 +1,7 @@
+---
+category: Introduction
+---
+
 # Getting started
 
 `docker-compose` is a small library that allows you to run [docker-compose](https://docs.docker.com/compose/) (which is still required) using Node.js. This is useful to bootstrap test environments.

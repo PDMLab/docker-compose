@@ -1,3 +1,7 @@
+---
+category: Commands
+---
+
 # down
 
 Stops containers and removes containers, networks, volumes, and images created by `up`.

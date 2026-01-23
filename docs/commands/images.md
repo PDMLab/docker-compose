@@ -1,3 +1,7 @@
+---
+category: Commands
+---
+
 # images
 
 List images used by the created containers.

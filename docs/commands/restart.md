@@ -1,3 +1,7 @@
+---
+category: Commands
+---
+
 # restart
 
 Restart services.

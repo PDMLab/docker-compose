@@ -59,7 +59,6 @@ export default defineConfig({
     await buildEndGenerateOpenGraphImages({
       baseUrl: 'https://pdmlab.github.io/docker-compose/',
       category: {
-        byLevel: 2,
         fallbackWithFrontmatter: true
       }
     })(siteConfig)

@@ -1,3 +1,7 @@
+---
+category: Commands
+---
+
 # config
 
 Validate and view the Compose file configuration.

@@ -1,3 +1,7 @@
+---
+category: Commands
+---
+
 # rm
 
 Remove stopped service containers.
