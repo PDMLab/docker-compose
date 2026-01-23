@@ -89,7 +89,7 @@
     "@types/node": "^12.12.6",
     "@typescript-eslint/eslint-plugin": "^4.21.0",
     "@typescript-eslint/parser": "^4.21.0",
-    "@vitest/ui": "^0.30.1",
+    "@vitest/ui": "^4.0.18",
     "dockerode": "^4.0.9",
     "eslint": "^7.24.0",
     "eslint-config-prettier": "^8.1.0",
@@ -101,7 +101,7 @@
     "standard-version": "9.5.0",
     "typescript": "^5.0.0",
     "vitepress": "^1.0.0-alpha.76",
-    "vitest": "^0.30.1"
+    "vitest": "^4.0.18"
   },
   "engines": {
     "node": ">= 6.0.0"
