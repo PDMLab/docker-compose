@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.2](https://github.com/PDMLab/docker-compose/compare/v1.3.1...v1.3.2) (2026-03-11)
+
+
+### Bug Fixes
+
+* respect executablePath in standalone mode ([265a2fb](https://github.com/PDMLab/docker-compose/commit/265a2fb24e54b348455699fa8d2d91afb5af5848))
+
 ### [1.3.1](https://github.com/PDMLab/docker-compose/compare/v1.3.0...v1.3.1) (2026-01-23)
 
 
