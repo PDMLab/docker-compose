@@ -307,8 +307,8 @@ export const execCompose = (
     let executablePath: string
     let executableArgs: string[] = []
 
-    if (executable?.standalone && !executable.executablePath) {
-      executablePath = 'docker-compose'
+    if (executable?.standalone) {
+      executablePath = executable.executablePath || 'docker-compose'
     } else {
       executablePath = executable?.executablePath || 'docker'
       const executableOptions = executable?.options || []

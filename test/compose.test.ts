@@ -5,10 +5,12 @@ import {
   beforeEach,
   afterEach,
   vi,
-  beforeAll
+  beforeAll,
+  MockInstance
 } from 'vitest'
 import Docker, { ContainerInfo } from 'dockerode'
 import * as compose from '../src'
+import childProcess from 'child_process'
 import * as path from 'path'
 import { readFile } from 'fs'
 import { mapPsOutput, mapImListOutput } from '../src'
@@ -1200,5 +1202,70 @@ describe('when upAll is called', () => {
           })
       })
     })
+  })
+})
+
+describe('executable path resolution', (): void => {
+  let spawnSpy: MockInstance<typeof childProcess.spawn>
+
+  beforeEach((): void => {
+    const mockProc = {
+      on: vi.fn(),
+      stdout: { on: vi.fn(), pipe: vi.fn() },
+      stderr: { on: vi.fn(), pipe: vi.fn() },
+      stdin: { write: vi.fn(), end: vi.fn() }
+    }
+
+    mockProc.on.mockImplementation((event, cb) => {
+      if (event === 'exit') {
+        setTimeout(() => cb(0), 0)
+      }
+    })
+
+    spawnSpy = vi
+      .spyOn(childProcess, 'spawn')
+      .mockReturnValue((mockProc as unknown) as childProcess.ChildProcess)
+  })
+
+  afterEach((): void => {
+    spawnSpy.mockRestore()
+  })
+
+  // spawn is always called with a third argument ({ cwd, env }) so we use
+  // expect.objectContaining({}) to match it without being brittle about its contents.
+  it('uses custom executablePath in standalone mode without appending compose', async (): Promise<void> => {
+    await compose.execCompose('up', [], {
+      executable: {
+        standalone: true,
+        executablePath: '/custom/path/docker-compose'
+      }
+    })
+    expect(spawnSpy).toHaveBeenCalledWith(
+      '/custom/path/docker-compose',
+      ['up'],
+      expect.objectContaining({})
+    )
+  })
+
+  it('defaults to docker-compose in standalone mode when no executablePath is provided', async (): Promise<void> => {
+    await compose.execCompose('up', [], {
+      executable: { standalone: true }
+    })
+    expect(spawnSpy).toHaveBeenCalledWith(
+      'docker-compose',
+      ['up'],
+      expect.objectContaining({})
+    )
+  })
+
+  it('appends compose subcommand when not in standalone mode', async (): Promise<void> => {
+    await compose.execCompose('up', [], {
+      executable: { executablePath: '/custom/docker' }
+    })
+    expect(spawnSpy).toHaveBeenCalledWith(
+      '/custom/docker',
+      ['compose', 'up'],
+      expect.objectContaining({})
+    )
   })
 })
