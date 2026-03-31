@@ -549,6 +549,34 @@ describe('when using build config as string', (): void => {
   })
 })
 
+describe('when using compose object', (): void => {
+  it('should start services from a typed compose object', async (): Promise<void> => {
+    const config = {
+      compose: {
+        services: {
+          web: {
+            image: 'nginx:1.16.0',
+            container_name: 'compose_test_web_obj',
+            command: 'nginx -g "daemon off;"',
+            environment: {
+              NGINX_PORT: '8889'
+            },
+            ports: ['8889:8889']
+          }
+        }
+      },
+      log: logOutput
+    }
+
+    await compose.upAll(config)
+    const result = await compose.port('web', 8889, config)
+
+    expect(result.data.address).toBe('0.0.0.0')
+    expect(result.data.port).toBe(8889)
+    await compose.downAll(config)
+  })
+})
+
 describe('when building single service', (): void => {
   it('should only build this service', async (): Promise<void> => {
     const opts = {

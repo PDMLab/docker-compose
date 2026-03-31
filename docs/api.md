@@ -70,6 +70,7 @@ compose.upAll({
 | `executablePath` | `string` | Path to docker-compose executable if not in `$PATH` |
 | `config` | `string \| string[]` | Custom yml file(s), relative to `cwd` |
 | `configAsString` | `string` | Configuration as string (ignores `config` if set) |
+| `compose` | `ComposeSpecification` | Typed compose configuration object (converted to YAML internally) |
 | `log` | `boolean` | Enable console logging |
 | `composeOptions` | `string[] \| Array<string \| string[]>` | Options for all commands (e.g., `--verbose`) |
 | `commandOptions` | `string[] \| Array<string \| string[]>` | Options for specific command |
@@ -89,3 +90,30 @@ compose.upAll({
   commandOptions: ['--build', ['--timeout', '30']]
 })
 ```
+
+### Example with typed compose object
+
+Instead of using a YAML file, you can pass a typed `ComposeSpecification` object directly. This gives you full TypeScript autocompletion and type checking for the Docker Compose configuration.
+
+```typescript
+import { upAll, ComposeSpecification } from 'docker-compose'
+
+const compose: ComposeSpecification = {
+  services: {
+    web: {
+      image: 'nginx:latest',
+      ports: ['8080:80']
+    },
+    db: {
+      image: 'postgres:16',
+      environment: {
+        POSTGRES_PASSWORD: 'secret'
+      }
+    }
+  }
+}
+
+await upAll({ compose })
+```
+
+The `ComposeSpecification` type is generated from the official [Compose Specification JSON Schema](https://github.com/compose-spec/compose-spec), so it covers all valid compose file options.
