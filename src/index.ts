@@ -1,7 +1,7 @@
 import childProcess from 'child_process'
 import yaml from 'yaml'
 import mapPorts from './map-ports'
-export { ComposeSpecification } from './compose-spec'
+export type { ComposeSpecification } from './compose-spec'
 import type { ComposeSpecification } from './compose-spec'
 
 export type IDockerComposeExecutableOptions =
