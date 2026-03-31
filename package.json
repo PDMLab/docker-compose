@@ -4,13 +4,20 @@
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "schema",
+    "readme.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
   "scripts": {
     "ci": "yarn install --frozen-lockfile",
     "test": "npx vitest --dir test --test-timeout=30000",
     "lint": "eslint src/**/*.ts test/**/*.ts",
     "generate:types": "json2ts schema/compose-spec.json src/compose-spec.d.ts",
-    "build": "yarn generate:types && tsc",
-    "prepublishOnly": "yarn generate:types && tsc",
+    "build": "yarn generate:types && tsc && cp src/compose-spec.d.ts dist/",
+    "prepublishOnly": "yarn generate:types && tsc && cp src/compose-spec.d.ts dist/",
     "release": "yarn build && standard-version"
   },
   "repository": {
