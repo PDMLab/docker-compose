@@ -1,7 +1,6 @@
 # ignore docs
 docs/
 community-samples/readme.md
-readme.md
 
 # ignore all files in the test/ directory and test settings
 test/
