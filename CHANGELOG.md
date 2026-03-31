@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.4.1](https://github.com/PDMLab/docker-compose/compare/v1.4.0...v1.4.1) (2026-03-31)
+
+
+### Bug Fixes
+
+* include compose-spec types in dist and add files field ([444908d](https://github.com/PDMLab/docker-compose/commit/444908d245486771160bc2dc60d86e372e833acc))
+
 ## [1.4.0](https://github.com/PDMLab/docker-compose/compare/v1.3.3...v1.4.0) (2026-03-31)
 
 
