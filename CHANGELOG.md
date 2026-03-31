@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/PDMLab/docker-compose/compare/v1.3.3...v1.4.0) (2026-03-31)
+
+
+### Features
+
+* add typed compose object support ([6e9cb51](https://github.com/PDMLab/docker-compose/commit/6e9cb518c7e81fcddf0a523c83693862babb56d5))
+
+
+### Bug Fixes
+
+* use type-only export for ComposeSpecification ([698d0f3](https://github.com/PDMLab/docker-compose/commit/698d0f347f203e40fae82a7f00f00a7977f1a8fb))
+
 ### [1.3.3](https://github.com/PDMLab/docker-compose/compare/v1.3.2...v1.3.3) (2026-03-26)
 
 ### [1.3.2](https://github.com/PDMLab/docker-compose/compare/v1.3.1...v1.3.2) (2026-03-11)
