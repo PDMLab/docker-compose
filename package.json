@@ -8,8 +8,9 @@
     "ci": "yarn install --frozen-lockfile",
     "test": "npx vitest --dir test --test-timeout=30000",
     "lint": "eslint src/**/*.ts test/**/*.ts",
-    "build": "tsc",
-    "prepublishOnly": "tsc",
+    "generate:types": "json2ts schema/compose-spec.json src/compose-spec.d.ts",
+    "build": "yarn generate:types && tsc",
+    "prepublishOnly": "yarn generate:types && tsc",
     "release": "yarn build && standard-version"
   },
   "repository": {
@@ -94,6 +95,7 @@
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-watch": "^7.0.0",
     "husky": "^6.0.0",
+    "json-schema-to-typescript": "^15.0.4",
     "prettier": "^2.2.1",
     "standard-version": "9.5.0",
     "typescript": "^5.0.0",

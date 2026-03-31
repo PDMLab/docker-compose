@@ -1,6 +1,8 @@
 import childProcess from 'child_process'
 import yaml from 'yaml'
 import mapPorts from './map-ports'
+export { ComposeSpecification } from './compose-spec'
+import type { ComposeSpecification } from './compose-spec'
 
 export type IDockerComposeExecutableOptions =
   | {
@@ -19,6 +21,7 @@ export interface IDockerComposeOptions {
   executable?: IDockerComposeExecutableOptions
   config?: string | string[]
   configAsString?: string
+  compose?: ComposeSpecification
   log?: boolean
   composeOptions?: string[] | (string | string[])[]
   commandOptions?: string[] | (string | string[])[]
@@ -285,6 +288,10 @@ export const execCompose = (
   options: IDockerComposeOptions = {}
 ): Promise<IDockerComposeResult> =>
   new Promise((resolve, reject): void => {
+    if (options.compose) {
+      options.configAsString = yaml.stringify(options.compose)
+    }
+
     const composeOptions = options.composeOptions || []
     const commandOptions = options.commandOptions || []
     let composeArgs = composeOptionsToArgs(composeOptions)
