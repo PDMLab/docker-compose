@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.4.2](https://github.com/PDMLab/docker-compose/compare/v1.4.1...v1.4.2) (2026-03-31)
+
+
+### Bug Fixes
+
+* remove README.md from .npmignore so npm displays it ([a64e9b8](https://github.com/PDMLab/docker-compose/commit/a64e9b8d8ab422816854ed7ef062fa774b344c85))
+* rename readme.md to README.md for npm package page ([95a1dea](https://github.com/PDMLab/docker-compose/commit/95a1deac0f738a6eed5271b0c5c7ed9983ef187d))
+
 ### [1.4.1](https://github.com/PDMLab/docker-compose/compare/v1.4.0...v1.4.1) (2026-03-31)
 
 
