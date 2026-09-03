@@ -8,6 +8,7 @@ import {
   beforeAll,
   MockInstance
 } from 'vitest'
+import { EventEmitter } from 'events'
 import Docker, { ContainerInfo } from 'dockerode'
 import * as compose from '../src'
 import childProcess from 'child_process'
@@ -1296,4 +1297,270 @@ describe('executable path resolution', (): void => {
       expect.objectContaining({})
     )
   })
+})
+
+describe('output buffering limits', (): void => {
+  let spawnSpy: MockInstance<typeof childProcess.spawn>
+  let mockProc: any
+
+  beforeEach((): void => {
+    vi.useFakeTimers()
+
+    const stdout = new EventEmitter() as EventEmitter & {
+      pipe: ReturnType<typeof vi.fn>
+    }
+    stdout.pipe = vi.fn()
+    const stderr = new EventEmitter() as EventEmitter & {
+      pipe: ReturnType<typeof vi.fn>
+    }
+    stderr.pipe = vi.fn()
+
+    mockProc = new EventEmitter()
+    mockProc.stdout = stdout
+    mockProc.stderr = stderr
+    mockProc.stdin = { write: vi.fn(), end: vi.fn() }
+
+    spawnSpy = vi
+      .spyOn(childProcess, 'spawn')
+      .mockReturnValue(mockProc as childProcess.ChildProcess)
+  })
+
+  afterEach((): void => {
+    spawnSpy.mockRestore()
+    vi.useRealTimers()
+  })
+
+  it('caps stdout and stderr buffering independently', async (): Promise<void> => {
+    const callback = vi.fn()
+    const promise = compose.execCompose('up', [], {
+      callback,
+      maxOutputLength: 5
+    })
+
+    mockProc.stdout.emit('data', Buffer.from('123'))
+    mockProc.stdout.emit('data', Buffer.from('456'))
+    mockProc.stderr.emit('data', Buffer.from('abcdef'))
+    mockProc.stderr.emit('data', Buffer.from('gh'))
+    mockProc.stdout.emit('data', Buffer.from('789'))
+    mockProc.emit('exit', 0)
+
+    await vi.advanceTimersByTimeAsync(500)
+    const result = await promise
+
+    expect(result.out).toBe('12345')
+    expect(result.err).toBe('defgh')
+    expect(result.truncated).toEqual({ out: true, err: true })
+    expect(callback.mock.calls).toEqual([
+      [Buffer.from('123'), 'stdout'],
+      [Buffer.from('456'), 'stdout'],
+      [Buffer.from('abcdef'), 'stderr'],
+      [Buffer.from('gh'), 'stderr'],
+      [Buffer.from('789'), 'stdout']
+    ])
+  })
+
+  it('disables buffering at zero while forwarding every chunk', async (): Promise<void> => {
+    const callback = vi.fn()
+    const promise = compose.execCompose('logs', [], {
+      maxOutputLength: 0,
+      callback,
+      log: true
+    })
+
+    mockProc.stdout.emit('data', Buffer.from('first output'))
+    mockProc.stderr.emit('data', Buffer.from('an error'))
+    mockProc.stdout.emit('data', Buffer.from('more output'))
+    mockProc.emit('exit', 0)
+
+    await vi.advanceTimersByTimeAsync(500)
+    expect(await promise).toEqual({
+      exitCode: 0,
+      out: '',
+      err: '',
+      truncated: { out: true, err: true }
+    })
+    expect(callback.mock.calls).toEqual([
+      [Buffer.from('first output'), 'stdout'],
+      [Buffer.from('an error'), 'stderr'],
+      [Buffer.from('more output'), 'stdout']
+    ])
+    expect(mockProc.stdout.pipe).toHaveBeenCalledWith(process.stdout)
+    expect(mockProc.stderr.pipe).toHaveBeenCalledWith(process.stderr)
+  })
+
+  it('retains complete output by default', async (): Promise<void> => {
+    const promise = compose.execCompose('up', [])
+    const output = 'stdout é😀\n'.repeat(10000)
+    const error = 'stderr é😀\n'.repeat(10000)
+
+    mockProc.stdout.emit('data', Buffer.from(output))
+    mockProc.stderr.emit('data', Buffer.from(error))
+    mockProc.stdout.emit('data', Buffer.from('done'))
+    mockProc.stderr.emit('data', Buffer.from('finished'))
+    mockProc.emit('exit', 0)
+
+    await vi.advanceTimersByTimeAsync(500)
+    expect(await promise).toEqual({
+      exitCode: 0,
+      out: output + 'done',
+      err: error + 'finished',
+      truncated: { out: false, err: false }
+    })
+  })
+
+  it.each([0, 5])(
+    'does not report truncation when output exactly fits a limit of %i',
+    async (maxOutputLength): Promise<void> => {
+      const promise = compose.execCompose('up', [], { maxOutputLength })
+      const output = 'x'.repeat(maxOutputLength)
+
+      for (const stream of [mockProc.stdout, mockProc.stderr]) {
+        stream.emit('data', Buffer.from(output))
+        stream.emit('data', Buffer.alloc(0))
+      }
+      mockProc.emit('exit', 0)
+
+      await vi.advanceTimersByTimeAsync(500)
+      expect(await promise).toEqual({
+        exitCode: 0,
+        out: output,
+        err: output,
+        truncated: { out: false, err: false }
+      })
+    }
+  )
+
+  it('counts UTF-16 code units for each stream', async (): Promise<void> => {
+    const promise = compose.execCompose('up', [], { maxOutputLength: 3 })
+
+    mockProc.stdout.emit('data', Buffer.from('é😀x'))
+    mockProc.stderr.emit('data', Buffer.from('é😀x'))
+    mockProc.emit('exit', 0)
+
+    await vi.advanceTimersByTimeAsync(500)
+    expect(await promise).toMatchObject({
+      out: 'é😀',
+      err: '😀x',
+      truncated: { out: true, err: true }
+    })
+  })
+
+  it.each([
+    { limit: -1, out: '', err: '', truncated: true },
+    { limit: 2.9, out: 'ab', err: 'ef', truncated: true },
+    { limit: NaN, out: 'abcdef', err: 'abcdef', truncated: false },
+    { limit: Infinity, out: 'abcdef', err: 'abcdef', truncated: false },
+    { limit: -Infinity, out: 'abcdef', err: 'abcdef', truncated: false }
+  ])(
+    'normalizes a maxOutputLength of $limit',
+    async ({ limit, out, err, truncated }): Promise<void> => {
+      const promise = compose.execCompose('up', [], { maxOutputLength: limit })
+
+      mockProc.stdout.emit('data', Buffer.from('abcdef'))
+      mockProc.stderr.emit('data', Buffer.from('abcdef'))
+      mockProc.emit('exit', 0)
+
+      await vi.advanceTimersByTimeAsync(500)
+      expect(await promise).toMatchObject({
+        out,
+        err,
+        truncated: { out: truncated, err: truncated }
+      })
+    }
+  )
+
+  it('preserves the final error and truncation flags on rejection', async (): Promise<void> => {
+    const promise = compose.execCompose('up', [], { maxOutputLength: 12 })
+    const rejection = expect(promise).rejects.toEqual({
+      exitCode: 1,
+      out: 'ok',
+      err: 'fatal: error',
+      truncated: { out: false, err: true }
+    })
+
+    mockProc.stdout.emit('data', Buffer.from('ok'))
+    mockProc.stderr.emit('data', Buffer.from('progress '.repeat(10)))
+    mockProc.stderr.emit('data', Buffer.from('fatal: error'))
+    mockProc.emit('exit', 1)
+
+    await vi.advanceTimersByTimeAsync(500)
+    await rejection
+  })
+
+  const parsedCommands = [
+    { name: 'config', run: compose.config, output: 'services: {}\n' },
+    {
+      name: 'configServices',
+      run: compose.configServices,
+      output: 'web\ndb\n'
+    },
+    {
+      name: 'configVolumes',
+      run: compose.configVolumes,
+      output: 'data\nlogs\n'
+    },
+    {
+      name: 'ps',
+      run: (options: compose.IDockerComposeOptions) =>
+        compose.ps({ ...options, commandOptions: ['--services'] }),
+      output: 'web\ndb\n'
+    },
+    { name: 'images', run: compose.images, output: '[]\n' },
+    {
+      name: 'port',
+      run: (options: compose.IDockerComposeOptions) =>
+        compose.port('web', 80, options),
+      output: '127.0.0.1:8080\n'
+    },
+    { name: 'version', run: compose.version, output: '2.0.0\n' },
+    {
+      name: 'stats',
+      run: (options: compose.IDockerComposeOptions) =>
+        compose.stats('web', options),
+      output: '"{ "CPUPerc": "0.00%" }"\n'
+    }
+  ]
+
+  it.each(parsedCommands)(
+    'rejects truncated stdout before parsing $name output',
+    async ({ run, output }): Promise<void> => {
+      // For YAML and line-based output, truncation can still look valid.
+      const promise = run({ maxOutputLength: output.length - 2 })
+      const rejection = expect(promise).rejects.toThrow(
+        'stdout was truncated by maxOutputLength'
+      )
+
+      mockProc.stdout.emit('data', Buffer.from(output))
+      mockProc.emit('exit', 0)
+
+      await vi.advanceTimersByTimeAsync(500)
+      await rejection
+    }
+  )
+
+  it.each(parsedCommands)(
+    'parses complete $name output when only stderr is truncated',
+    async ({ name, run, output }): Promise<void> => {
+      const promise = run({ maxOutputLength: output.length })
+
+      mockProc.stdout.emit('data', Buffer.from(output))
+      mockProc.stderr.emit(
+        'data',
+        Buffer.from('warning '.repeat(output.length))
+      )
+      mockProc.emit('exit', 0)
+
+      await vi.advanceTimersByTimeAsync(500)
+      const result = await promise
+      if (name === 'stats') {
+        expect(result).toEqual({ CPUPerc: '0.00%' })
+      } else {
+        expect(result).toMatchObject({
+          out: output,
+          truncated: { out: false, err: true },
+          data: expect.any(Object)
+        })
+      }
+    }
+  )
 })
