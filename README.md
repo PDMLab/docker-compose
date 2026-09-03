@@ -48,6 +48,22 @@ compose.upAll({ cwd: path.join(__dirname), log: true }).then(
 )
 ```
 
+For very chatty commands, use `callback` to process output chunks as they arrive and `maxOutputLength` to limit the UTF-16 code units retained per stream (the same units as JavaScript's `string.length`). It defaults to Node.js's `buffer.constants.MAX_STRING_LENGTH`. Stdout keeps the beginning of its output; stderr keeps the end so recent errors remain available. The result's `truncated.out` and `truncated.err` flags indicate whether output was dropped. Commands that parse stdout reject with an error mentioning `maxOutputLength` if stdout was truncated.
+
+Set `maxOutputLength: 0` to disable buffering completely while still receiving every chunk through `callback`. Both `result.out` and `result.err` will be empty strings:
+
+```javascript
+await compose.logs('web', {
+  cwd: path.join(__dirname),
+  follow: true,
+  maxOutputLength: 0,
+  callback: (chunk, streamSource) => {
+    const stream = streamSource === 'stderr' ? process.stderr : process.stdout
+    stream.write(chunk)
+  }
+})
+```
+
 Start specific services using `compose.upMany`:
 
 ```javascript

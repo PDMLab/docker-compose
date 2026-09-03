@@ -1,4 +1,5 @@
 import childProcess from 'child_process'
+import { constants as bufferConstants } from 'buffer'
 import yaml from 'yaml'
 import mapPorts from './map-ports'
 export type { ComposeSpecification } from './compose-spec'
@@ -26,6 +27,8 @@ export interface IDockerComposeOptions {
   composeOptions?: string[] | (string | string[])[]
   commandOptions?: string[] | (string | string[])[]
   env?: NodeJS.ProcessEnv
+  /** Maximum UTF-16 code units retained per stream; 0 disables buffering. */
+  maxOutputLength?: number
   callback?: (chunk: Buffer, streamSource?: 'stdout' | 'stderr') => void
 }
 
@@ -83,16 +86,92 @@ export interface IDockerComposeResult {
   exitCode: number | null
   out: string
   err: string
+  truncated: {
+    out: boolean
+    err: boolean
+  }
 }
 
-export type TypedDockerComposeResult<T> = {
-  exitCode: number | null
-  out: string
-  err: string
+export type TypedDockerComposeResult<T> = IDockerComposeResult & {
   data: T
 }
 
 const nonEmptyString = (v: string) => v !== ''
+
+const MAX_CAPTURED_OUTPUT_LENGTH = bufferConstants.MAX_STRING_LENGTH
+
+interface BufferedOutput {
+  chunks: string[]
+  head: number
+  length: number
+  truncated: boolean
+}
+
+const createBufferedOutput = (): BufferedOutput => ({
+  chunks: [],
+  head: 0,
+  length: 0,
+  truncated: false
+})
+
+const appendBufferedOutput = (
+  output: BufferedOutput,
+  stream: 'out' | 'err',
+  chunk: Buffer,
+  maxLength: number
+): void => {
+  if (chunk.length === 0) {
+    return
+  }
+
+  if (maxLength === 0 || (stream === 'out' && output.length >= maxLength)) {
+    output.truncated = true
+    return
+  }
+
+  const chunkString = chunk.toString()
+  const remainingLength = maxLength - output.length
+  if (chunkString.length > remainingLength) {
+    output.truncated = true
+  }
+
+  const retainedChunk =
+    stream === 'err'
+      ? chunkString.slice(-maxLength)
+      : chunkString.slice(0, remainingLength)
+  output.chunks.push(retainedChunk)
+  output.length += retainedChunk.length
+
+  // Evict individual chunks without copying the retained window on each write.
+  while (output.length > maxLength) {
+    const first = output.chunks[output.head]
+    const excessLength = output.length - maxLength
+    if (first.length <= excessLength) {
+      output.length -= first.length
+      output.chunks[output.head++] = ''
+    } else {
+      output.chunks[output.head] = first.slice(excessLength)
+      output.length -= excessLength
+    }
+  }
+
+  // Release discarded entries without shifting the array on every eviction.
+  if (output.head > 0 && output.head * 2 >= output.chunks.length) {
+    output.chunks = output.chunks.slice(output.head)
+    output.head = 0
+  }
+}
+
+const assertCompleteOutput = (
+  result: IDockerComposeResult,
+  command: string
+): void => {
+  if (result.truncated.out) {
+    throw new Error(
+      `Cannot parse docker compose ${command} output because stdout was truncated by maxOutputLength. Increase maxOutputLength or omit it.`
+    )
+  }
+}
 
 export type DockerComposePsResultService = {
   name: string
@@ -310,6 +389,17 @@ export const execCompose = (
     const cwd = options.cwd
     const env = options.env || undefined
     const executable = options.executable
+    const requestedMaxOutputLength =
+      options.maxOutputLength ?? MAX_CAPTURED_OUTPUT_LENGTH
+    const maxOutputLength = Number.isFinite(requestedMaxOutputLength)
+      ? Math.max(
+          0,
+          Math.min(
+            Math.floor(requestedMaxOutputLength),
+            MAX_CAPTURED_OUTPUT_LENGTH
+          )
+        )
+      : MAX_CAPTURED_OUTPUT_LENGTH
 
     let executablePath: string
     let executableArgs: string[] = []
@@ -335,25 +425,27 @@ export const execCompose = (
       reject(err)
     })
 
-    const result: IDockerComposeResult = {
-      exitCode: null,
-      err: '',
-      out: ''
-    }
+    const stdout = createBufferedOutput()
+    const stderr = createBufferedOutput()
 
     childProc.stdout.on('data', (chunk): void => {
-      result.out += chunk.toString()
+      appendBufferedOutput(stdout, 'out', chunk, maxOutputLength)
       options.callback?.(chunk, 'stdout')
     })
 
     childProc.stderr.on('data', (chunk): void => {
-      result.err += chunk.toString()
+      appendBufferedOutput(stderr, 'err', chunk, maxOutputLength)
       options.callback?.(chunk, 'stderr')
     })
 
     childProc.on('exit', (exitCode): void => {
-      result.exitCode = exitCode
       setTimeout(() => {
+        const result: IDockerComposeResult = {
+          exitCode,
+          out: stdout.chunks.join(''),
+          err: stderr.chunks.join(''),
+          truncated: { out: stdout.truncated, err: stderr.truncated }
+        }
         if (exitCode === 0) {
           resolve(result)
         } else {
@@ -583,6 +675,7 @@ export const config = async function (
 ): Promise<TypedDockerComposeResult<DockerComposeConfigResult>> {
   try {
     const result = await execCompose('config', [], options)
+    assertCompleteOutput(result, 'config')
     const config = yaml.parse(result.out)
     return {
       ...result,
@@ -598,6 +691,7 @@ export const configServices = async function (
 ): Promise<TypedDockerComposeResult<DockerComposeConfigServicesResult>> {
   try {
     const result = await execCompose('config', ['--services'], options)
+    assertCompleteOutput(result, 'config --services')
     const services = result.out.split('\n').filter(nonEmptyString)
     return {
       ...result,
@@ -613,6 +707,7 @@ export const configVolumes = async function (
 ): Promise<TypedDockerComposeResult<DockerComposeConfigVolumesResult>> {
   try {
     const result = await execCompose('config', ['--volumes'], options)
+    assertCompleteOutput(result, 'config --volumes')
     const volumes = result.out.split('\n').filter(nonEmptyString)
     return {
       ...result,
@@ -628,6 +723,7 @@ export const ps = async function (
 ): Promise<TypedDockerComposeResult<DockerComposePsResult>> {
   try {
     const result = await execCompose('ps', [], options)
+    assertCompleteOutput(result, 'ps')
     const data = mapPsOutput(result.out, options)
     return {
       ...result,
@@ -648,6 +744,7 @@ export const images = async function (
       commandOptions: [...(options?.commandOptions || []), ['--format', 'json']]
     }
     const result = await execCompose('images', [], jsonOptions)
+    assertCompleteOutput(result, 'images')
     const data = mapImListOutput(result.out, jsonOptions)
     return {
       ...result,
@@ -713,6 +810,7 @@ export const port = async function (
 
   try {
     const result = await execCompose('port', args, options)
+    assertCompleteOutput(result, 'port')
     const [address, port] = result.out.split(':')
     return {
       ...result,
@@ -731,6 +829,7 @@ export const version = async function (
 ): Promise<TypedDockerComposeResult<DockerComposeVersionResult>> {
   try {
     const result = await execCompose('version', ['--short'], options)
+    assertCompleteOutput(result, 'version')
     const version = result.out.replace('\n', '').trim()
     return {
       ...result,
@@ -749,6 +848,7 @@ export const stats = async function (
 
   try {
     const result = await execCompose('stats', args, options)
+    assertCompleteOutput(result, 'stats')
     // Remove first and last quote from output, as well as newline.
     const output = result.out.replace('\n', '').trim().slice(1, -1)
     return JSON.parse(output)
