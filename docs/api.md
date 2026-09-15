@@ -41,8 +41,11 @@ All commands return a `Promise({object})` with stdout and stderr strings and an 
   out: 'stdout contents',
   err: 'stderr contents',
   exitCode: 0, // !== 0 in case of an error
+  truncated: { out: false, err: false },
 }
 ```
+
+`truncated.out` and `truncated.err` indicate whether any output was dropped from the corresponding stream, including when buffering is disabled. These flags are also present on results rejected for a nonzero exit code and on typed results with a `data` field. Commands that parse stdout (`config`, `configServices`, `configVolumes`, `ps`, `images`, `port`, `version`, and `stats`) reject with an error mentioning `maxOutputLength` if stdout was truncated. Truncating only stderr does not prevent parsing stdout.
 
 ## Progress Callback
 
@@ -60,6 +63,26 @@ compose.upAll({
 )
 ```
 
+### Output buffering
+
+Use `maxOutputLength` to limit how much output is retained independently for stdout and stderr. The limit counts UTF-16 code units, as measured by JavaScript's `string.length`, and defaults to Node.js's `buffer.constants.MAX_STRING_LENGTH`. Stdout retains the beginning of the output; stderr retains a trailing window so the most recent error messages remain available. Reaching the limit does not stop the command, and `callback` and `log` still receive all output.
+
+Set `maxOutputLength: 0` to disable buffering completely and process output only as it arrives. `out` and `err` remain empty strings, and each truncation flag becomes `true` if its stream emits nonempty output:
+
+```typescript
+await compose.logs('web', {
+  cwd: path.join(__dirname),
+  follow: true,
+  maxOutputLength: 0,
+  callback: (chunk, streamSource) => {
+    const stream = streamSource === 'stderr' ? process.stderr : process.stdout
+    stream.write(chunk)
+  }
+})
+```
+
+Finite limits are rounded down and clamped between `0` and `buffer.constants.MAX_STRING_LENGTH`. Non-finite values use the default limit.
+
 ## Options
 
 `docker-compose` accepts these params:
@@ -74,6 +97,7 @@ compose.upAll({
 | `log` | `boolean` | Enable console logging |
 | `composeOptions` | `string[] \| Array<string \| string[]>` | Options for all commands (e.g., `--verbose`) |
 | `commandOptions` | `string[] \| Array<string \| string[]>` | Options for specific command |
+| `maxOutputLength` | `number` | Maximum UTF-16 code units retained per stream; defaults to `buffer.constants.MAX_STRING_LENGTH`. `0` disables buffering. |
 | `callback` | `(chunk: Buffer, sourceStream?: 'stdout' \| 'stderr') => void` | Progress callback |
 
 ### Example with options
