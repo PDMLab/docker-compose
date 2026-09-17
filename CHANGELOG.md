@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/PDMLab/docker-compose/compare/v1.4.2...v1.5.0) (2026-09-17)
+
+
+### Features
+
+* prevent compose output string overflow ([fa79e10](https://github.com/PDMLab/docker-compose/commit/fa79e10b30b77403555029385b60edcd6474b706))
+
+
+### Bug Fixes
+
+* force Node.js 24 for remaining GitHub Actions deprecation warnings ([32b365d](https://github.com/PDMLab/docker-compose/commit/32b365d877f472ff314682a0685d200c2bd49087))
+* update GitHub Actions to Node.js 24 to resolve deprecation warnings ([551a189](https://github.com/PDMLab/docker-compose/commit/551a189d14ca34a1178bf6015aa8fb837978f217))
+
 ### [1.4.2](https://github.com/PDMLab/docker-compose/compare/v1.4.1...v1.4.2) (2026-03-31)
 
 
